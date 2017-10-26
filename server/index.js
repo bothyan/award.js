@@ -9,10 +9,11 @@ server.use('/static',express.static('./client/dist'));
 server.get('/', (req, res) => {
 
     const Index = require('./dist/page/index.js')
-    const html = render(Index.default)
+    const html = render(Index.default, {todoList:[]})
 
     res.send(`
     <div id="wrap">${html}</div>
+    <script src="/static/main.js"></script>
     <script src="/static/page/index.js"></script>
 `)
 })

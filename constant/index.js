@@ -1,0 +1,7 @@
+export const RECEIVE_USER = 'RECEIVE_USER'
+export const BEIGIN_RECEIVE_USER = 'BEIGIN_RECEIVE_USER'
+export const BEIGIN_FINISH_TODO = 'BEIGIN_FINISH_TODO'
+export const ADD_TODO = 'ADD_TODO'
+export const FINISH_TODO = 'FINISH_TODO'
+export const DEL_TODO = 'DEL_TODO'
+export const RECEIVE_TODO = 'RECEIVE_TODO'

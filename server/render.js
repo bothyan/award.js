@@ -2,8 +2,8 @@ const { createElement } = require('react')
 const { renderToString, renderToStaticMarkup} = require('react-dom/server')
 
 
-module.exports = function Render(Component) { 
+module.exports = function Render(Component,props) { 
 
-    return renderToStaticMarkup(createElement(Component));
+    return renderToStaticMarkup(createElement(Component,props));
     
 }
