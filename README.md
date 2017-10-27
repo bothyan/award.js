@@ -1,7 +1,7 @@
 # react ssr 解决方案
 
 ## 技术栈：
-react + react-dom + redux + redux-saga + webpack + express + nodejs
+react + react-dom + redux + redux-saga + webpack + express + nodejs8++
 
 ## 快速体验
 ```shell
