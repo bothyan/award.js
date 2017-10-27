@@ -1,10 +1,11 @@
-# react ssr 实现方案
+# react ssr 解决方案
 
 ## 技术栈：
 react + react-dom + redux + redux-saga + webpack + express + nodejs
 
-## 效果查看命令
+## 快速体验
 ```shell
+git clone https://github.com/Topthinking/react-ssr.git
 npm install
 npm run dist
 npm run server 
@@ -12,8 +13,8 @@ http://localhost:4000/
 ```
 
 ## 基础架构
-- [x] 采用redux-saga实现todoList
-- [x] 服务端渲染数据获取getInitialProps
+- [x] 加入redux-saga作为redux异步处理的中间件
+- [x] 服务端渲染获取数据的方法getInitialProps
 - [x] getInitialProps赋予store的属性和方法，操作redux-saga获取数据
 - [ ] 加入react-router来控制前后端的路由
 - [ ] 热更新，包括环境处理
