@@ -15,16 +15,15 @@ function* getUserAsync(action) {
 }
 
 function* getTodoList() {
-    const todoList = [{
-        id:1,
-        name: '完成redux-saga的学习',
-        finish: false
-    }, {
-        id:2,
-        name: '完成react-ssr的学习',
-        finish: false    
-    }]
-    yield put(RECEIVE_TODO(todoList))
+    try {
+        
+        const { data: { todoList } } = yield call(axios.get, 'http://localhost:4000/todo_list')
+
+        yield put(RECEIVE_TODO(todoList))
+        
+    } catch (error) {
+        yield put(RECEIVE_TODO(error))
+    }
 }
 
 function* addTodo(action) { 

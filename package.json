@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dist_client": "webpack --config ./webpack/client.js",
-    "dist_server": "webpack --config ./webpack/server.js",
+    "dist_client": "webpack --config ./webpack/client.js --progress --colors",
+    "dist_server": "webpack --config ./webpack/server.js --progress --colors",
     "dist": "npm run dist_client && npm run dist_server",
     "server": "node ./server/index.js"
   },

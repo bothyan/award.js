@@ -8,10 +8,9 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, '../server/dist'),
         filename: "page/index.js",
-        libraryTarget: 'commonjs2'
-    },
-    resolve: {
-        extensions: ['.js', '.jsx']
+        libraryTarget: 'commonjs2',
+        strictModuleExceptionHandling: true,
+        chunkFilename: '[name]'
     },
     module: {
         loaders: [
@@ -19,8 +18,14 @@ module.exports = {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 loader: 'babel-loader',
-                exclude: /node_modules/
+                options: {
+                    presets:[]
+                }
             }
         ]
+    },
+    target: 'node',
+    resolve: {
+        extensions: ['.js', '.jsx']
     }
 }

@@ -1,13 +1,13 @@
 import React from 'react'
 import { BEIGIN_RECEIVE_USER } from '../action'
+import axios from 'axios'
+import { withReduxSaga } from '../store'
+import { connect } from 'react-redux'
 
 class Index extends React.Component {
-    constructor() {
-        super()
-    }
 
-    componentDidMount() { 
-        this.props.dispatch({
+    static async getInitialProps({ store,isServer }) {
+        store.dispatch({
             type:'/get_todo'
         })
     }
@@ -16,12 +16,12 @@ class Index extends React.Component {
         const todoList = this.props.todoList
         return (
             <div>
-                <h1 onClick={this.getUser.bind(this)}>todo-list</h1>
+                <h1 onClick={this.getList.bind(this)}>todo-list</h1>
                 <input type="text" ref="todo" />
                 <button onClick={this.submit.bind(this)}>提交</button>
                 <ul>
                     {
-                        todoList.length
+                        todoList && todoList.length
                             ?
                             todoList.map((item, index) => {
                                 return (
@@ -46,9 +46,10 @@ class Index extends React.Component {
         )
     }
 
-    getUser() {
-        //console.log(this.props)
-        //this.props.dispatch(BEIGIN_RECEIVE_USER())
+    getList() {
+        this.props.dispatch({
+            type:'/get_todo'
+        })
     }
 
     submit() {
@@ -77,5 +78,4 @@ class Index extends React.Component {
 
 }
 
-
-export default Index
+export default withReduxSaga(connect(state=>state)(Index))
