@@ -1,16 +1,16 @@
 
 import { call, put, take, takeEvery, takeLatest } from 'redux-saga/effects'
-import { BEIGIN_RECEIVE_USER,RECEIVE_USER,RECEIVE_TODO } from '../action'
+import { RECEIVE_TODO_DETAIL,RECEIVE_TODO } from '../action'
 
 import axios from 'axios'
 
-function* getUserAsync(action) { 
+function* getTodoDetail(action) { 
     try {
-        const response = yield call(axios.get, 'https://jsonplaceholder.typicode.com/posts')
-        yield put(RECEIVE_USER(response.data))
+        const { data: { todoDetail } } = yield call(axios.get, 'http://localhost:4000/todo_detail')
+        yield put(RECEIVE_TODO_DETAIL(todoDetail))
 
     } catch (error) {
-        yield put(RECEIVE_USER(error))
+        yield put(RECEIVE_TODO_DETAIL(error))
     }
 }
 
@@ -65,7 +65,7 @@ function* finish_todo(action) {
 
 
 export default function* rootSaga() { 
-    //yield takeEvery(BEIGIN_RECEIVE_USER, getUserAsync)
+    yield takeEvery('/get_todo_detail', getTodoDetail)
     yield takeEvery('/finish_todo', finish_todo)
     yield takeEvery('/get_todo', getTodoList)
     yield takeEvery('/del_todo', delTodo)

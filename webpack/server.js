@@ -3,11 +3,12 @@ const path = require('path')
 
 module.exports = {
     entry: {
-        app: './page/index.js'
+        index: './page/index.js',
+        detail:'./page/detail.js'
     },
     output: {
         path: path.resolve(__dirname, '../server/dist'),
-        filename: "page/index.js",
+        filename: "page/[name].js",
         libraryTarget: 'commonjs2',
         strictModuleExceptionHandling: true,
         chunkFilename: '[name]'

@@ -3,6 +3,8 @@ import { BEIGIN_RECEIVE_USER } from '../action'
 import axios from 'axios'
 import { withReduxSaga } from '../store'
 import { connect } from 'react-redux'
+import List from '../components/Index/list'
+import {BrowserRouter as Router,StaticRouter} from 'react-router-dom'
 
 class Index extends React.Component {
 
@@ -13,36 +15,13 @@ class Index extends React.Component {
     }
 
     render() {
-        const todoList = this.props.todoList
         return (
-            <div>
-                <h1 onClick={this.getList.bind(this)}>todo-list</h1>
-                <input type="text" ref="todo" />
-                <button onClick={this.submit.bind(this)}>提交</button>
-                <ul>
-                    {
-                        todoList && todoList.length
-                            ?
-                            todoList.map((item, index) => {
-                                return (
-                                    <li key={index}>
-                                        {
-                                            item.finish
-                                                ?
-                                                <span style={{textDecoration: 'line-through' }} onClick={this.finish.bind(this, item.id)}>{item.name}</span>
-                                                :
-                                                <span onClick={this.finish.bind(this, item.id)}>{item.name}</span>
-                                        }
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <a href="javascript:;" onClick={this.delete.bind(this, item.id)}>删除</a>
-                                    </li>
-                                )
-                            })
-                            :
-                            null
-                    }
-                </ul>
-            </div>
+                <div>
+                    <h1 onClick={this.getList.bind(this)}>TODO-LIST</h1>
+                    <input type="text" ref="todo" />
+                    <button onClick={this.submit.bind(this)}>提交</button>
+                    <List />
+                </div>
         )
     }
 
@@ -57,22 +36,6 @@ class Index extends React.Component {
             type: '/add_todo',
             data: this.props.todoList,
             name:this.refs.todo.value
-        })
-    }
-
-    finish(id) {
-        this.props.dispatch({
-            type: '/finish_todo',
-            data: this.props.todoList,
-            id
-        })
-    }
-
-    delete(id) {
-        this.props.dispatch({
-            type: '/del_todo',
-            data: this.props.todoList,
-            id
         })
     }
 

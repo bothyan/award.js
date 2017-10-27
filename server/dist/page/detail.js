@@ -67,7 +67,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 278);
+/******/ 	return __webpack_require__(__webpack_require__.s = 281);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -18509,7 +18509,10 @@ var withRouter = function withRouter(Component) {
 /* harmony default export */ __webpack_exports__["a"] = (withRouter);
 
 /***/ }),
-/* 278 */
+/* 278 */,
+/* 279 */,
+/* 280 */,
+/* 281 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18551,80 +18554,46 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _action = __webpack_require__(130);
-
-var _axios = __webpack_require__(131);
-
-var _axios2 = _interopRequireDefault(_axios);
+var _reactRouterDom = __webpack_require__(132);
 
 var _store = __webpack_require__(211);
 
 var _reactRedux = __webpack_require__(72);
 
-var _list = __webpack_require__(279);
-
-var _list2 = _interopRequireDefault(_list);
-
-var _reactRouterDom = __webpack_require__(132);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Index = function (_React$Component) {
-    (0, _inherits3.default)(Index, _React$Component);
+var Detail = function (_React$Component) {
+    (0, _inherits3.default)(Detail, _React$Component);
 
-    function Index() {
-        (0, _classCallCheck3.default)(this, Index);
-        return (0, _possibleConstructorReturn3.default)(this, (Index.__proto__ || (0, _getPrototypeOf2.default)(Index)).apply(this, arguments));
+    function Detail() {
+        (0, _classCallCheck3.default)(this, Detail);
+        return (0, _possibleConstructorReturn3.default)(this, (Detail.__proto__ || (0, _getPrototypeOf2.default)(Detail)).apply(this, arguments));
     }
 
-    (0, _createClass3.default)(Index, [{
+    (0, _createClass3.default)(Detail, [{
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
-                'div',
-                null,
+                _reactRouterDom.Link,
+                { to: '/' },
                 _react2.default.createElement(
                     'h1',
-                    { onClick: this.getList.bind(this) },
-                    'TODO-LIST'
-                ),
-                _react2.default.createElement('input', { type: 'text', ref: 'todo' }),
-                _react2.default.createElement(
-                    'button',
-                    { onClick: this.submit.bind(this) },
-                    '\u63D0\u4EA4'
-                ),
-                _react2.default.createElement(_list2.default, null)
+                    null,
+                    this.props.todoDetail
+                )
             );
-        }
-    }, {
-        key: 'getList',
-        value: function getList() {
-            this.props.dispatch({
-                type: '/get_todo'
-            });
-        }
-    }, {
-        key: 'submit',
-        value: function submit() {
-            this.props.dispatch({
-                type: '/add_todo',
-                data: this.props.todoList,
-                name: this.refs.todo.value
-            });
         }
     }], [{
         key: 'getInitialProps',
         value: function () {
             var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(_ref2) {
-                var store = _ref2.store,
-                    isServer = _ref2.isServer;
+                var store = _ref2.store;
                 return _regenerator2.default.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
                                 store.dispatch({
-                                    type: '/get_todo'
+                                    type: '/get_todo_detail'
                                 });
 
                             case 1:
@@ -18642,197 +18611,12 @@ var Index = function (_React$Component) {
             return getInitialProps;
         }()
     }]);
-    return Index;
+    return Detail;
 }(_react2.default.Component);
 
 exports.default = (0, _store.withReduxSaga)((0, _reactRedux.connect)(function (state) {
     return state;
-})(Index));
-
-/***/ }),
-/* 279 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _getPrototypeOf = __webpack_require__(47);
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(48);
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(49);
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(50);
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(55);
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRedux = __webpack_require__(72);
-
-var _item = __webpack_require__(280);
-
-var _item2 = _interopRequireDefault(_item);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var List = function (_React$Component) {
-    (0, _inherits3.default)(List, _React$Component);
-
-    function List() {
-        (0, _classCallCheck3.default)(this, List);
-        return (0, _possibleConstructorReturn3.default)(this, (List.__proto__ || (0, _getPrototypeOf2.default)(List)).apply(this, arguments));
-    }
-
-    (0, _createClass3.default)(List, [{
-        key: 'finish',
-        value: function finish(id) {
-            this.props.dispatch({
-                type: '/finish_todo',
-                data: this.props.todoList,
-                id: id
-            });
-        }
-    }, {
-        key: 'delete',
-        value: function _delete(id) {
-            this.props.dispatch({
-                type: '/del_todo',
-                data: this.props.todoList,
-                id: id
-            });
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            var todoList = this.props.todoList;
-            if (!!todoList === false || todoList.length === 0) {
-                return null;
-            }
-
-            return _react2.default.createElement(
-                'ul',
-                null,
-                todoList.map(function (item) {
-                    return _react2.default.createElement(_item2.default, {
-                        key: item.id,
-                        data: item,
-                        finish: _this2.finish.bind(_this2, item.id),
-                        'delete': _this2.delete.bind(_this2, item.id)
-                    });
-                })
-            );
-        }
-    }]);
-    return List;
-}(_react2.default.Component);
-
-exports.default = (0, _reactRedux.connect)(function (state) {
-    return state;
-})(List);
-
-/***/ }),
-/* 280 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _getPrototypeOf = __webpack_require__(47);
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(48);
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(49);
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(50);
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(55);
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRouterDom = __webpack_require__(132);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Item = function (_React$Component) {
-    (0, _inherits3.default)(Item, _React$Component);
-
-    function Item() {
-        (0, _classCallCheck3.default)(this, Item);
-        return (0, _possibleConstructorReturn3.default)(this, (Item.__proto__ || (0, _getPrototypeOf2.default)(Item)).apply(this, arguments));
-    }
-
-    (0, _createClass3.default)(Item, [{
-        key: 'render',
-        value: function render() {
-            var data = this.props.data;
-
-            var style = data.finish ? { textDecoration: 'line-through' } : {};
-            return _react2.default.createElement(
-                'li',
-                null,
-                _react2.default.createElement(
-                    'span',
-                    { style: style, onClick: this.props.finish },
-                    data.name
-                ),
-                '\xA0\xA0\xA0\xA0\xA0\xA0',
-                _react2.default.createElement(
-                    _reactRouterDom.Link,
-                    { to: '/detail/' + data.id },
-                    _react2.default.createElement(
-                        'span',
-                        null,
-                        '\u67E5\u770B'
-                    )
-                ),
-                '\xA0\xA0\xA0\xA0',
-                _react2.default.createElement(
-                    'a',
-                    { href: 'javascript:;', onClick: this.props.delete },
-                    '\u5220\u9664'
-                )
-            );
-        }
-    }]);
-    return Item;
-}(_react2.default.Component);
-
-exports.default = Item;
+})(Detail));
 
 /***/ })
 /******/ ]);
