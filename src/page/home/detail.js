@@ -1,6 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import { withReduxSaga } from '../store'
+import { withReduxSaga } from '../../store'
 import { connect } from 'react-redux'
 
 class Detail extends React.Component {

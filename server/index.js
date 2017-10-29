@@ -3,66 +3,40 @@ const server = express()
 const path = require('path')
 const render = require('./render')
 const axios = require('axios')
-server.use('/static',express.static('./client/dist'));
+const routes = require('../routes')
 
-server.get('/', async (req, res) => {
+/**
+ * 注册express路由
+ * 包括静态资源、react-router、mock数据(api地址)
+ */
+server.use('/static', express.static('./client/dist'))
+require('../mock')(server)
 
-    const Index = require('./dist/page/index.js')
+routes.map(item => { 
+    server.get(item.path, async (req, res) => { 
 
-    const Component = Index.default || Index
-
-    const props = await Component.getInitialProps({ req, res })
+        const _Component = require(`./dist/page/${item.page}.js`)
+        
+        const Component = _Component.default || _Component
     
-    const html = render(Component, props)
-
-    res.send(`
-        <div id="wrap">${html}</div>
-        <div id="data" data-state=${JSON.stringify(props)}></div>
-        <script src="/static/main.js"></script>
-        <script src="/static/page/index.js"></script>
-    `)
-})
-
-server.get('/detail/:id', async (req, res) => {
+        const props = await Component.getInitialProps({ req, res })
+        
+        const html = render(Component, props)
     
-    const Detail = require('./dist/page/detail.js')
-    
-    const Component = Detail.default || Detail
-
-    const props = Component.getInitialProps ? await Component.getInitialProps({ req, res }) : {}
-
-    const html = render(Component, props)
-
-    res.send(`
-        <div id="wrap">${html}</div>
-        <div id="data" data-state=${JSON.stringify(props)}></div>
-        <script src="/static/main.js"></script>
-        <script src="/static/page/index.js"></script>
-    `)
-})
-
-server.get('/todo_list', async (req, res) => { 
-
-    res.send({
-        todoList:[{
-            id:1,
-            name: '完成redux-saga的学习',
-            finish: false
-        }, {
-            id:2,
-            name: '完成react-ssr的学习',
-            finish: false    
-        }]
+        res.send(`
+            <html>
+                <head>
+                    <title>首页</title>
+                    <link rel="stylesheet" type="text/css" href="/static/style/app.css" />
+                </head>
+                <div id="wrap">${html}</div>
+                <div id="data" data-state=${JSON.stringify(props)}></div>
+                <script src="/static/main.js"></script>
+                <script src="/static/page/index.js"></script>
+            </html>
+        `)
     })
 })
-
-server.get('/todo_detail', async (req, res) => { 
-    
-    res.send({
-        todoDetail:'这是todoList的详情'
-    })
-})
-
 
 server.listen(4000, () => { 
     console.log('http://localhost:4000')

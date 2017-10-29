@@ -1,18 +1,7 @@
 
 import { call, put, take, takeEvery, takeLatest } from 'redux-saga/effects'
-import { RECEIVE_TODO_DETAIL,RECEIVE_TODO } from '../action'
-
+import { RECEIVE_TODO } from '../actions'
 import axios from 'axios'
-
-function* getTodoDetail(action) { 
-    try {
-        const { data: { todoDetail } } = yield call(axios.get, 'http://localhost:4000/todo_detail')
-        yield put(RECEIVE_TODO_DETAIL(todoDetail))
-
-    } catch (error) {
-        yield put(RECEIVE_TODO_DETAIL(error))
-    }
-}
 
 function* getTodoList() {
     try {
@@ -49,8 +38,6 @@ function* delTodo(action) {
     yield put(RECEIVE_TODO(Object.assign([],data)))
 }
 
-
-
 function* finish_todo(action) { 
     let { data, id } = action
 
@@ -63,9 +50,7 @@ function* finish_todo(action) {
     yield put(RECEIVE_TODO(Object.assign([],data)))
 }
 
-
-export default function* rootSaga() { 
-    yield takeEvery('/get_todo_detail', getTodoDetail)
+export default function* () { 
     yield takeEvery('/finish_todo', finish_todo)
     yield takeEvery('/get_todo', getTodoList)
     yield takeEvery('/del_todo', delTodo)

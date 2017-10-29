@@ -1,8 +1,8 @@
 import React from 'react';
-import AppContainer from '../index'
+import AppContainer from '../src/app'
 import ReactDOM from 'react-dom';
 //import { AppContainer } from 'react-hot-loader'
-import configureStore from '../store'
+import configureStore from '../src/store'
 
 const appContainer = document.getElementById('wrap')
 const appObj = document.getElementById('data')

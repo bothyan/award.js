@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import './style/item.scss'
 
 class Item extends React.Component {
     render() {
@@ -7,7 +8,7 @@ class Item extends React.Component {
         const style = data.finish ? { textDecoration: 'line-through' } : {}
         return (
             <li>
-                <span style={style} onClick={this.props.finish}>{data.name}</span>
+                <span style={style} onClick={this.props.finish} className="name">{data.name}</span>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <Link to={`/detail/${data.id}`}><span>查看</span></Link>&nbsp;&nbsp;&nbsp;&nbsp;
                 <a href="javascript:;" onClick={this.props.delete}>删除</a>

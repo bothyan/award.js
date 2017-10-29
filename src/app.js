@@ -3,20 +3,13 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 import { withReduxSaga } from './store'
 import { connect } from 'react-redux'
-import { REFRESH } from './action'
 
-import Index from './page/index'
-import Detail from './page/detail'
+import Routes from '../routes'
 
-const routers = [{
-    path: '/',
-    exact: true,
-    Component: Index
-}, {
-    path: '/detail/:id',
-    Component: Detail
-}]
-
+Routes.map(item => { 
+    const Component = require(`./page/${item.page}`)
+    item.Component = Component.default || Component
+})
 
 class AppContainer extends React.Component {
 
@@ -25,7 +18,7 @@ class AppContainer extends React.Component {
             <Router>
                 <Switch>
                     {
-                        routers.map((router, index) => (
+                        Routes.map((router, index) => (
                             <Route key={index}
                                 exact={router.exact} 
                                 path={router.path}

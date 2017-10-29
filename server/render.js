@@ -1,6 +1,6 @@
 const { createElement } = require('react')
 const { renderToString, renderToStaticMarkup} = require('react-dom/server')
-const { StaticRouter } = require('react-router')
+const { StaticRouter } = require('react-router-dom')
 
 
 module.exports = function Render(Component,props) { 

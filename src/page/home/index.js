@@ -1,10 +1,8 @@
 import React from 'react'
-import { BEIGIN_RECEIVE_USER } from '../action'
 import axios from 'axios'
-import { withReduxSaga } from '../store'
+import { withReduxSaga } from '../../store'
 import { connect } from 'react-redux'
-import List from '../components/Index/list'
-import {BrowserRouter as Router,StaticRouter} from 'react-router-dom'
+import List from '../../components/Index/list'
 
 class Index extends React.Component {
 
