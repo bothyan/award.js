@@ -27,16 +27,18 @@ class List extends React.Component {
         }
 
         return (
-            <ul>
-                {todoList.map(item => { 
-                    return <Item
-                        key={item.id}
-                        data={item}
-                        finish={this.finish.bind(this, item.id)}
-                        delete={this.delete.bind(this, item.id)}
-                    />
-                })}   
-            </ul>    
+            <div className="todolist-section">
+                <ul className="todo-list">
+                    {todoList.map(item => { 
+                        return <Item
+                            key={item.id}
+                            data={item}
+                            finish={this.finish.bind(this, item.id)}
+                            delete={this.delete.bind(this, item.id)}
+                        />
+                    })}   
+                </ul>  
+            </div>    
         )
                 
     }

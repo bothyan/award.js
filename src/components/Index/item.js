@@ -7,11 +7,20 @@ class Item extends React.Component {
         const { data } = this.props
         const style = data.finish ? { textDecoration: 'line-through' } : {}
         return (
-            <li>
-                <span style={style} onClick={this.props.finish} className="name">{data.name}</span>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <Link to={`/detail/${data.id}`}><span>查看</span></Link>&nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="javascript:;" onClick={this.props.delete}>删除</a>
+            <li className="todo-list-item">
+                {data.finish ?
+                    <del>
+                        <p onClick={this.props.finish}>{data.name}</p>
+                    </del>
+                    :
+                    <p onClick={this.props.finish}>{data.name}</p>
+                }
+                <div className="item-action">
+                    <Link to={`/detail/${data.id}`}><span>查看</span></Link>
+                    <button onClick={this.props.delete} className="pure-button">
+                        <i className="iconfont icon-delete"></i>
+                    </button>
+                </div>    
             </li>
         )
     }

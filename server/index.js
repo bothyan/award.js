@@ -47,7 +47,11 @@ routes.map(item => {
         res.send(`
             <html>
                 <head>
-                    <title>首页</title>
+                    <meta charset="UTF-8">
+                    <meta name="viewport"
+                      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+                    <title>React同构开发Demo</title>
+                    <link rel="stylesheet" href="//at.alicdn.com/t/font_62vouh9aajug14i.css">                    
                     <link rel="stylesheet" type="text/css" href="${sourcePath}style/app.css" />
                 </head>
                 <div id="wrap">${html}</div>

@@ -5,6 +5,8 @@ import { withReduxSaga } from './store'
 import { connect } from 'react-redux'
 
 import Routes from '../routes'
+import './common/rem'
+import './common/style/common.scss'
 
 Routes.map(item => { 
     const Component = require(`./page/${item.page}`)
