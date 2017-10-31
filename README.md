@@ -57,4 +57,4 @@ http://localhost:4000/
 
 ## License
 
-[GPL](https://github.com/bailicangdu/vue2-elm/blob/master/COPYING)
+[GPL](https://github.com/Topthinking/react-ssr/blob/master/License)
