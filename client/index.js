@@ -1,19 +1,24 @@
-import React from 'react';
-import AppContainer from '../src/app'
-import ReactDOM from 'react-dom';
-//import { AppContainer } from 'react-hot-loader'
+import 'react-hot-loader/patch'
+import React from 'react'
+import App from '../src/app'
+import ReactDOM from 'react-dom'
+import { AppContainer } from 'react-hot-loader'
 import configureStore from '../src/store'
 
-const appContainer = document.getElementById('wrap')
-const appObj = document.getElementById('data')
-const appData = JSON.parse(appObj.getAttribute("data-state"))
-appObj.remove()
+//获取服务器数据
+const AppDOM = document.getElementById('wrap')
+const Obj = document.getElementById('data')
+const DataState = JSON.parse(Obj.getAttribute("data-state"))
+Obj.remove()
 
-appData.first = true
-const store = configureStore(appData)
+//存储store
+DataState.first = true
+const store = configureStore(DataState)
 
 ReactDOM.render(
-    <AppContainer store={store}/>
+    <AppContainer>
+        <App store={store} />
+    </AppContainer>    
     ,
-    appContainer
+    AppDOM
 )

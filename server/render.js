@@ -5,8 +5,10 @@ const { StaticRouter } = require('react-router-dom')
 
 module.exports = function Render(Component,props) { 
 
-    const _Component = createElement(Component,props)
+    const _Component = createElement(Component, props)
+    
+    const render = process.env.NODE_ENV !== 'production' ? renderToStaticMarkup : renderToString
 
-    return renderToString(createElement(StaticRouter, { context: {}},_Component));
+    return render(createElement(StaticRouter, { context: {}},_Component));
     
 }

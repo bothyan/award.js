@@ -4,7 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     entry: {
-        app: './client/index.js',
+        app: ['./client/index.js', 'webpack-hot-middleware/client?reload=true'],
         vendor: [   // 这里是依赖的库文件配置，和CommonsChunkPlugin配合使用可以单独打包
             'react',
             'react-dom',
@@ -15,9 +15,9 @@ module.exports = {
         ]
     },
     output: {
-        path: path.resolve(__dirname, '../client/dist'),
         filename: "[name].js",
-        chunkFilename: '[name]'
+        chunkFilename: '[name]',
+        publicPath: '/_client/webpack/'
     },
     resolve: {
         extensions: ['.js', '.jsx']
@@ -45,22 +45,24 @@ module.exports = {
         }),
 
         //js代码压缩
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-            //supresses warnings, usually from module minification
-            warnings: false
-            },
-            beautify:false,
-            comments:false
-        }),
+        // new webpack.optimize.UglifyJsPlugin({
+        //     compress: {
+        //     //supresses warnings, usually from module minification
+        //     warnings: false
+        //     },
+        //     beautify:false,
+        //     comments:false
+        // }),
 
-        // 定义为生产环境，编译 React 时压缩到最小
-        new webpack.DefinePlugin({
-            'process.env':{
-                'NODE_ENV': JSON.stringify('production')
-            }
-        }),
+        // // 定义为生产环境，编译 React 时压缩到最小
+        // new webpack.DefinePlugin({
+        //     'process.env':{
+        //         'NODE_ENV': JSON.stringify('production')
+        //     }
+        // }),
 
-        new ExtractTextPlugin('style/[name].css')
+        new ExtractTextPlugin('style/[name].css'),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoEmitOnErrorsPlugin()
     ]
 }

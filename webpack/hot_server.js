@@ -12,7 +12,7 @@ routes.map(item => {
 module.exports = {
     entry,
     output: {
-        path: path.resolve(__dirname, '../server/dist'),
+        path: path.resolve(__dirname, '../.server'),
         filename: "page/[name].js",
         libraryTarget: 'commonjs2',
         strictModuleExceptionHandling: true,
@@ -42,6 +42,8 @@ module.exports = {
         extensions: ['.js', '.jsx']
     },
     plugins: [
-        new ExtractTextPlugin('style/[name].css')
+        new ExtractTextPlugin('style/[name].css'),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoEmitOnErrorsPlugin()
     ]
 }

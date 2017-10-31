@@ -26,13 +26,15 @@ class AppContainer extends React.Component {
 
                                 // 需要异步去获取数据
                                     
-                                const Component = router.Component
+                                    const Component = router.Component
+                                
+                                    //console.log(this.props)
 
-                                if (!this.props.first) {
+                                //if (!this.props.first) {
                                     Component.getInitialProps()
-                                } else {
-                                    this.props.first = false
-                                }
+                                //} else {
+                                   // this.props.first = false
+                                //}
                                     
                                 return (
                                     <Component {...this.props} {...props} />
@@ -47,4 +49,4 @@ class AppContainer extends React.Component {
 
 }
 
-export default connect(state => state)(AppContainer)
+export default connect(state => state || {})(AppContainer)

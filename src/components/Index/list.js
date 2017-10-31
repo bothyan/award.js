@@ -43,4 +43,4 @@ class List extends React.Component {
     
 }
 
-export default connect(state => state)(List)
+export default connect(state => state || {})(List)

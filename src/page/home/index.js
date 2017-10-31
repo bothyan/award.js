@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from 'axios'
+import { Link } from 'react-router-dom'
 import { withReduxSaga } from '../../store'
 import { connect } from 'react-redux'
 import List from '../../components/Index/list'
@@ -16,6 +16,7 @@ class Index extends React.Component {
         return (
                 <div>
                     <h1 onClick={this.getList.bind(this)}>TODO-LIST</h1>
+                    <Link to="/list"><span>点击</span></Link>
                     <input type="text" ref="todo" />
                     <button onClick={this.submit.bind(this)}>提交</button>
                     <List />
@@ -39,4 +40,4 @@ class Index extends React.Component {
 
 }
 
-export default withReduxSaga(connect(state=>state)(Index))
+export default withReduxSaga(connect(state => state || {})(Index))

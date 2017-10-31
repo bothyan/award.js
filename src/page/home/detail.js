@@ -16,4 +16,4 @@ class Detail extends React.Component {
     }
 }
 
-export default withReduxSaga(connect(state=>state)(Detail))
+export default withReduxSaga(connect(state=>state || {})(Detail))
