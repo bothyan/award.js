@@ -20,7 +20,7 @@ class Index extends React.Component {
                 <div>
                     <header>
                         <h1 className="title">
-                            TodoList
+                            <Link to="/list">TodoList</Link>
                         </h1>
                     </header>
                     <Comment />

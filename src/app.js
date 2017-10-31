@@ -20,29 +20,31 @@ class AppContainer extends React.Component {
             <Router>
                 <Switch>
                     {
-                        Routes.map((router, index) => (
-                            <Route key={index}
-                                exact={router.exact} 
-                                path={router.path}
-                                render={(props) => {
+                        Routes.map((router, index) => {
+                            return (
+                                <Route key={index}
+                                    exact={router.exact}
+                                    path={router.path}
+                                    render={(props) => {
 
-                                // 需要异步去获取数据
-                                    
-                                    const Component = router.Component
+                                        // 需要异步去获取数据                                    
+                                        const Component = router.Component
                                 
-                                    //console.log(this.props)
-
-                                //if (!this.props.first) {
-                                    Component.getInitialProps()
-                                //} else {
-                                   // this.props.first = false
-                                //}
+                                        console.log(this.props)
+                                
+                                        if (React.load) {
+                                            const props = Component.getInitialProps()
+                                            console.log(props)
+                                        } else {
+                                            React.load = true
+                                        }
                                     
-                                return (
-                                    <Component {...this.props} {...props} />
-                                )
-                            }} />
-                        ))
+                                        return (
+                                            <Component name="hello" {...this.props} {...props} />
+                                        )
+                                    }} />
+                            )
+                        })
                     }
                 </Switch>
             </Router>

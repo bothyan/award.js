@@ -6,7 +6,6 @@
  */
 
 import { fork } from 'redux-saga/effects'
-
 import todo from './todo'
 import detail from './detail'
 

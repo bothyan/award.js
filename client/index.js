@@ -12,7 +12,7 @@ const DataState = JSON.parse(Obj.getAttribute("data-state"))
 Obj.remove()
 
 //存储store
-DataState.first = true
+React.load = false
 const store = configureStore(DataState)
 
 ReactDOM.render(
