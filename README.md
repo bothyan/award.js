@@ -1,7 +1,8 @@
 # react ssr 解决方案
 
 ## 写在前面
-    利用react、webpack、express实现了一个服务端渲染的框架，其中express是一个桥梁作用，react和webpack都需要对服务端和客户端来处理，目前实现的功能在基础架构中可以看到
+    利用react、webpack、express实现了一个服务端渲染的框架，
+    其中express是一个桥梁作用，react和webpack都需要对服务端和客户端来处理，目前实现的功能在基础架构中可以看到
 
 ## 技术栈：
 react + react-dom + react-router-dom + redux + redux-saga + webpack + express + nodejs8++
