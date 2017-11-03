@@ -3,7 +3,9 @@ const path = require('path')
 const routes = require('../routes')
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const entry = {}
+const entry = {
+    'document':'./document.js'
+}
 
 routes.map(item => { 
     entry[item.page] = `./src/page/${item.page}.js`

@@ -22,20 +22,24 @@ if (process.env.NODE_ENV !== 'production') {
 routes.map(item => { 
     server.get(item.path, async (req, res) => { 
 
-        let _Component
+        let _Component,_Document
         if (process.env.NODE_ENV !== 'production') {
             //这里需要删除require的缓存
             delete require.cache[require.resolve(`../.server/page/${item.page}.js`)]
+            delete require.cache[require.resolve(`../.server/page/document.js`)]            
             
+            _Document = require(`../.server/page/document.js`)
             _Component = require(`../.server/page/${item.page}.js`)
 
         } else { 
 
+            _Document = require(`./dist/page/document.js`)
             _Component = require(`./dist/page/${item.page}.js`)
             
         }
 
         const Component = _Component.default || _Component
+        const Document = _Document.default || _Document        
     
         const props = await Component.getInitialProps({ req, res })
         
@@ -43,23 +47,14 @@ routes.map(item => {
 
         //资源路径
         const sourcePath = process.env.NODE_ENV !== 'production' ? '/_client/webpack/' : '/static/'
-
-        res.send(`
-            <html>
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport"
-                      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-                    <title>React同构开发Demo</title>
-                    <link rel="stylesheet" href="//at.alicdn.com/t/font_62vouh9aajug14i.css">                    
-                    <link rel="stylesheet" type="text/css" href="${sourcePath}style/app.css" />
-                </head>
-                <div id="wrap">${html}</div>
-                <div id="data" data-state=${JSON.stringify(props)}></div>
-                <script src="${sourcePath}main.js"></script>
-                <script src="${sourcePath}app.js"></script>
-            </html>
-        `)
+        
+        const _html = render(Document, {
+            sourcePath,
+            comProps:props,
+            html
+        })
+        
+        res.send('<!DOCTYPE html>' + _html)
     })
 })
 

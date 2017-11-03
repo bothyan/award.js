@@ -1,14 +1,12 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Switch , Prompt, Redirect } from 'react-router-dom'
-
-import { withReduxSaga } from './store'
 import { connect } from 'react-redux'
 
 import Routes from '../routes'
-import './common/style/common.scss'
+import { Loading } from '../document'
 
 Routes.map(item => { 
-    const Component  = require(`./page/${item.page}`)   
+    const Component  = require(`../src/page/${item.page}`)   
     item.Component = Component.default || Component
 })
 
@@ -24,7 +22,7 @@ const InitiAlProps = (Component) => {
 
         render() {
             if (!this.state.initDone) { 
-                return <h1>加载中...</h1>
+                return <Loading/>
             }
             return <Component {...this.state} {...this.props}/>  
         }

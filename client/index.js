@@ -1,8 +1,10 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import App from '../src/app'
+import App from './app'
 import ReactDOM from 'react-dom'
 import configureStore from '../src/store'
+
+import '../src'
 
 //获取服务器数据
 const AppDOM = document.getElementById('wrap')

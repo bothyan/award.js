@@ -1,0 +1,52 @@
+.loading{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    margin: 0 auto;
+    min-width: 320px;
+    max-width: 640px;
+    top: 0;
+}
+
+.indicator{
+    transition: opacity .2s linear;
+}
+
+.indicator-wrapper{
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%,0);
+    border-radius: 5px;
+    background: rgba(0,0,0,.7);
+    color: #fff;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 10px;
+
+    .indicator-spin{
+        text-align: center;
+
+        .spinner-snake{
+            border:2px solid transparent;
+            border-top-color: rgb(204, 204, 204);
+            border-left-color: rgb(204, 204, 204);
+            border-bottom-color: rgb(204, 204, 204);
+            height: 30px;
+            width: 30px;
+            animation: spinner-rotate .8s infinite linear;               
+            border-radius: 50%;
+
+        }
+    }
+}
+
+@keyframes spinner-rotate{
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(1turn);
+    }
+}
