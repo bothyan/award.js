@@ -9,7 +9,7 @@ import './style/index.scss'
 
 class Index extends React.Component {
 
-    static async getInitialProps({ store,isServer }) {
+    static async getInitialProps({ store, isServer }) {
         store.dispatch({
             type:'/get_todo'
         })
@@ -17,7 +17,7 @@ class Index extends React.Component {
 
     render() {
         return (
-                <div>
+                <div className="content">
                     <header>
                         <h1 className="title">
                             <Link to="/list">TodoList</Link>

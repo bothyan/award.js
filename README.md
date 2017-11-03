@@ -23,6 +23,11 @@ npm run start
 http://localhost:4000/ 
 ```
 
+## 技术难点
+```
+1.保证react-routerV4前端路由的数据加载方式和服务端路由数据加载的方式一致性,都是统一使用getInitialProps方法，兼容了redux和ajax方式
+```
+
 ## 基础架构
 - [x] 加入redux-saga作为redux异步处理的中间件
 - [x] 服务端渲染获取数据的方法getInitialProps
@@ -30,7 +35,7 @@ http://localhost:4000/
 - [x] react-router-dom作为前端路由,这里采用的redux-saga的异步方案来配合实现组件初始化数据的获取
 - [x] mock数据，reducers合并和写法规则，saga的合并和写法规则
 - [x] 客户端和服务端的热更新
-- [ ] getInitialProps异步同步获取数据，也就是路由加载前异步获取初始化的数据
+- [x] getInitialProps异步同步获取数据，也就是路由加载前异步获取初始化的数据
 - [ ] 将架构代码按环境合并
 - [ ] 将项目代码按结构拆分
 - [ ] 静态文件处理，如css、图片资源

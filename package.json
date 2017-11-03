@@ -10,12 +10,13 @@
     "watch_server": "webpack --config ./webpack/hot_server.js -d -w --progress --colors",
     "dev": "NODE_ENV=development npm run watch_server & npm run watch_client",
     "build": "NODE_ENV=production npm run build_client && NODE_ENV=production npm run build_server",
-    "start":"NODE_ENV=production node ./server/index.js"
+    "start": "NODE_ENV=production node ./server/index.js"
   },
   "author": "Topthinking",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.17.0",
+    "bundle-loader": "^0.5.5",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",

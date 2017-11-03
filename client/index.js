@@ -1,8 +1,7 @@
-import 'react-hot-loader/patch'
 import React from 'react'
+import { Provider } from 'react-redux'
 import App from '../src/app'
 import ReactDOM from 'react-dom'
-import { AppContainer } from 'react-hot-loader'
 import configureStore from '../src/store'
 
 //获取服务器数据
@@ -16,9 +15,9 @@ React.load = false
 const store = configureStore(DataState)
 
 ReactDOM.render(
-    <AppContainer>
-        <App store={store} />
-    </AppContainer>    
+    <Provider store={store}>
+        <App />
+    </Provider>    
     ,
     AppDOM
 )
