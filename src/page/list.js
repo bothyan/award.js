@@ -1,21 +1,29 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+const getRemoteData = () => { 
+    return new Promise((resolve, reject) => {
+        setTimeout(() => { 
+            resolve({
+                name: 'top'
+            })
+        },1500)
+    })
+}
+
 class Index extends React.Component {
 
     static async getInitialProps() {
-        return {
-            name: 'topsss',
-            hello:'123'
-        }
+        const data = await getRemoteData()
+        return {...data}
     }
 
     render() {
         return (
-            <h1>
-                {this.props.name} {this.props.hello}
+            <div>
+                <h1> hello {this.props.name}</h1>
                 <Link to="/">返回首页</Link>
-            </h1>
+            </div>    
         )
     }
 }

@@ -5,7 +5,6 @@ import { withReduxSaga } from './store'
 import { connect } from 'react-redux'
 
 import Routes from '../routes'
-//import './common/rem'
 import './common/style/common.scss'
 
 Routes.map(item => { 
@@ -18,10 +17,15 @@ const InitiAlProps = (Component) => {
 
         constructor() { 
             super()
-            this.state = {}
+            this.state = {
+                initDone:false
+            }
         }
 
         render() {
+            if (!this.state.initDone) { 
+                return <h1>加载中...</h1>
+            }
             return <Component {...this.state} {...this.props}/>  
         }
     
@@ -30,7 +34,10 @@ const InitiAlProps = (Component) => {
                 this.setState({ ...await Component.getInitialProps() })
             } else { 
                 React.load = true
-            }    
+            }
+            this.setState({
+                initDone:true
+            })
         }
     }
 

@@ -3,11 +3,20 @@ import {Link} from 'react-router-dom'
 import { withReduxSaga } from '../../store'
 import { connect } from 'react-redux'
 
+const getRemoteData = (store) => { 
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            store.dispatch({
+                type:'/get_todo_detail'
+            })
+            resolve()
+        },1500)
+    })
+}
+
 class Detail extends React.Component {
     static async getInitialProps({ store }) { 
-        store.dispatch({
-            type:'/get_todo_detail'
-        })
+       await getRemoteData(store)
     }
     render() { 
         return (
