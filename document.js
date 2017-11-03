@@ -1,5 +1,6 @@
 import React from 'react'
 import LoadingComponent from './src/components/Loading'
+import './src/common/style/common.scss'
 
 class Main extends React.Component { 
     render() { 

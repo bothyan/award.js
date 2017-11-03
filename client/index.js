@@ -4,8 +4,6 @@ import App from './app'
 import ReactDOM from 'react-dom'
 import configureStore from '../src/store'
 
-import '../src'
-
 //获取服务器数据
 const AppDOM = document.getElementById('wrap')
 const Obj = document.getElementById('data')
