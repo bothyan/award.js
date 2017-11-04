@@ -1,8 +1,8 @@
 {
-  "name": "react-ssr",
-  "version": "1.0.0",
+  "name": "more.js",
+  "version": "0.0.1",
   "description": "react-ssr解决方案",
-  "main": "",
+  "main": "./server/index.js",
   "scripts": {
     "build_client": "webpack --config ./webpack/client.js --progress --colors",
     "build_server": "webpack --config ./webpack/server.js --progress --colors",
@@ -12,8 +12,12 @@
     "build": "NODE_ENV=production npm run build_client && NODE_ENV=production npm run build_server",
     "start": "NODE_ENV=production node ./server/index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Topthinking/more.js.git"
+  },
   "author": "Topthinking",
-  "license": "ISC",
+  "license": "GPL",
   "dependencies": {
     "axios": "^0.17.0",
     "bundle-loader": "^0.5.5",
