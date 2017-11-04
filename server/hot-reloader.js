@@ -1,7 +1,7 @@
 const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
-const webpackDevConfig = require('../webpack/hot_client')
+import webpackDevConfig from './webpack/hot_client'
 const compiler = webpack(webpackDevConfig);
 
 module.exports = class HotReloader { 

@@ -1,16 +1,30 @@
-const express = require('express')
+import express from 'express'
+import { resolve, join } from 'path'
+import render from './render'
+import axios from 'axios'
+import parseArgs from 'minimist'
+
 const server = express()
-const path = require('path')
-const render = require('./render')
-const axios = require('axios')
-const routes = require('../routes')
+const argv = parseArgs(process.argv.slice(2), {
+    alias: {
+      h: 'help',
+      H: 'hostname',
+      p: 'port'
+    },
+    boolean: ['h'],
+    string: ['H'],
+    default: { p: 3000 }
+  })
+const dir = resolve(argv._[0] || '.')
+
+const routes = require(join(dir,'./routes'))
 
 /**
  * 注册express路由
  * 包括静态资源、react-router、mock数据(api地址)
  */
-server.use('/static', express.static('./client/dist'))
-require('../mock')(server)
+//server.use('/static', express.static('./client/dist'))
+require(join(dir,'./mock'))(server)
 const HotReloader = require('./hot-reloader')
 
 if (process.env.NODE_ENV !== 'production') {

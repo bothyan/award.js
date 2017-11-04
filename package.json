@@ -4,9 +4,10 @@
   "description": "react-ssr解决方案",
   "main": "",
   "scripts": {
+    "release": "taskr",
     "build_client": "webpack --config ./webpack/client.js --progress --colors",
     "build_server": "webpack --config ./webpack/server.js --progress --colors",
-    "watch_client": "node ./server/index.js",
+    "watch_client": "node ./dist/server/index.js",
     "watch_server": "webpack --config ./webpack/hot_server.js -d -w --progress --colors",
     "dev": "NODE_ENV=development npm run watch_server & npm run watch_client",
     "build": "NODE_ENV=production npm run build_client && NODE_ENV=production npm run build_server",
@@ -25,6 +26,10 @@
     "redux-saga": "^0.16.0"
   },
   "devDependencies": {
+    "@taskr/babel": "^1.1.0",
+    "@taskr/clear": "^1.1.0",
+    "@taskr/esnext": "^1.1.0",
+    "@taskr/watch": "^1.1.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-import": "^1.6.2",
@@ -37,11 +42,13 @@
     "express": "^4.16.2",
     "extract-text-webpack-plugin": "^3.0.2",
     "loadash": "^1.0.0",
+    "node-notifier": "^5.1.2",
     "node-sass": "^4.5.3",
     "null-loader": "^0.1.1",
     "react-hot-loader": "^3.1.1",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.0",
+    "taskr": "^1.1.0",
     "webpack": "^3.8.1",
     "webpack-dev-middleware": "^1.12.0",
     "webpack-hot-middleware": "^2.20.0"
