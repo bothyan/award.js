@@ -1,4 +1,4 @@
-# react ssr 解决方案
+# react ssr 解决方案 (维护中...bug)
 
 ## 写在前面
     利用react、webpack、express实现了一个服务端渲染的框架，
