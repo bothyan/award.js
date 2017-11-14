@@ -1,4 +1,4 @@
-# react ssr 解决方案 (维护中...bug)
+# swrn ( server side rendered webpack react nodejs )
 
 ## 写在前面
     利用react、webpack、express实现了一个服务端渲染的框架，
@@ -8,27 +8,32 @@
 ## 技术栈：
 react + react-dom + react-router-dom + redux + redux-saga + webpack + express + nodejs8++
 
-## 项目快速体验
-```
-
-```
-
-
 ## 快速体验
-```shell
-//注意  node版本使用8以上的 暂时还没有用babel支持async 和 await
-git clone https://github.com/Topthinking/swrn.git
-cd react-ssr
-npm install
 
-// 开发模式
-npm run dev
-
-// 发布模式
-npm run build
-npm run start 
-http://localhost:4000/ 
+安装
+```bash
+npm install --save swrn
 ```
+
+package.json
+```json
+{
+  "scripts": {
+    "dev": "swrn"
+  }
+}
+```
+在项目中创建文件`./page/index.js`
+
+```jsx
+export default () => <div>Welcome to swrn.js!</div>
+```
+
+接下来执行 `npm run dev` 然后访问站点 `http://localhost:4000`
+
+    这才刚刚开始 ，还有很多没有加入，不过基础的热更新，热替换，还有服务端渲染的雏形已经建立
+
+# swrn的项目简要
 
 ## 技术难点
 ```
