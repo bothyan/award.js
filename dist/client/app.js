@@ -42,20 +42,32 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouterDom = require('react-router-dom');
 
-var _reactRedux = require('react-redux');
-
-var _routes = require('../routes');
-
-var _routes2 = _interopRequireDefault(_routes);
-
-var _document = require('../document');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_routes2.default.map(function (item) {
-    var Component = require('../src/page/' + item.page);
-    item.Component = Component.default || Component;
-});
+//const Routes = require('./routes.js')
+//const { Loading } = require('./document.js')
+
+// Routes.map(item => { 
+//     const Component  = require(`./page/${item.page}.js`)
+//     item.Component = Component.default || Component
+// })
+
+var Routes = [{
+    page: 'home/index',
+    path: '/',
+    exact: true
+}, {
+    page: 'home/detail',
+    path: '/detail/:id'
+}, {
+    page: 'list',
+    path: '/list',
+    exact: true
+}, {
+    page: 'center/list',
+    path: '/center',
+    exact: true
+}];
 
 var InitiAlProps = function InitiAlProps(Component) {
     var Initi = function (_React$Component) {
@@ -67,7 +79,8 @@ var InitiAlProps = function InitiAlProps(Component) {
             var _this = (0, _possibleConstructorReturn3.default)(this, (Initi.__proto__ || (0, _getPrototypeOf2.default)(Initi)).call(this));
 
             _this.state = {
-                initDone: false
+                initDone: false,
+                MineCommponet: {}
             };
             return _this;
         }
@@ -76,14 +89,24 @@ var InitiAlProps = function InitiAlProps(Component) {
             key: 'render',
             value: function render() {
                 if (!this.state.initDone) {
-                    return _react2.default.createElement(_document.Loading, null);
+                    return _react2.default.createElement(
+                        'h1',
+                        null,
+                        '\u52A0\u8F7D\u4E2D...'
+                    );
+                } else {
+                    var Text = this.state.MineCommponet;
+                    console.log(Text);
+                    return _react2.default.createElement(Text, (0, _extends3.default)({}, this.state, this.props));
                 }
-                return _react2.default.createElement(Component, (0, _extends3.default)({}, this.state, this.props));
             }
         }, {
             key: 'componentDidMount',
             value: function () {
                 var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
+                    var _this2 = this;
+
+                    var obj;
                     return _regenerator2.default.wrap(function _callee$(_context) {
                         while (1) {
                             switch (_context.prev = _context.next) {
@@ -112,11 +135,25 @@ var InitiAlProps = function InitiAlProps(Component) {
                                     _react2.default.load = true;
 
                                 case 12:
-                                    this.setState({
-                                        initDone: true
-                                    });
+                                    // this.setState({
+                                    //     initDone:true
+                                    // })
 
-                                case 13:
+                                    obj = document.createElement("script");
+
+                                    obj.setAttribute("src", "http://localhost:8001/index.js");
+                                    document.body.append(obj);
+
+                                    setTimeout(function () {
+                                        var _Component = MineCommponet.default;
+                                        console.log(_Component);
+                                        _this2.setState({
+                                            initDone: true,
+                                            MineCommponet: _Component
+                                        });
+                                    }, 1500);
+
+                                case 16:
                                 case 'end':
                                     return _context.stop();
                             }
@@ -137,8 +174,25 @@ var InitiAlProps = function InitiAlProps(Component) {
     return Initi;
 };
 
-var AppContainer = function (_React$Component2) {
-    (0, _inherits3.default)(AppContainer, _React$Component2);
+var Test = function (_React$Component2) {
+    (0, _inherits3.default)(Test, _React$Component2);
+
+    function Test() {
+        (0, _classCallCheck3.default)(this, Test);
+        return (0, _possibleConstructorReturn3.default)(this, (Test.__proto__ || (0, _getPrototypeOf2.default)(Test)).apply(this, arguments));
+    }
+
+    (0, _createClass3.default)(Test, [{
+        key: 'render',
+        value: function render() {
+            return null;
+        }
+    }]);
+    return Test;
+}(_react2.default.Component);
+
+var AppContainer = function (_React$Component3) {
+    (0, _inherits3.default)(AppContainer, _React$Component3);
 
     function AppContainer() {
         (0, _classCallCheck3.default)(this, AppContainer);
@@ -148,7 +202,7 @@ var AppContainer = function (_React$Component2) {
     (0, _createClass3.default)(AppContainer, [{
         key: 'render',
         value: function render() {
-            var _this3 = this;
+            var _this5 = this;
 
             return _react2.default.createElement(
                 _reactRouterDom.BrowserRouter,
@@ -156,15 +210,17 @@ var AppContainer = function (_React$Component2) {
                 _react2.default.createElement(
                     _reactRouterDom.Switch,
                     null,
-                    _routes2.default.map(function (router, index) {
+                    Routes.map(function (router, index) {
                         return _react2.default.createElement(_reactRouterDom.Route, { key: index,
                             exact: router.exact,
                             path: router.path,
                             component: function component(props) {
+                                var Component = router.Component;
+                                Component = Test;
                                 return _react2.default.createElement(
                                     'div',
                                     null,
-                                    _react2.default.createElement(InitiAlProps(router.Component), (0, _extends3.default)({}, _this3.props, props))
+                                    _react2.default.createElement(InitiAlProps(Component), (0, _extends3.default)({}, _this5.props, props))
                                 );
                             } });
                     })
@@ -175,6 +231,4 @@ var AppContainer = function (_React$Component2) {
     return AppContainer;
 }(_react2.default.Component);
 
-exports.default = (0, _reactRedux.connect)(function (state) {
-    return state || {};
-})(AppContainer);
+exports.default = AppContainer;

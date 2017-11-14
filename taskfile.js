@@ -36,7 +36,7 @@ export async function build (task) {
 
 export default async function (task) {
   await task.start('build')
-  //await task.watch('bin/*', 'bin')
+  await task.watch('bin/*', 'bin')
   //await task.watch('pages/**/*.js', 'copy')
   await task.watch('server/**/*.js', 'server')
   await task.watch('client/**/*.js', 'client')

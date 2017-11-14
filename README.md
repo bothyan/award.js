@@ -8,6 +8,12 @@
 ## 技术栈：
 react + react-dom + react-router-dom + redux + redux-saga + webpack + express + nodejs8++
 
+## 项目快速体验
+```
+
+```
+
+
 ## 快速体验
 ```shell
 //注意  node版本使用8以上的 暂时还没有用babel支持async 和 await
@@ -68,3 +74,11 @@ http://localhost:4000/
 ## License
 
 [GPL](https://github.com/Topthinking/react-ssr/blob/master/License)
+
+
+## 问题
+
+一份需要webpack打包的js文件，需要两份打包结果
+其中一个打包结果直接到目录dist/server下，另一个打包结果到目录dist/client下，
+但注意的是，第二个打包结果中的所有js文件需要被一个方法包裹
+请写下实现此打包方式的webpack配置

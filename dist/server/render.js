@@ -1,20 +1,21 @@
 'use strict';
 
-var _require = require('react'),
-    createElement = _require.createElement;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = Render;
 
-var _require2 = require('react-dom/server'),
-    renderToString = _require2.renderToString,
-    renderToStaticMarkup = _require2.renderToStaticMarkup;
+var _react = require('react');
 
-var _require3 = require('react-router-dom'),
-    StaticRouter = _require3.StaticRouter;
+var _server = require('react-dom/server');
 
-module.exports = function Render(Component, props) {
+var _reactRouterDom = require('react-router-dom');
 
-    var _Component = createElement(Component, props);
+function Render(Component, props) {
 
-    var render = process.env.NODE_ENV !== 'production' ? renderToStaticMarkup : renderToString;
+    var _Component = (0, _react.createElement)(Component, props);
 
-    return render(createElement(StaticRouter, { context: {} }, _Component));
-};
+    var render = process.env.NODE_ENV !== 'production' ? _server.renderToStaticMarkup : _server.renderToString;
+
+    return render((0, _react.createElement)(_reactRouterDom.StaticRouter, { context: {} }, _Component));
+}
