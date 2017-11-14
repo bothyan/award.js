@@ -17,7 +17,7 @@ react + react-dom + react-router-dom + redux + redux-saga + webpack + express + 
 ## 快速体验
 ```shell
 //注意  node版本使用8以上的 暂时还没有用babel支持async 和 await
-git clone https://github.com/Topthinking/react-ssr.git
+git clone https://github.com/Topthinking/swrn.git
 cd react-ssr
 npm install
 
