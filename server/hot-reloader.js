@@ -1,23 +1,34 @@
-const webpack = require('webpack')
-const webpackDevMiddleware = require('webpack-dev-middleware')
-const webpackHotMiddleware = require('webpack-hot-middleware')
-const webpackDevConfig = require('../webpack/hot_client')
-const compiler = webpack(webpackDevConfig);
+import WebpackDevMiddleware from 'webpack-dev-middleware'
+import WebpackHotMiddleware from 'webpack-hot-middleware'
+import webpack from './build/webpack'
+import clean from './build/clean'
 
-module.exports = class HotReloader { 
-    constructor(server) { 
+export default class HotReloader { 
+    
+    constructor(server,dir,routes) { 
         this.server = server
+        this.dir = dir
+        this.routes = routes
     }
 
-    start() { 
-        this.server.use(webpackDevMiddleware(compiler, {
-            publicPath: webpackDevConfig.output.publicPath,
+    async start() { 
+
+        const [compiler] = await Promise.all([
+            webpack(this.dir, this.routes),
+            clean(this.dir)
+        ])
+                
+        this.server.use(WebpackDevMiddleware(compiler, {
+            publicPath: '/_client/webpack/',
             noInfo: true,
-            stats: {
-                colors: true
-            }
+            quiet: true,
+            clientLogLevel: 'warning'
         }))
-        
-        this.server.use(webpackHotMiddleware(compiler))
+
+        this.server.use(WebpackHotMiddleware(compiler,{
+            path: '/_client/webpack-hmr',
+            log: false,
+            heartbeat: 2500
+        }))
     }
 }

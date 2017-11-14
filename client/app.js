@@ -1,14 +1,30 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Switch , Prompt, Redirect } from 'react-router-dom'
-import { connect } from 'react-redux'
 
-import Routes from '../routes'
-import { Loading } from '../document'
+//const Routes = require('./routes.js')
+//const { Loading } = require('./document.js')
 
-Routes.map(item => { 
-    const Component  = require(`../src/page/${item.page}`)   
-    item.Component = Component.default || Component
-})
+// Routes.map(item => { 
+//     const Component  = require(`./page/${item.page}.js`)
+//     item.Component = Component.default || Component
+// })
+
+const Routes = [{
+    page:'home/index',
+    path: '/',
+    exact: true
+}, {
+    page:'home/detail',    
+    path: '/detail/:id'
+},{
+    page:'list',    
+    path: '/list',
+    exact: true
+},{
+    page:'center/list',    
+    path: '/center',
+    exact: true
+}]
 
 const InitiAlProps = (Component) => {
     class Initi extends React.Component {
@@ -16,15 +32,19 @@ const InitiAlProps = (Component) => {
         constructor() { 
             super()
             this.state = {
-                initDone:false
+                initDone: false,
+                MineCommponet: {}
             }
         }
 
         render() {
-            if (!this.state.initDone) { 
-                return <Loading/>
-            }
-            return <Component {...this.state} {...this.props}/>  
+            if (!this.state.initDone) {
+                return <h1>加载中...</h1>
+            } else {
+                const Text = this.state.MineCommponet
+                console.log(Text)
+                return <Text {...this.state} {...this.props} />
+            }    
         }
     
         async componentDidMount() {
@@ -33,15 +53,34 @@ const InitiAlProps = (Component) => {
             } else { 
                 React.load = true
             }
-            this.setState({
-                initDone:true
-            })
+            // this.setState({
+            //     initDone:true
+            // })
+
+            var obj = document.createElement("script")
+            obj.setAttribute("src", "http://localhost:8001/index.js")
+            document.body.append(obj)
+
+            setTimeout(() => {
+                var _Component = MineCommponet.default
+                console.log(_Component)
+                this.setState({
+                    initDone: true,
+                    MineCommponet:_Component
+                })
+            },1500)
         }
     }
 
     return Initi
-}    
+}
 
+
+class Test extends React.Component { 
+    render() { 
+        return null
+    }
+}
 
 class AppContainer extends React.Component {
 
@@ -55,8 +94,10 @@ class AppContainer extends React.Component {
                                 <Route key={index}
                                     exact={router.exact}
                                     path={router.path}
-                                    component={(props) => { 
-                                        return <div>{React.createElement(InitiAlProps(router.Component),{ ...this.props,...props })}</div>                                         
+                                    component={(props) => {
+                                        let Component = router.Component
+                                        Component = Test
+                                        return <div>{React.createElement(InitiAlProps(Component),{ ...this.props,...props })}</div>                                         
                                     }} />
                             )
                         })
@@ -68,4 +109,4 @@ class AppContainer extends React.Component {
 
 }
 
-export default connect(state => state || {})(AppContainer)
+export default AppContainer

@@ -1,14 +1,13 @@
-const { createElement } = require('react')
-const { renderToString, renderToStaticMarkup} = require('react-dom/server')
-const { StaticRouter } = require('react-router-dom')
+import { createElement } from 'react'
+import { renderToString, renderToStaticMarkup } from 'react-dom/server'
+import { StaticRouter } from 'react-router-dom'
 
-
-module.exports = function Render(Component,props) { 
+export default function Render(Component, props) {
 
     const _Component = createElement(Component, props)
-    
+
     const render = process.env.NODE_ENV !== 'production' ? renderToStaticMarkup : renderToString
 
-    return render(createElement(StaticRouter, { context: {}},_Component));
-    
+    return render(createElement(StaticRouter, { context: {} }, _Component));
+
 }
