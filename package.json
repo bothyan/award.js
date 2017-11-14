@@ -4,7 +4,7 @@
   "description": "react-ssr解决方案",
   "main": "./dist/server/index.js",
   "bin": {
-    "more": "./dist/bin/more"
+    "swrn": "./dist/bin/swrn"
   },
   "scripts": {
     "release": "taskr",

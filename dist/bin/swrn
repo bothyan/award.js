@@ -40,7 +40,7 @@ if (commands.has(cmd)) {
   args = process.argv.slice(2);
 }
 
-var bin = (0, _path.join)(__dirname, 'more-' + cmd);
+var bin = (0, _path.join)(__dirname, 'swrn-' + cmd);
 
 var startProcess = function startProcess() {
   var proc = (0, _crossSpawn.spawn)(bin, args, { stdio: 'inherit', customFds: [0, 1, 2] });
