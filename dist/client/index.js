@@ -1,16 +1,5 @@
 'use strict';
 
-<<<<<<< HEAD
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRedux = require('react-redux');
-
-var _app = require('./app');
-
-var _app2 = _interopRequireDefault(_app);
-=======
 var _set = require('babel-runtime/core-js/set');
 
 var _set2 = _interopRequireDefault(_set);
@@ -32,39 +21,17 @@ var _webpackHmr2 = _interopRequireDefault(_webpackHmr);
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
->>>>>>> swrn
 
 var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-<<<<<<< HEAD
-var _store = require('../src/store');
-
-var _store2 = _interopRequireDefault(_store);
-=======
 var _reactHotLoader = require('react-hot-loader');
->>>>>>> swrn
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //获取服务器数据
 var AppDOM = document.getElementById('wrap');
-<<<<<<< HEAD
-var Obj = document.getElementById('data');
-var DataState = JSON.parse(Obj.getAttribute("data-state"));
-Obj.remove();
-
-//存储store
-_react2.default.load = false;
-var store = (0, _store2.default)(DataState);
-
-_reactDom2.default.render(_react2.default.createElement(
-    _reactRedux.Provider,
-    { store: store },
-    _react2.default.createElement(_app2.default, null)
-), AppDOM);
-=======
 // const Obj = document.getElementById('data')
 // const DataState = JSON.parse(Obj.getAttribute("data-state"))
 // Obj.remove()
@@ -123,4 +90,3 @@ function render(Component) {
         _react2.default.createElement(Component)
     ), AppDOM);
 }
->>>>>>> swrn
