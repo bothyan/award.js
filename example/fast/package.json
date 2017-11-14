@@ -1,0 +1,15 @@
+{
+  "name": "page",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev":"swrn"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "swrn": "^0.0.1"
+  }
+}
