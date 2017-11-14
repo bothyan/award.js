@@ -1,5 +1,5 @@
 {
-  "name": "react-ssr",
+  "name": "swrn",
   "version": "1.0.0",
   "description": "react-ssr解决方案",
   "main": "./dist/server/index.js",
