@@ -13,7 +13,7 @@ export default async function createCompiler(dir, routes) {
     const document = await glob('document.js', { cwd: dir })
 
     let entry = {
-        'main.js': join(__dirname, '..', '..', '..', 'client/index.js')
+        'main.js': join(__dirname, '..', '..', 'client/index.js')
     }
 
     if (document.length) {

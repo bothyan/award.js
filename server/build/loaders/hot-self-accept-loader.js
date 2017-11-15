@@ -9,6 +9,6 @@ module.exports = function (content, sourceMap) {
       module.hot.accept()
       window.route.update(Component)
    
-    })(module.exports.default,'/')
+    })(typeof __webpack_exports__ !== 'undefined' ? __webpack_exports__.default : (module.exports.default || module.exports),'/')
   `, sourceMap)
 }

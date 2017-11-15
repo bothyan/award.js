@@ -67,7 +67,7 @@ exports.default = function () {
                     case 2:
                         document = _context.sent;
                         entry = {
-                            'main.js': (0, _path.join)(__dirname, '..', '..', '..', 'client/index.js')
+                            'main.js': (0, _path.join)(__dirname, '..', '..', 'client/index.js')
                         };
 
 

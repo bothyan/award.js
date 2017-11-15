@@ -1,13 +1,14 @@
 {
   "name": "swrn",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "react-ssr解决方案",
   "main": "./dist/server/index.js",
   "bin": {
     "swrn": "./dist/bin/swrn"
   },
   "scripts": {
-    "build": "taskr"
+    "build": "taskr",
+    "release":"taskr release"
   },
   "repository": {
     "type": "git",
