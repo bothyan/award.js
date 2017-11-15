@@ -54,7 +54,7 @@ export default async function createCompiler(dir, routes) {
                 {
                     test: /\.js(\?[^?]*)?$/,
                     loader: 'hot-self-accept-loader',
-                    include: [dir],
+                    include: [join(dir,'page')],
                 },
                 {
                     test: /\.js(\?[^?]*)?$/,
