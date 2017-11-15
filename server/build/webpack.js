@@ -65,6 +65,7 @@ export default async function createCompiler(dir, routes) {
                     test: /\.(js|json)(\?[^?]*)?$/,
                     loader: 'emit-file-loader',
                     include: [dir],
+                    exclude: /node_modules/,
                     options: {
                         name: 'dist/[path][name].[ext]',                    
                         transform ({ content, sourceMap, interpolatedName }) {
