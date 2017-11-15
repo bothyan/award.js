@@ -1,5 +1,5 @@
 # swrn ( server side rendered webpack react nodejs ) Nodejs8
-
+[![NPM version](https://img.shields.io/npm/v/next.svg)](https://www.npmjs.com/package/swrn) 
 ## 写在前面
     利用react、webpack、express实现了一个服务端渲染的框架，
     其中express是一个桥梁作用，react和webpack都需要对服务端和客户端来处理，目前实现的功能在基础架构中可以看到
