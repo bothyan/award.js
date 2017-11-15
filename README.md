@@ -1,7 +1,5 @@
 # swrn ( server side rendered webpack react nodejs )
 
-# 暂时不可用，需要安装很多依赖，后续将在安装swrn的时候自动安装依赖包
-
 ## 写在前面
     利用react、webpack、express实现了一个服务端渲染的框架，
     其中express是一个桥梁作用，react和webpack都需要对服务端和客户端来处理，目前实现的功能在基础架构中可以看到
