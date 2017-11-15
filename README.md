@@ -1,17 +1,15 @@
-# swrn ( server side rendered webpack react nodejs )
+# swrn ( server side rendered webpack react nodejs ) Nodejs8
 
 ## 写在前面
     利用react、webpack、express实现了一个服务端渲染的框架，
     其中express是一个桥梁作用，react和webpack都需要对服务端和客户端来处理，目前实现的功能在基础架构中可以看到
     node.js8 主要是为了在node端运行支持async和await用法
 
-## 技术栈：
-react + react-dom + react-router-dom + redux + redux-saga + webpack + express + nodejs8++
-
 ## 快速体验
 
 安装
 ```bash
+//node > 8
 npm install --save swrn
 ```
 

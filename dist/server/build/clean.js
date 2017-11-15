@@ -26,7 +26,7 @@ exports.default = function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            return _context.abrupt('return', (0, _del2.default)((0, _path.resolve)(dir, './server'), { force: true }));
+            return _context.abrupt('return', (0, _del2.default)((0, _path.resolve)(dir, './.server'), { force: true }));
 
           case 1:
           case 'end':

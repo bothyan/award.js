@@ -1,6 +1,6 @@
 import express from 'express'
 import { resolve, join } from 'path'
-import render from './render'
+import render, { serveStatic } from './render'
 import HotReloader from './hot-reloader'
 import axios from 'axios'
 import parseArgs from 'minimist'
@@ -118,6 +118,16 @@ export default class Server {
                 
                 res.send('<!DOCTYPE html>' + _html)
             })
+        })
+
+        this.server.get('/_client/webpack/main.js', async (req, res) => { 
+            const path = join(this.dir,'.server', 'main.js')
+            return await serveStatic(req, res, path)
+        })
+
+        this.server.get('/_client/webpack/bundles/page/index.js', async (req, res) => { 
+            const path = join(this.dir,'.server', 'bundles/page/index.js')
+            return await serveStatic(req, res, path)
         })
     }
 

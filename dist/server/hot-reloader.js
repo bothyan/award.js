@@ -75,7 +75,7 @@ var HotReloader = function () {
 
 
                                 this.server.use((0, _webpackDevMiddleware2.default)(compiler, {
-                                    publicPath: '/_client/webpack/',
+                                    publicPath: '/_client/top/webpack',
                                     noInfo: true,
                                     quiet: true,
                                     clientLogLevel: 'warning'

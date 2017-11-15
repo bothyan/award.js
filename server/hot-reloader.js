@@ -19,7 +19,7 @@ export default class HotReloader {
         ])
                 
         this.server.use(WebpackDevMiddleware(compiler, {
-            publicPath: '/_client/webpack/',
+            publicPath: '/_client/top/webpack',
             noInfo: true,
             quiet: true,
             clientLogLevel: 'warning'

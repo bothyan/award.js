@@ -20,7 +20,7 @@ export default class Index extends React.Component {
     render() { 
         return (
             <h1 onClick={this.change.bind(this)} style={{ color: this.state.new ? 'red' : 'black' }}>
-                hello world eee
+                hello test
             </h1>
         )
     }

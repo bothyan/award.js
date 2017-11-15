@@ -3,7 +3,7 @@ const childProcess = require('child_process')
 const isWindows = /^win/.test(process.platform)
 
 export async function compile (task) {
-  await task.parallel(['bin', 'server', 'lib', 'client'])
+  await task.parallel(['bin', 'server', 'client'])
 }
 
 export async function bin (task, opts) {
@@ -31,7 +31,7 @@ export async function copy (task) {
 }
 
 export async function build (task) {
-  await task.serial(['copy', 'compile'])
+  await task.serial(['compile'])
 }
 
 export default async function (task) {

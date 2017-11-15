@@ -37,7 +37,7 @@ export default async function createCompiler(dir, routes) {
             path: resolve(dir, './.server'),
             filename: "[name]",
             libraryTarget: 'commonjs2',
-            publicPath: '/_client/webpack/',
+            publicPath: '/_client/top/webpack',
             strictModuleExceptionHandling: true,
             chunkFilename: '[name]'
         },

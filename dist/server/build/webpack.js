@@ -91,7 +91,7 @@ exports.default = function () {
                                 path: (0, _path.resolve)(dir, './.server'),
                                 filename: "[name]",
                                 libraryTarget: 'commonjs2',
-                                publicPath: '/_client/webpack/',
+                                publicPath: '/_client/top/webpack',
                                 strictModuleExceptionHandling: true,
                                 chunkFilename: '[name]'
                             },
