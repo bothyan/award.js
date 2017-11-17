@@ -19,14 +19,14 @@ export default class HotReloader {
         ])
                 
         this.server.use(WebpackDevMiddleware(compiler, {
-            publicPath: '/_client/top/webpack',
+            publicPath: '/_swrn/webpack/',
             noInfo: true,
             quiet: true,
             clientLogLevel: 'warning'
         }))
 
         this.server.use(WebpackHotMiddleware(compiler,{
-            path: '/_client/webpack-hmr',
+            path: '/_swrn/webpack-hmr',
             log: false,
             heartbeat: 2500
         }))

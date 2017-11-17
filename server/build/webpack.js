@@ -13,7 +13,8 @@ export default async function createCompiler(dir, routes) {
     const document = await glob('document.js', { cwd: dir })
 
     let entry = {
-        'main.js': join(__dirname, '..', '..', 'client/index.js')
+        'main.js': join(__dirname, '..', '..', 'client/index.js'),
+        'router.js': join(dir,`main.js`)
     }
 
     if (document.length) {
@@ -23,11 +24,11 @@ export default async function createCompiler(dir, routes) {
     }
     
     routes.map(item => { 
-        entry[`bundles/page/${item.page}.js`] = join(dir,`./page/${item.page}.js`)
+        entry[join('bundles',item.page)] = join(dir,item.page)
     })
 
     entry = _.mapValues(entry, val => [
-        'webpack-hot-middleware/client?path=/_client/webpack-hmr&timeout=2000',
+        'webpack-hot-middleware/client?path=/_swrn/webpack-hmr&timeout=2000',
         val
     ])
 
@@ -35,9 +36,8 @@ export default async function createCompiler(dir, routes) {
         entry,
         output: {
             path: resolve(dir, './.server'),
-            filename: "[name]",
-            libraryTarget: 'commonjs2',
-            publicPath: '/_client/top/webpack',
+            filename: "[name]",          
+            publicPath: '/_swrn/webpack/',
             strictModuleExceptionHandling: true,
             chunkFilename: '[name]'
         },
@@ -64,7 +64,7 @@ export default async function createCompiler(dir, routes) {
                 {
                     test: /\.(js|json)(\?[^?]*)?$/,
                     loader: 'emit-file-loader',
-                    include: [dir],
+                    include: [dir,join(dir,'page')],
                     exclude: /node_modules/,
                     options: {
                         name: 'dist/[path][name].[ext]',                    
@@ -93,7 +93,16 @@ export default async function createCompiler(dir, routes) {
                     loader: 'babel-loader',
                     options: {
                         presets: ["react", "es2015", "stage-0"],
-                        plugins: ["react-require","transform-runtime"]
+                        plugins: ["react-require", "transform-runtime",
+                            [
+                                require.resolve('babel-plugin-module-resolver'),
+                                {
+                                    alias: {
+                                        'swrn/router': require.resolve('../../lib/router'),
+                                    }
+                                }
+                            ]
+                        ]
                     }
                 }
             ]

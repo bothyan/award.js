@@ -74,14 +74,24 @@ export default () => <div>Welcome to swrn.js!</div>
 ├── src                      //项目存放目录，这里可以根据当前的demo去扩展新的项目
 ```
 
-## License
-
-[GPL](https://github.com/Topthinking/react-ssr/blob/master/License)
-
-
 ## 问题
 
 一份需要webpack打包的js文件，需要两份打包结果
 其中一个打包结果直接到目录dist/server下，另一个打包结果到目录dist/client下，
 但注意的是，第二个打包结果中的所有js文件需要被一个方法包裹
 请写下实现此打包方式的webpack配置
+
+
+## 开发
+```shell
+git clone https://github.com/Topthinking/swrn.git
+npm install
+npm run build //启动源码编译服务
+cd example/fast
+../../dist/bin/swrn //开启服务，目前需注意要在当前目录下出现.server文件，再访问，这个后续优化
+```
+然后访问站点 `http://localhost:4000` 进行修改源码，编译，调试，开发
+
+## License
+
+[GPL](https://github.com/Topthinking/react-ssr/blob/master/License)

@@ -1,8 +1,9 @@
 import 'react-hot-loader/patch'
-import webpackHotMiddlewareClient from 'webpack-hot-middleware/client?overlay=false&reload=true&path=/_client/webpack-hmr'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {AppContainer} from 'react-hot-loader';
+import { AppContainer } from 'react-hot-loader'
+import { Link, Router, Route } from 'swrn/router'
+import './webpack-hot-middleware-client'
 
 //获取服务器数据
 const AppDOM = document.getElementById('wrap')
@@ -46,8 +47,12 @@ window.route = route
 function render(Component) {
     ReactDOM.render(
         <AppContainer>
-            {React.createElement(Component)}
+            <Router> 
+                <Route path="/about/:id" render="./page/index.js"/>  
+                {React.createElement(Component)}
+            </Router>
         </AppContainer>
-        , AppDOM)
+    , AppDOM)
 }
+
 

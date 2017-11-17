@@ -1,6 +1,7 @@
 
 import React from 'react'
-
+import { Link } from 'swrn/router'
+//import './style/index.scss'
 
 export default class Index extends React.Component { 
 
@@ -19,9 +20,12 @@ export default class Index extends React.Component {
 
     render() { 
         return (
-            <h1 onClick={this.change.bind(this)} style={{ color: this.state.new ? 'red' : 'black' }}>
-                hello test
+            <div>
+            <h1 className="hello" onClick={this.change.bind(this)} style={{ color: this.state.new ? 'red' : 'black' }}>
+                hello test 123                
             </h1>
+            <Link to="/home/mine" tag="span"><a>mine</a></Link>    
+            </div>    
         )
     }
 }

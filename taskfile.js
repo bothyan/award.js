@@ -3,7 +3,7 @@ const childProcess = require('child_process')
 const isWindows = /^win/.test(process.platform)
 
 export async function compile (task) {
-  await task.parallel(['bin', 'server', 'client'])
+  await task.parallel(['bin', 'server', 'lib', 'client'])
 }
 
 export async function bin (task, opts) {
@@ -40,7 +40,7 @@ export default async function (task) {
   //await task.watch('pages/**/*.js', 'copy')
   await task.watch('server/**/*.js', 'server')
   await task.watch('client/**/*.js', 'client')
-  //await task.watch('lib/**/*.js', 'lib')
+  await task.watch('lib/**/*.js', 'lib')
 }
 
 export async function release (task) {
