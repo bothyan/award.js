@@ -16,13 +16,10 @@ class Main extends React.Component {
                 <div id="data" data-state={JSON.stringify(comProps)}></div>
                 <script dangerouslySetInnerHTML={{
                     __html: `
-                    module={}
-                    __NEXT_PAGE = []
-                    window.__NEXT_REGISTER_PAGE = function (route,fn) {
-                        __NEXT_PAGE.push(fn())
-                    }
+                    module={}                    
                 `}} />
                 <script src={`${sourcePath}main.js`}></script>
+                <script src={`${sourcePath}bundles/main.js`}></script>
                 <script src={`${sourcePath}${page}`}></script>                
             </html>
         )

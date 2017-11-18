@@ -2,7 +2,7 @@
 import React from 'react'
 //import './style/index.scss'
 
-export default class Index extends React.Component { 
+export default class Mine extends React.Component { 
 
     constructor() { 
         super()
@@ -20,7 +20,7 @@ export default class Index extends React.Component {
     render() { 
         return (
             <h1 className="hello" onClick={this.change.bind(this)} style={{ color: this.state.new ? 'red' : 'black' }}>
-                hello mine 123
+                hello mine {this.props.query.id}
             </h1>
         )
     }

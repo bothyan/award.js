@@ -1,5 +1,5 @@
-const IS_BUNDLED_PAGE = /^bundles[/\\]page.*\.js$/
-const MATCH_ROUTE_NAME = /^bundles[/\\]page[/\\](.*)\.js$/
+const IS_BUNDLED_PAGE = /^bundles[/\\](page.*\.js|main\.js)$/
+const MATCH_ROUTE_NAME = /^bundles[/\\](page[/\\](.*)\.js|main\.js)$/
 
 export default class PagesPlugin {
     apply(compiler) {
@@ -28,9 +28,9 @@ export default class PagesPlugin {
 
                 const content = page.source()
                 const newContent = `
-            window.__NEXT_REGISTER_PAGE('${routeName}', function() {
+            window.__SWRN_REGISTER_PAGE__('${routeName}', function() {
               var comp = ${content}
-              return { page: comp.default }
+              return comp.default
             })
           `
             // Replace the exisiting chunk with the new content

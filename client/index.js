@@ -7,15 +7,9 @@ import './webpack-hot-middleware-client'
 
 //获取服务器数据
 const AppDOM = document.getElementById('wrap')
-// const Obj = document.getElementById('data')
-// const DataState = JSON.parse(Obj.getAttribute("data-state"))
-// Obj.remove()
-
-// ReactDOM.render(
-//     <App {...DataState}/>   
-//     ,
-//     AppDOM
-// )
+const Obj = document.getElementById('data')
+const DataState = JSON.parse(Obj.getAttribute("data-state"))
+Obj.remove()
 
 class Loading { 
     constructor() { 
@@ -24,7 +18,7 @@ class Loading {
 
     subscribe(fn) { 
         this.subscriptions.add(fn)
-        return () => this.subscriptions.delete(fn)
+        //return () => this.subscriptions.delete(fn)
     }
 
     update(Component) { 
@@ -38,19 +32,26 @@ class Loading {
 
 let route = new Loading()
 
-route.subscribe((Component) => { 
-    render(Component)
-})
-
 window.route = route
 
-function render(Component) {
+const __SWRN_PAGE__ = []
+let Main
+window.__SWRN_REGISTER_PAGE__ = function (route, fn) {
+    if (route == '/main.js') {
+        Main = fn()
+    } else { 
+        let Component = fn()
+        window.route.subscribe((Component) => { 
+            render(Main, {Component,route,...DataState})
+        })
+        render(Main, {Component,route,...DataState})
+    }
+}
+
+function render(Component, props = {}) {
     ReactDOM.render(
         <AppContainer>
-            <Router> 
-                <Route path="/about/:id" render="./page/index.js"/>  
-                {React.createElement(Component)}
-            </Router>
+            <Component {...props}/>
         </AppContainer>
     , AppDOM)
 }

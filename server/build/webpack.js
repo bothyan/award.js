@@ -14,7 +14,7 @@ export default async function createCompiler(dir, routes) {
 
     let entry = {
         'main.js': join(__dirname, '..', '..', 'client/index.js'),
-        'router.js': join(dir,`main.js`)
+        'bundles/main.js': join(dir,`main.js`)
     }
 
     if (document.length) {

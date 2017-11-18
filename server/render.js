@@ -1,16 +1,12 @@
 import { createElement } from 'react'
 import { renderToString, renderToStaticMarkup } from 'react-dom/server'
-import { StaticRouter } from 'react-router-dom'
 import send from 'send'
 
 export default function Render(Component, props) {
 
-    const _Component = createElement(Component, props)
-
     const render = process.env.NODE_ENV !== 'production' ? renderToStaticMarkup : renderToString
 
-    return render(createElement(StaticRouter, { context: {} }, _Component));
-
+    return render(createElement(Component, props))
 }
 
 export function serveStatic (req, res, path) {

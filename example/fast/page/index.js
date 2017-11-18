@@ -24,7 +24,7 @@ export default class Index extends React.Component {
             <h1 className="hello" onClick={this.change.bind(this)} style={{ color: this.state.new ? 'red' : 'black' }}>
                 hello test 123                
             </h1>
-            <Link to="/home/mine" tag="span"><a>mine</a></Link>    
+            <Link to="/mine/12" tag="span"><a>mine</a></Link>    
             </div>    
         )
     }
