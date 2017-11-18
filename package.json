@@ -1,6 +1,6 @@
 {
   "name": "swrn",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "react-ssr解决方案",
   "main": "./dist/server/index.js",
   "bin": {
@@ -10,6 +10,10 @@
     "build": "taskr",
     "release": "taskr release"
   },
+  "files": [
+    "dist",
+    "router.js"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Topthinking/swrn.git"
