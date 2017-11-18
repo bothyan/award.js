@@ -32,6 +32,29 @@ export default () => <div>Welcome to swrn.js!</div>
 
 另外在项目的`example`文件夹中，有一些已经实现的小项目
 
+## 自定义路由
+
+需要在项目的根目录下定义名称为`main.js`的文件，内容如下
+path  访问的地址
+render 绝对地址，暂时是这样，后续优化
+```js
+import React from 'react'
+import { Router,Route } from 'swrn/router'
+
+export default class Main extends React.Component{ 
+    render() { 
+        return (
+            <Router>
+                <h1>hello Swrn.js</h1>    
+                <Route path="/" render="/page/index.js"/>
+                <Route path="/about/:id" render="/page/about.js"/>                 
+            </Router>
+        )
+    }
+}
+```
+
+
 ## 总结的问题
 
     一份需要webpack打包的js文件，需要两份打包结果
@@ -76,7 +99,7 @@ git clone https://github.com/Topthinking/swrn.git
 npm install
 npm run build //启动源码编译服务
 cd example/fast
-../../dist/bin/swrn //开启服务，目前需注意要在当前目录下出现.server文件，再访问，这个后续优化
+../../dist/bin/swrn //开启服务，当看到访问的地址，即可访问
 ```
 然后访问站点 `http://localhost:4000` 进行修改源码，编译，调试，开发
 
