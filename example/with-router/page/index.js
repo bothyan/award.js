@@ -1,8 +1,19 @@
 
 import React from 'react'
 import { Link } from 'swrn/router'
+import axios from 'axios'
 
 export default class Index extends React.Component { 
+
+    static async getInitialProps() {
+        
+        const { data: { list } } = await axios.get('http://localhost:4000/api/list')
+
+        return {
+            name: 'top',
+            list
+        }
+    }
 
     constructor() { 
         super()
@@ -21,9 +32,12 @@ export default class Index extends React.Component {
         return (
             <div>
             <h1 className="hello" onClick={this.change.bind(this)} style={{ color: this.state.new ? 'red' : 'black' }}>
-                hello test       123         
+                hello {this.props.name}      
             </h1>
-            <Link to="/mine/12" tag="span"><a>mine</a></Link>    
+                <Link to="/mine/12/home/140" tag="span"><a>mine</a></Link>
+                <ul>{this.props.list.map(item => { 
+                    return <li key={item.id}>{item.name}</li>
+                })}</ul>    
             </div>    
         )
     }

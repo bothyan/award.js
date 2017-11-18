@@ -111,6 +111,14 @@ export default class Server {
             const path = join(this.dir, '.server', 'main.js')
             return await serveStatic(req, res, path)
         })
+
+        // mock数据
+        const mocks = await glob('mock/**/*.js', { cwd: this.dir })
+        if (mocks.length) {
+            mocks.map(item => { 
+                require(join(this.dir, item))(this.server)
+            })            
+        }        
     }
 
     async prepare() {

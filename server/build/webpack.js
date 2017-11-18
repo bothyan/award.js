@@ -14,15 +14,10 @@ export default async function createCompiler(dir, routes = {}, hasEntry = false)
 
     if (!hasEntry) {
         
-        const _document = await glob('document.js', { cwd: dir })
         const _main = await glob('main.js', { cwd: dir })
 
         entry = {
             'main.js': join(__dirname, '..', '..', 'client/index.js')            
-        }
-
-        if (_document.length) {
-            entry['bundles/page/document.js'] = join(dir, './document.js')
         }
 
         if (_main.length) { 
@@ -87,7 +82,10 @@ export default async function createCompiler(dir, routes = {}, hasEntry = false)
                             const transpiled = babelCore.transform(content, {
                                 babelrc: false,
                                 sourceMaps: false,
-                                inputSourceMap: sourceMap
+                                inputSourceMap: sourceMap,
+                                plugins: [
+                                    [require.resolve('babel-plugin-transform-es2015-modules-commonjs')]
+                                ]
                             })
 
                             return {

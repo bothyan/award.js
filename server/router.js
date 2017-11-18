@@ -48,18 +48,11 @@ export default class Router {
     //这里获取的是默认路由
     async getRoutes() {
 
-        let routes = await glob('routes.js', { cwd: this.dir })
-        const mocks = await glob('mock/**/*.js', { cwd: this.dir })
         const pages = await glob('page/**/*.js', { cwd: this.dir })
 
-        if (mocks.length) {
-            require(join(this.dir, './mock'))(this.server)
-        }
-
-        if (routes.length) {
-            routes = require(join(this.dir, './routes'))
-        } else {
-            routes = []
+        routes = []
+        
+        if (pages.length) {
             pages.map(item => {
                 let _path = item.substr(0, item.length - 3).substr(4)
                 _path = _path.split("/")
@@ -86,7 +79,7 @@ export default class Router {
                     path
                 })
             })
-        }
+        }    
 
         return routes
     }

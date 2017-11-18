@@ -1,5 +1,6 @@
 
 import React from 'react'
+import { Link } from 'swrn/router'
 
 export default class Mine extends React.Component { 
 
@@ -19,7 +20,9 @@ export default class Mine extends React.Component {
     render() { 
         return (
             <h1 className="hello" onClick={this.change.bind(this)} style={{ color: this.state.new ? 'red' : 'black' }}>
-                hello mine {this.props.query.id}
+                id：{this.props.query.id} uid： {this.props.query.uid}
+                <br />
+                <Link to="/" tag="a">回到首页</Link>
             </h1>
         )
     }

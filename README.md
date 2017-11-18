@@ -39,7 +39,7 @@ export default () => <div>Welcome to swrn.js!</div>
 path  访问的地址
 
 render 绝对地址，暂时是这样，后续优化
-```js
+```jsx
 import React from 'react'
 import { Router,Route } from 'swrn/router'
 
@@ -56,6 +56,32 @@ export default class Main extends React.Component{
 }
 ```
 
+## 异步加载初始化数据
+
+在组件内部使用`getInitialProps`,同时在组件内部，可以通过`this.props`获取
+```js
+static async getInitialProps() {    
+    const { data: { list } } = await axios.get('http://localhost:4000/api/list')
+    return {
+        name: 'top',
+        list
+    }
+}
+```
+
+## mock数据
+
+在项目根目录新建`mock`文件夹，在其文件夹中新建本地需要模拟数据的js文件
+```js
+module.exports = (server) => { 
+    //函数内部可以写任意 多个mock数据
+    server.get('/api/list', async (req, res) => {         
+        res.send('返回内容，比如json')
+    })
+
+    //...
+}
+```
 
 ## 总结的问题
 

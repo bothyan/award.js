@@ -36,16 +36,22 @@ window.route = route
 
 const __SWRN_PAGE__ = []
 let Main = null
+let _loaded = false
 
-window.__SWRN_REGISTER_PAGE__ = function (route, fn) {
+window.__SWRN_REGISTER_PAGE__ = async (route, fn) => {
     if (route == '/main.js') {
         Main = fn()
     } else { 
-        let Component = fn()
+        let Component = fn(),initialProps = {}
+
+        if (_loaded) {
+            initialProps = !Component.getInitialProps ? {} : await Component.getInitialProps()
+        } 
+        _loaded = true
         window.route.subscribe((Component) => { 
-            render(Main, {Component,route,...DataState})
+            render(Main, {Component,route,...DataState,...initialProps})
         })
-        render(Main, {Component,route,...DataState})
+        render(Main, {Component,route,...DataState,...initialProps})
     }
 }
 
