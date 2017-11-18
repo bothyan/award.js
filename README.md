@@ -30,7 +30,7 @@ export default () => <div>Welcome to swrn.js!</div>
 
 接下来执行 `npm run dev` 然后访问站点 `http://localhost:4000`
 
-另外在项目的`example`文件夹中，有一些已经实现的小项目
+另外在项目的`example`文件夹中，有一些已经实现的小项目,除了`basic-demo`项目
 
 ## 自定义路由
 
