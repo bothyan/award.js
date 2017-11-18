@@ -34,8 +34,10 @@ export default () => <div>Welcome to swrn.js!</div>
 
 ## 自定义路由
 
-需要在项目的根目录下定义名称为`main.js`的文件，内容如下
+如果需要扩展路由，那么在项目的根目录下定义名称为`main.js`的文件，内容如下
+
 path  访问的地址
+
 render 绝对地址，暂时是这样，后续优化
 ```js
 import React from 'react'
@@ -95,7 +97,7 @@ export default class Main extends React.Component{
 
 ## 开发
 ```shell
-git clone https://github.com/Topthinking/swrn.git
+git clone https://github.com/Topthinking/swrn.js.git
 npm install
 npm run build //启动源码编译服务
 cd example/fast
