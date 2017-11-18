@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'swrn/router'
 
 export default class Index extends React.Component { 
 
@@ -20,9 +19,8 @@ export default class Index extends React.Component {
         return (
             <div>
                 <h1 className="hello" onClick={this.change.bind(this)} style={{ color: this.state.new ? 'red' : 'black' }}>
-                    Hello Swrn.js           
+                    Swrn.js detail           
                 </h1>
-                <Link to="/about" tag="span">查看详情</Link>
             </div>    
         )
     }

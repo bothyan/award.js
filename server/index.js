@@ -8,6 +8,8 @@ import axios from 'axios'
 import parseArgs from 'minimist'
 import glob from 'glob-promise'
 import Document from './document'
+import App from '../lib/app'
+import { renderToString, renderToStaticMarkup } from 'react-dom/server'
 
 require('babel-register')({
     presets: ['react', 'es2015']
@@ -74,12 +76,12 @@ export default class Server {
                 const route = item.page
                 const initialProps = !Component.getInitialProps ? {} : await Component.getInitialProps({ req, res })
 
-                let html, props = { ...initialProps, route, query }
+                let html, props = { ...initialProps, route, query, routes:this.routes }
 
                 if (!!_Main) {
                     const Main = _Main.default || _Main
-                    props = { ...props, Component }
-                    html = render(Main, props)
+                    props = { ...props, Component, Main }
+                    html = renderToStaticMarkup(React.createElement(App,props), props)
                 } else {
                     html = render(Component, props)
                 }

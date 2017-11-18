@@ -1,10 +1,10 @@
 import 'react-hot-loader/patch'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { AppContainer } from 'react-hot-loader'
+import PropTypes from 'prop-types'
 import { Link, Router, Route } from 'swrn/router'
 import webpackHotMiddlewareClient from 'webpack-hot-middleware/client?overlay=false&reload=true&path=/_swrn/webpack-hmr'
-
+import App from '../lib/app'
 //获取服务器数据
 const AppDOM = document.getElementById('wrap')
 const Obj = document.getElementById('data')
@@ -51,18 +51,17 @@ window.__SWRN_REGISTER_PAGE__ = function (route, fn) {
 
 function render(Component, props = {}) {
     if (!!Component) {
+        props.Main = Component
         ReactDOM.render(
-            <AppContainer>
-                <Component {...props} />
-            </AppContainer>
+            <App {...props} />
             , AppDOM)
+        
     } else { 
         Component = props.Component
         delete props.Component
+        props.Main = Component
         ReactDOM.render(
-            <AppContainer>
-                <Component {...props} />
-            </AppContainer>
+            <App {...props} />
         , AppDOM)
     }    
 }
