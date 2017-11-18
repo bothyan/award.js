@@ -8,30 +8,40 @@ import TestPlugin from './plugins/test-plugin'
 import * as babelCore from 'babel-core'
 import _ from 'lodash'
 
-export default async function createCompiler(dir, routes) {
+export default async function createCompiler(dir, routes = {}, hasEntry = false) {
     
-    const document = await glob('document.js', { cwd: dir })
+    let entry
 
-    let entry = {
-        'main.js': join(__dirname, '..', '..', 'client/index.js'),
-        'bundles/main.js': join(dir,`main.js`)
-    }
+    if (!hasEntry) {
+        
+        const _document = await glob('document.js', { cwd: dir })
+        const _main = await glob('main.js', { cwd: dir })
 
-    if (document.length) {
-        entry.push({
-            'bundles/page/document.js':join(dir,'./document.js')
+        entry = {
+            'main.js': join(__dirname, '..', '..', 'client/index.js')            
+        }
+
+        if (_document.length) {
+            entry['bundles/page/document.js'] = join(dir, './document.js')
+        }
+
+        if (_main.length) { 
+            entry['bundles/main.js'] = join(dir, `main.js`)
+        }
+    
+        routes.map(item => {
+            entry[join('bundles', item.page)] = join(dir, item.page)
         })
+
+        entry = _.mapValues(entry, val => [
+            'webpack-hot-middleware/client?path=/_swrn/webpack-hmr&timeout=2000',
+            val
+        ])
+
+    } else { 
+        entry = hasEntry
     }
     
-    routes.map(item => { 
-        entry[join('bundles',item.page)] = join(dir,item.page)
-    })
-
-    entry = _.mapValues(entry, val => [
-        'webpack-hot-middleware/client?path=/_swrn/webpack-hmr&timeout=2000',
-        val
-    ])
-
     const webpackConfig = {
         entry,
         output: {

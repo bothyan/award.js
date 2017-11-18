@@ -30,5 +30,12 @@ export default class HotReloader {
             log: false,
             heartbeat: 2500
         }))
+
+        return new Promise((resolve, reject) => { 
+            compiler.plugin('done', () => { 
+                resolve()
+            })
+        })
+        
     }
 }

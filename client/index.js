@@ -35,7 +35,7 @@ let route = new Loading()
 window.route = route
 
 const __SWRN_PAGE__ = []
-let Main
+let Main = null
 window.__SWRN_REGISTER_PAGE__ = function (route, fn) {
     if (route == '/main.js') {
         Main = fn()
@@ -49,11 +49,21 @@ window.__SWRN_REGISTER_PAGE__ = function (route, fn) {
 }
 
 function render(Component, props = {}) {
-    ReactDOM.render(
-        <AppContainer>
-            <Component {...props}/>
-        </AppContainer>
-    , AppDOM)
+    if (!!Component) {
+        ReactDOM.render(
+            <AppContainer>
+                <Component {...props} />
+            </AppContainer>
+            , AppDOM)
+    } else { 
+        Component = props.Component
+        delete props.Component
+        ReactDOM.render(
+            <AppContainer>
+                <Component {...props} />
+            </AppContainer>
+        , AppDOM)
+    }    
 }
 
 

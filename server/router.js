@@ -1,6 +1,9 @@
 import glob from 'glob-promise'
 import { resolve, join } from 'path'
+import WebpackDevMiddleware from 'webpack-dev-middleware'
 import render from './render'
+import webpack from './build/webpack'
+import clean from './build/clean'
 
 export default class Router {
 
@@ -9,14 +12,37 @@ export default class Router {
     }
 
     async routers() { 
-        let routers
 
-        routers = await this.getConfigRoutes()
-        if (!routers.length) {
-            routers = await this.getRoutes()
-        }    
+        let _main = await glob('main.js', { cwd: this.dir })
+
+        //设置了main.js
+        if (_main.length) {
+
+            const [compiler] = await Promise.all([
+                webpack(this.dir, {}, { 'bundles/main.js': join(this.dir, `main.js`) }),
+                clean(this.dir)
+            ])
+
+            WebpackDevMiddleware(compiler, {
+                publicPath: '/_swrn/webpack/',
+                noInfo: true,
+                quiet: true,
+                clientLogLevel: 'warning'
+            })
+
+            return new Promise((resolve, reject) => {
+                compiler.plugin('done', () => {
+                    resolve()
+                })
+            }).then(async () => {
+                return await this.getConfigRoutes()
+            })
+            
+        } else { 
+            //未设置
+            return await this.getRoutes()
+        }
         
-        return routers
     }
 
     //这里获取的是默认路由
@@ -49,10 +75,10 @@ export default class Router {
                 if (_path.length) {
                     const join = _path.join('/')
                     path = `/${join}`
-                    page = 'page/' + join + (pop ? "/index" : '') + '.js'
+                    page = '/page/' + join + (pop ? "/index" : '') + '.js'
                 } else {
                     path = '/'
-                    page = 'page/index.js'
+                    page = '/page/index.js'
                 }
 
                 routes.push({
@@ -69,7 +95,7 @@ export default class Router {
     async getConfigRoutes() {
         global.SWRN_ROUTE = true
         let _Router
-        const routePath = join(this.dir, `./.server/dist/main.js`)
+        const routePath = join(this.dir, `.server/dist/main.js`)
         _Router = require(routePath)
         const Router = _Router.default || _Router
 
@@ -94,6 +120,7 @@ export default class Router {
             })
         }    
         global.SWRN_ROUTE = false
+        routers.push({page:'/main.js',path:null})
         return routers
     }
 }

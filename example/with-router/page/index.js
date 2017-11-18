@@ -1,8 +1,9 @@
 
 import React from 'react'
+import { Link } from 'swrn/router'
 //import './style/index.scss'
 
-export default class Mine extends React.Component { 
+export default class Index extends React.Component { 
 
     constructor() { 
         super()
@@ -19,9 +20,12 @@ export default class Mine extends React.Component {
 
     render() { 
         return (
+            <div>
             <h1 className="hello" onClick={this.change.bind(this)} style={{ color: this.state.new ? 'red' : 'black' }}>
-                hello mine {this.props.query.id}
+                hello test 123                
             </h1>
+            <Link to="/mine/12" tag="span"><a>mine</a></Link>    
+            </div>    
         )
     }
 }

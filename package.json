@@ -1,6 +1,6 @@
 {
   "name": "swrn",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "react-ssr解决方案",
   "main": "./dist/server/index.js",
   "bin": {

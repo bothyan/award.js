@@ -2,7 +2,7 @@ import React from 'react'
 
 class Main extends React.Component { 
     render() { 
-        const { html, comProps, sourcePath, page } = this.props
+        const { html, comProps, sourcePath, page, hasMain } = this.props
         return (
             <html>
                 <head>
@@ -19,7 +19,7 @@ class Main extends React.Component {
                     module={}                    
                 `}} />
                 <script src={`${sourcePath}main.js`}></script>
-                <script src={`${sourcePath}bundles/main.js`}></script>
+                {hasMain ? <script src={`${sourcePath}bundles/main.js`}></script> : null}
                 <script src={`${sourcePath}${page}`}></script>                
             </html>
         )
