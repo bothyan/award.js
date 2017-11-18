@@ -3,7 +3,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 import { Link, Router, Route } from 'swrn/router'
-import './webpack-hot-middleware-client'
+import webpackHotMiddlewareClient from 'webpack-hot-middleware/client?overlay=false&reload=true&path=/_swrn/webpack-hmr'
 
 //获取服务器数据
 const AppDOM = document.getElementById('wrap')
@@ -18,7 +18,7 @@ class Loading {
 
     subscribe(fn) { 
         this.subscriptions.add(fn)
-        //return () => this.subscriptions.delete(fn)
+        return () => this.subscriptions.delete(fn)
     }
 
     update(Component) { 
@@ -36,6 +36,7 @@ window.route = route
 
 const __SWRN_PAGE__ = []
 let Main = null
+
 window.__SWRN_REGISTER_PAGE__ = function (route, fn) {
     if (route == '/main.js') {
         Main = fn()

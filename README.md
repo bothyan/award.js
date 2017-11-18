@@ -1,9 +1,10 @@
-# swrn ( server side rendered webpack react nodejs ) Nodejs8
+# swrn
+
 [![NPM version](https://img.shields.io/npm/v/swrn.svg)](https://www.npmjs.com/package/swrn) 
+
 ## 写在前面
-    利用react、webpack、express实现了一个服务端渲染的框架，
-    其中express是一个桥梁作用，react和webpack都需要对服务端和客户端来处理，目前实现的功能在基础架构中可以看到
-    node.js8 主要是为了在node端运行支持async和await用法
+    利用nodejs、react、webpack、express实现了一个服务端渲染的框架
+    nodejs作为服务器，express作为路由入口，webpack将同一份react项目代码编译打包，实现了对服务端和客户端的展现
 
 ## 快速体验
 
@@ -29,14 +30,22 @@ export default () => <div>Welcome to swrn.js!</div>
 
 接下来执行 `npm run dev` 然后访问站点 `http://localhost:4000`
 
-    这才刚刚开始 ，还有很多没有加入，不过基础的热更新，热替换，还有服务端渲染的雏形已经建立
+另外在项目的`example`文件夹中，有一些已经实现的小项目
+
+## 总结的问题
+
+    一份需要webpack打包的js文件，需要两份打包结果
+    其中一个打包结果直接到目录dist/server下，另一个打包结果到目录dist/client下
+    但注意的是，第二个打包结果中的所有js文件需要被一个方法包裹
+    请写下实现此打包方式的webpack配置
+
 
 # swrn的项目简要
 
 ## 技术难点
-```
-1.保证react-routerV4前端路由的数据加载方式和服务端路由数据加载的方式一致性,都是统一使用getInitialProps方法，兼容了redux和ajax方式
-```
+
+  1.保证react-routerV4前端路由的数据加载方式和服务端路由数据加载的方式一致性,都是统一使用getInitialProps方法，兼容了redux和ajax方式
+
 
 ## 基础架构
 - [x] 加入redux-saga作为redux异步处理的中间件
@@ -52,9 +61,6 @@ export default () => <div>Welcome to swrn.js!</div>
 - [ ] 静态文件处理，如css、图片资源
 - [ ] 离线包发布
 
-## 站点内容
-- [x] 实现一个简单的todo list
-
 ## 说明
 
 >  本项目主要研究react-ssr
@@ -62,24 +68,6 @@ export default () => <div>Welcome to swrn.js!</div>
 >  如果觉得不错的话，您可以点右上角 "Star" 支持一下 谢谢！ ^_^
 
 >  如有问题请直接在 Issues 中提，或者您发现问题并有非常好的解决方案，欢迎 PR 👍
-
-## 项目布局
-
-```
-├── client                   //存放客户端需要的入口文件
-├── mock                     //存放mock数据的文件
-├── server                   //存放服务端需要的入口文件
-├── webpack                  //主要编译成服务端和客户端两个地方使用的代码
-├── routes.js                //路由地址的配置
-├── src                      //项目存放目录，这里可以根据当前的demo去扩展新的项目
-```
-
-## 问题
-
-一份需要webpack打包的js文件，需要两份打包结果
-其中一个打包结果直接到目录dist/server下，另一个打包结果到目录dist/client下，
-但注意的是，第二个打包结果中的所有js文件需要被一个方法包裹
-请写下实现此打包方式的webpack配置
 
 
 ## 开发

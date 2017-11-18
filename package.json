@@ -1,7 +1,7 @@
 {
   "name": "swrn",
   "version": "0.0.8",
-  "description": "react-ssr解决方案",
+  "description": "server side rendered && webpack && react && nodejs",
   "main": "./dist/server/index.js",
   "bin": {
     "swrn": "./dist/bin/swrn"

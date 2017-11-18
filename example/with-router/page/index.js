@@ -1,7 +1,6 @@
 
 import React from 'react'
 import { Link } from 'swrn/router'
-//import './style/index.scss'
 
 export default class Index extends React.Component { 
 
