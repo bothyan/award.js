@@ -7,10 +7,11 @@ export default class Main extends React.Component{
 
     render() { 
         return (
-            <Router>
-                <h1>自定义路由</h1>    
+            <Router>   
                 <Route path="/" render="/page/index.js"/>
-                <Route path="/about/:id/home/:uid" render="/page/about.js"/>                  
+                <Route path="/mine/:id/home/:uid" render="/page/home/mine/index.js"/>
+                <h1>hello world</h1>  
+                <p>这是一个统一的页面</p>
             </Router>
         )
     }

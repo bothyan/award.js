@@ -1,5 +1,5 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
+import {Link} from 'swrn/router'
 import { withReduxSaga } from '../../store'
 import { connect } from 'react-redux'
 

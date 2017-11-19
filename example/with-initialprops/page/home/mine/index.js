@@ -2,13 +2,7 @@
 import React from 'react'
 import { Link } from 'swrn/router'
 
-export default class Index extends React.Component { 
-
-    static async getInitialProps() {
-        return {
-            name: 'top'
-        }
-    }
+export default class Mine extends React.Component { 
 
     constructor() { 
         super()
@@ -25,12 +19,11 @@ export default class Index extends React.Component {
 
     render() { 
         return (
-            <div>
             <h1 className="hello" onClick={this.change.bind(this)} style={{ color: this.state.new ? 'red' : 'black' }}>
-                hello {this.props.name}      
+                id：{this.props.query.id} uid： {this.props.query.uid}
+                <br />
+                <Link to="/" tag="a">回到首页</Link>
             </h1>
-                <Link to="/about/12/home/140" tag="span"><a>查看详情</a></Link>                  
-            </div>    
         )
     }
 }

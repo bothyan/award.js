@@ -1,11 +1,10 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { withReduxSaga } from '../../store'
 import { connect } from 'react-redux'
 import Comment from '../../components/Index/comment'
 import List from '../../components/Index/list'
 
-import './style/index.scss'
+//import './style/index.scss'
 
 class Index extends React.Component {
 
@@ -20,7 +19,7 @@ class Index extends React.Component {
                 <div className="content">
                     <header>
                         <h1 className="title">
-                            <Link to="/list">TodoList</Link>
+                            TodoList
                         </h1>
                     </header>
                     <Comment />

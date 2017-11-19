@@ -9,9 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "react-redux": "^5.0.6",
-    "redux": "^3.7.2",
-    "redux-saga": "^0.16.0",
+    "axios": "^0.17.1",
     "swrn": "^0.0.12"
   }
 }

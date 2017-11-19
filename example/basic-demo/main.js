@@ -9,8 +9,8 @@ export default class Main extends React.Component{
         return (
             <Router>
                 <h1>自定义路由</h1>    
-                <Route path="/" render="/page/index.js"/>
-                <Route path="/about/:id/home/:uid" render="/page/about.js"/>                  
+                <Route path="/" render="/page/home/index.js"/>
+                <Route path="/detail/:id" render="/page/home/detail.js"/>                  
             </Router>
         )
     }

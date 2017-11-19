@@ -1,10 +1,16 @@
-# swrn
-
-[![NPM version](https://img.shields.io/npm/v/swrn.svg)](https://www.npmjs.com/package/swrn) 
+# Swrn &middot; [![NPM version](https://img.shields.io/npm/v/swrn.svg)](https://www.npmjs.com/package/swrn) 
 
 ## 写在前面
     利用nodejs、react、webpack、express实现了一个服务端渲染的框架
     nodejs作为服务器，express作为路由入口，webpack将同一份react项目代码编译打包，实现了对服务端和客户端的展现
+
+- [快速体验](#快速体验)
+  - [自定义路由](#自定义路由)
+  - [异步加载初始化数据](#异步加载初始化数据)
+  - [mock数据](#mock数据)
+- [基础架构](#基础架构)
+  
+  
 
 ## 快速体验
 
@@ -30,7 +36,7 @@ export default () => <div>Welcome to swrn.js!</div>
 
 接下来执行 `npm run dev` 然后访问站点 `http://localhost:4000`
 
-另外在项目的`example`文件夹中，有一些已经实现的小项目,除了`basic-demo`项目
+另外在项目的`example`文件夹中，有相关功能的demo
 
 ## 自定义路由
 
@@ -99,16 +105,13 @@ module.exports = (server) => {
 
 
 ## 基础架构
-- [x] 加入redux-saga作为redux异步处理的中间件
-- [x] 服务端渲染获取数据的方法getInitialProps
-- [x] getInitialProps赋予store的属性和方法，操作redux-saga获取数据
-- [x] react-router-dom作为前端路由,这里采用的redux-saga的异步方案来配合实现组件初始化数据的获取
-- [x] mock数据，reducers合并和写法规则，saga的合并和写法规则
+- [x] 前后端的路由统一处理方案，自定义前端路由
+- [x] 组件数据初始化方案
+- [x] mock数据，方便本地数据模拟开发
 - [x] 客户端和服务端的热更新
-- [x] getInitialProps异步同步获取数据，也就是路由加载前异步获取初始化的数据
-- [ ] 将业务代码 和 系统架构代码分开  现在还剩下redux的代码 还耦合 接下来需要解决
-- [ ] 将架构代码按环境合并
-- [ ] 将项目代码按结构拆分
+- [x] 功能精简，仅仅一个swrn命令即可
+- [ ] 区分环境
+- [ ] 错误异常处理
 - [ ] 静态文件处理，如css、图片资源
 - [ ] 离线包发布
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import './style/comment.scss'
+//import './style/comment.scss'
 
 class Comment extends React.Component {
 

@@ -1,6 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import './style/item.scss'
+import { Link } from 'swrn/router'
+//import './style/item.scss'
 
 class Item extends React.Component {
     render() {
