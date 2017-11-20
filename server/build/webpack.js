@@ -50,12 +50,29 @@ export default async function createCompiler(dir, routes = {}, hasEntry = false)
             loaders: [
                 {
                     test: /\.scss$/,
+                    loader: 'emit-css-loader',
+                    include: [dir,join(dir,'page')],
                     exclude: /node_modules/,
-                    loader: ExtractTextPlugin.extract({
-                        fallback: 'style-loader',
-                        use: 'css-loader!sass-loader'
-                    })
+                    options: {
+                        name: 'dist/[path][name].[ext]',                    
+                        transform ({ content, sourceMap, interpolatedName }) {
+                            // Only handle .js files
+                            if (!(/\.scss$/.test(interpolatedName))) {
+                                return { content, sourceMap }
+                            }
+
+                            console.log(content,interpolatedName)
+
+                            return {
+                                content
+                            }
+                        }
+                    }
                 },
+                // {
+                //     test: /\.scss$/,
+                //     loader: 'style-loader!css-loader!sass-loader'                    
+                // },
                 {
                     test: /\.js(\?[^?]*)?$/,
                     loader: 'hot-self-accept-loader',
@@ -77,16 +94,20 @@ export default async function createCompiler(dir, routes = {}, hasEntry = false)
                             // Only handle .js files
                             if (!(/\.js$/.test(interpolatedName))) {
                                 return { content, sourceMap }
-                            }
+                            }                            
 
                             const transpiled = babelCore.transform(content, {
                                 babelrc: false,
                                 sourceMaps: false,
                                 inputSourceMap: sourceMap,
-                                plugins: [
-                                    [require.resolve('babel-plugin-transform-es2015-modules-commonjs')]
+                                plugins: [                                    
+                                    [require.resolve('babel-plugin-transform-es2015-modules-commonjs')],
+                                    [require.resolve('babel-plugin-transform-react-jsx')],
+                                    [require.resolve('babel-plugin-react-css-modules')]
                                 ]
                             })
+
+                            console.log(transpiled.code)
 
                             return {
                                 content: transpiled.code,
@@ -96,12 +117,22 @@ export default async function createCompiler(dir, routes = {}, hasEntry = false)
                     }
                 },
                 {
+                    test: /\.css$/,
+                    exclude: /node_modules/,
+                    loaders: [
+                      'style-loader',
+                      'css-loader?importLoader=1&modules&localIdentName=[path]___[name]__[local]___[hash:base64:5]'
+                    ]                    
+                },
+                {
                     test: /\.(js|jsx)$/,
                     exclude: /node_modules/,
                     loader: 'babel-loader',
                     options: {
                         presets: ["react", "es2015", "stage-0"],
                         plugins: ["react-require", "transform-runtime",
+                            [require.resolve('babel-plugin-transform-react-jsx')],
+                            [require.resolve('babel-plugin-react-css-modules')],    
                             [
                                 require.resolve('babel-plugin-module-resolver'),
                                 {
