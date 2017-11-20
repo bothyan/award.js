@@ -50,7 +50,7 @@ export default class Router {
 
         const pages = await glob('page/**/*.js', { cwd: this.dir })
 
-        routes = []
+        const routes = []
         
         if (pages.length) {
             pages.map(item => {
