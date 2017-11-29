@@ -8,12 +8,16 @@ import glob from 'glob-promise'
 import Document from './document'
 import App from '../lib/app'
 import { renderToString, renderToStaticMarkup } from 'react-dom/server'
+import { flushToHTML } from 'styled-jsx/server'
 
 require('babel-register')({
     presets: ['react', 'es2015']
 })
 
 global.SWRN_InServer = true
+
+import CssApp from './app'
+
 
 /**
  * 注册express路由
@@ -34,7 +38,10 @@ export default class Server {
             //获取动态页面渲染
             item.path && this.server.get(item.path, async (req, res) => {
 
-                let _Component, _Document, _Main, pageSourcePath = join('bundles', item.page)
+                let _Component, _Document,
+                    _Main,
+                    jsSourcePath = join('bundles', item.page),
+                    cssSourcePath = join('style','bundles',item.page + '.css')
                 if (process.env.NODE_ENV !== 'production') {
 
                     const documentPath = join(this.dir, `./.server/dist/page/document.js`)
@@ -69,7 +76,7 @@ export default class Server {
 
                 const Component = _Component.default || _Component
                 const Document = _Document.default || _Document
-
+                
                 const query = req.params
                 const route = item.page
                 const initialProps = !Component.getInitialProps ? {} : await Component.getInitialProps({ req, res })
@@ -90,7 +97,8 @@ export default class Server {
                 const _html = render(Document, {
                     sourcePath,
                     hasMain:!!_Main,
-                    page: pageSourcePath,
+                    jsSource: jsSourcePath,
+                    cssSource:cssSourcePath,
                     comProps: props,
                     html
                 })
@@ -98,9 +106,15 @@ export default class Server {
                 res.send('<!DOCTYPE html>' + _html)
             })
 
-            //获取静态资源
+            //获取js
             this.server.get(`/swrn/bundles${item.page}`, async (req, res) => { 
                 const path = join(this.dir, '.server', `bundles/${item.page}`)
+                return await serveStatic(req, res, path)
+            })
+
+            //获取css
+            this.server.get(`/swrn/style/bundles${item.page}.css`,  async (req, res) => { 
+                const path = join(this.dir, '.server', `style/bundles/${item.page}.css`)
                 return await serveStatic(req, res, path)
             })
         })
@@ -127,6 +141,19 @@ export default class Server {
 
     async start(prot, hostname) {
         await this.prepare()
+        this.server.get('/css',(req, res) => {
+            const app = renderToString(<CssApp />)
+            const styles = flushToHTML()
+            console.log(styles)
+            const html = `<!doctype html>
+              <html>
+                <head>${styles}</head>
+                <body>
+                  <div id="root">${app}</div>
+                </body>
+              </html>`
+            res.end(html)
+        })
         this.server.listen(4000, () => {
             console.log('http://localhost:4000')
         })

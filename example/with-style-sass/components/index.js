@@ -1,11 +1,11 @@
 import React from 'react'
-import '../style/about.scss'
+import './index.scss'
 
 export default class Index extends React.Component { 
     render() { 
         return (
             <h1 className="name12345678">
-                hello about    
+                <span>hello Component</span>                   
             </h1>
         )
     }
