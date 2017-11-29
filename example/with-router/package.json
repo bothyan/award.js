@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "swrn": "^0.0.17"
+    "swrn": "^0.1.0"
   }
 }
