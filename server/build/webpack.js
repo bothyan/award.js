@@ -7,11 +7,9 @@ import PagesPlugin from './plugins/page-plugin'
 import * as babelCore from 'babel-core'
 import _ from 'lodash'
 
-export default async function createCompiler(dir, routes = {}, hasEntry = false) {
+export default async function createCompiler({ dir, dev, dist, page, routes = {}, entry }) {
 
-    let entry
-
-    if (!hasEntry) {
+    if (!entry) {
 
         const _main = await glob('main.js', { cwd: dir })
 
@@ -32,8 +30,6 @@ export default async function createCompiler(dir, routes = {}, hasEntry = false)
             val
         ])
 
-    } else {
-        entry = hasEntry
     }
 
     let extractCss = new ExtractTextPlugin('style/[name].css')
@@ -41,18 +37,18 @@ export default async function createCompiler(dir, routes = {}, hasEntry = false)
     const webpackConfig = {
         entry,
         output: {
-            path: resolve(dir, './.server'),
+            path: resolve(dir, `./${dist}`),
             filename: "[name]",
             publicPath: '/_swrn/webpack/',
             strictModuleExceptionHandling: true,
             chunkFilename: '[name]'
         },
         module: {
-            rules: [                
+            rules: [
                 {
                     test: /\.js(\?[^?]*)?$/,
                     loader: 'hot-self-accept-loader',
-                    include: [join(dir,'page')],
+                    include: [join(dir, page)],
                 },
                 {
                     test: /\.js(\?[^?]*)?$/,
@@ -62,7 +58,7 @@ export default async function createCompiler(dir, routes = {}, hasEntry = false)
                 {
                     test: /\.(js|json)(\?[^?]*)?$/,
                     loader: 'emit-file-loader',
-                    include: [dir, join(dir, 'page')],
+                    include: [dir, join(dir, page)],
                     exclude: /node_modules/,
                     options: {
                         name: 'dist/[path][name].[ext]',
@@ -105,7 +101,7 @@ export default async function createCompiler(dir, routes = {}, hasEntry = false)
 
                                     line = i
                                 }
-                            }                            
+                            }
 
                             return {
                                 content,
@@ -117,8 +113,8 @@ export default async function createCompiler(dir, routes = {}, hasEntry = false)
                 {
                     test: /\.scss$/,
                     exclude: /node_modules/,
-                    loader:extractCss.extract(['css-loader','sass-loader'])                    
-                },                               
+                    loader: extractCss.extract(['css-loader', 'sass-loader'])
+                },
                 {
                     test: /\.(js|jsx)$/,
                     exclude: /node_modules/,

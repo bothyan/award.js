@@ -2,7 +2,7 @@ import React from 'react'
 
 class Main extends React.Component {
     render() {
-        const { html, comProps, sourcePath, jsSource, cssSource, hasMain } = this.props
+        const { html, props, mainBundle ,mainPath,jsPath, cssPath, } = this.props
         return (
             <html>
                 <head>
@@ -10,17 +10,17 @@ class Main extends React.Component {
                     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0" />
                     <title>React同构开发Demo</title>
                     <link rel="stylesheet" href="//at.alicdn.com/t/font_62vouh9aajug14i.css" />
-                    <link rel="stylesheet" href={`${sourcePath}${cssSource}`} />
+                    {cssPath ? <link rel="stylesheet" href={cssPath} /> : null}
                 </head>
                 <div id="wrap" dangerouslySetInnerHTML={{ __html: html }}></div>
-                <div id="data" data-state={JSON.stringify(comProps)}></div>
+                <div id="data" data-state={JSON.stringify(props)}></div>
                 <script dangerouslySetInnerHTML={{
                     __html: `
                     module={}                    
                 `}} />
-                <script src={`${sourcePath}main.js`}></script>
-                {hasMain ? <script src={`${sourcePath}bundles/main.js`}></script> : null}
-                <script src={`${sourcePath}${jsSource}`}></script>
+                <script src={mainPath}></script>
+                {mainBundle ? <script src={mainBundle}></script> : null}
+                <script src={jsPath}></script>
             </html>
         )
     }

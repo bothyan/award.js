@@ -29,7 +29,7 @@ package.json
   }
 }
 ```
-在项目中创建文件`./page/index.js`
+在项目中创建文件`./pages/index.js`
 
 ```jsx
 export default () => <div>Welcome to swrn.js!</div>
@@ -55,8 +55,8 @@ export default class Main extends React.Component{
         return (
             <Router>
                 <h1>hello Swrn.js</h1>    
-                <Route path="/" render="/page/index.js"/>
-                <Route path="/about/:id" render="/page/about.js"/>                 
+                <Route path="/" render="/pages/index.js"/>
+                <Route path="/about/:id" render="/pages/about.js"/>                 
             </Router>
         )
     }

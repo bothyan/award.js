@@ -1,5 +1,5 @@
-const IS_BUNDLED_PAGE = /^bundles[/\\](page.*\.js|main\.js)$/
-const MATCH_ROUTE_NAME = /^bundles[/\\](page[/\\](.*)\.js|main\.js)$/
+const IS_BUNDLED_PAGE = /^bundles[/\\](pages.*\.js|main\.js)$/
+const MATCH_ROUTE_NAME = /^bundles[/\\](pages[/\\](.*)\.js|main\.js)$/
 
 export default class PagesPlugin {
     apply(compiler) {

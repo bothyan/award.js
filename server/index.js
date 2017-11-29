@@ -21,124 +21,166 @@ global.SWRN_InServer = true
  */
 
 export default class Server {
-    constructor({ dir }) {
+    constructor({ dev, dir }) {
         this.dir = resolve(dir)
+        this.dev = dev
         this.server = express()
-        this.router = new Router(this.dir)
-
-        this.routes = []
+        this.dist = '.swrn'
+        this.page = 'pages'
     }
 
-    async initRouter() {
-        this.routes.map(item => {
+    // 注册路由
+    async registerRouter(routes) {
+
+        // 客户端入口文件路由
+        this.server.get('/swrn/main.js', async (req, res) => {
+            const path = join(this.dir, this.dist, 'main.js')
+            return await serveStatic(req, res, path)
+        })
+
+        // 注册各个页面路由
+        routes.map(async (item, index) => {
+     
             //获取动态页面渲染
-            item.path && this.server.get(item.path, async (req, res) => {
+            item.path && this.server.get(item.path, async (req, res) => {                
 
-                let _Component, _Document,
-                    _Main,
-                    jsSourcePath = join('bundles', item.page),
-                    cssSourcePath = join('style','bundles',item.page + '.css')
-                if (process.env.NODE_ENV !== 'production') {
+                let _Component = null, _Main = null
 
-                    const documentPath = join(this.dir, `./.server/dist/page/document.js`)
-                    const pagePath = join(this.dir, './.server/dist/', item.page)
-                    const mainPath = join(this.dir, `./.server/dist/main.js`)
-
-                    let documentFile = await glob(documentPath)
-                    let mainFile = await glob(mainPath)
-
-                    if (documentFile.length) {
-                        delete require.cache[require.resolve(documentPath)]
-                    }
-
-                    if (mainFile.length) {
-                        delete require.cache[require.resolve(mainPath)]
-                    }
+                if (this.dev) {
+                    //开发
+                    const ComponentPath = join(this.dir, `./${this.dist}/dist/`, item.page)
+                    const MainPath = join(this.dir, `./${this.dist}/dist/main.js`)
 
                     //这里需要删除require的缓存
-                    delete require.cache[require.resolve(pagePath)]
+                    delete require.cache[require.resolve(ComponentPath)]
+                    _Component = require(ComponentPath)
 
-
-                    _Document = documentFile.length ? require(documentPath) : require('./document')
-                    _Component = require(pagePath)
-                    _Main = mainFile.length ? require(mainPath) : null
+                    const mainFile = await glob(MainPath)
+                    if (mainFile.length) {
+                        delete require.cache[require.resolve(MainPath)]
+                        _Main = require(MainPath)
+                    }
 
                 } else {
 
-                    _Document = require(`./dist/page/document.js`)
-                    _Component = require(`./dist/page/${item.page}.js`)
+                    //发布
 
                 }
 
                 const Component = _Component.default || _Component
-                const Document = _Document.default || _Document
-                
-                const query = req.params
-                const route = item.page
-                const initialProps = !Component.getInitialProps ? {} : await Component.getInitialProps({ req, res })
+                const Main = !!_Main && (_Main.default || _Main)
 
-                let html, props = { ...initialProps, route, query, routes:this.routes }
-
-                if (!!_Main) {
-                    const Main = _Main.default || _Main
-                    props = { ...props, Component, Main }
-                    html = renderToStaticMarkup(React.createElement(App,props), props)
-                } else {
-                    html = render(Component, props)
-                }
-
-                //资源路径
-                const sourcePath = `/swrn/`
-
-                const _html = render(Document, {
-                    sourcePath,
-                    hasMain:!!_Main,
-                    jsSource: jsSourcePath,
-                    cssSource:cssSourcePath,
-                    comProps: props,
-                    html
+                await this.renderHtml({
+                    req,
+                    res,
+                    Main,
+                    Component,
+                    routes,
+                    page: item.page
                 })
 
-                res.send('<!DOCTYPE html>' + _html)
             })
 
-            //获取js
-            this.server.get(`/swrn/bundles${item.page}`, async (req, res) => { 
-                const path = join(this.dir, '.server', `bundles/${item.page}`)
-                return await serveStatic(req, res, path)
-            })
-
-            //获取css
-            this.server.get(`/swrn/style/bundles${item.page}.css`,  async (req, res) => { 
-                const path = join(this.dir, '.server', `style/bundles/${item.page}.css`)
-                return await serveStatic(req, res, path)
-            })
+            // 注册该页面的静态路由
+            if (this.dev) {
+                this.publicSource(item.page)
+            }
         })
 
-        this.server.get('/swrn/main.js', async (req, res) => {
-            const path = join(this.dir, '.server', 'main.js')
+        //注册mock路由
+        this.mockData()
+    }
+
+    //静态资源处理，包括css、js、images...
+    async publicSource(page) {
+
+        //获取js
+        this.server.get(`/swrn/bundles${page}`, async (req, res) => {
+            const path = join(this.dir, this.dist, `bundles/${page}`)
             return await serveStatic(req, res, path)
         })
 
-        // mock数据
+        //获取css
+        this.server.get(`/swrn/style/bundles${page}.css`, async (req, res) => {
+            const path = join(this.dir, this.dist, `style/bundles/${page}.css`)
+            return await serveStatic(req, res, path)
+        })
+    }
+
+    // mock数据
+    async mockData() {
         const mocks = await glob('mock/**/*.js', { cwd: this.dir })
         if (mocks.length) {
-            mocks.map(item => { 
+            mocks.map(item => {
                 require(join(this.dir, item))(this.server)
-            })            
-        }        
+            })
+        }
     }
 
+    //服务预处理
     async prepare() {
-        this.routes = await this.router.routers()
-        await this.initRouter()
-        await new HotReloader(this.server, this.dir, this.routes).start()
+        const options = {
+            dir: this.dir,
+            dev: this.dev,
+            server: this.server,
+            dist: this.dist,
+            page: this.page
+        }
+        // 获取路由
+        const routes = await new Router(options).routes()
+
+        // 注册路由
+        await this.registerRouter(routes)
+
+        // webpack编译
+        options.routes = routes
+        await new HotReloader(options).start()
     }
 
-    async start(prot, hostname) {
-        await this.prepare()        
-        this.server.listen(4000, () => {
-            console.log('http://localhost:4000')
+    //开启服务
+    async start(port, hostname) {
+        await this.prepare()
+        await this.server.listen(port, hostname)
+    }
+
+    //send Html资源
+    async renderHtml({ req, res, page, routes, Component, Main }) {
+
+        const query = req.params
+        const initialProps = !Component.getInitialProps ? {} : await Component.getInitialProps({ req, res })
+
+        let html, props = { ...initialProps, route:page, query, routes}
+
+        if (Main) {
+            props = { ...props, Component, Main }
+            html = renderToStaticMarkup(React.createElement(App, props), props)
+        } else {
+            html = render(Component, props)
+        }
+
+        //资源路径
+        const sourcePath = `/swrn/`
+
+        const mainBundle = Main ? sourcePath + 'bundles/main.js' : null
+        const mainPath = sourcePath + 'main.js'
+        const jsPath = sourcePath + join('bundles', page)
+        let cssPath = null
+
+        const _cssPath = await glob(join(this.dir, this.dist , 'style', 'bundles', page + '.css'))
+        
+        if (_cssPath.length) {
+            cssPath = sourcePath + join('style', 'bundles', page + '.css')
+        }    
+
+        const _html = render(Document, {
+            mainBundle,
+            mainPath,
+            jsPath,
+            cssPath,
+            props,
+            html
         })
+
+        res.send('<!DOCTYPE html>' + _html)
     }
 }

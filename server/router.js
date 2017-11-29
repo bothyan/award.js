@@ -7,20 +7,26 @@ import clean from './build/clean'
 
 export default class Router {
 
-    constructor(dir) { 
-        this.dir = dir
+    constructor(options) { 
+        this.options = options
+
+        this.dir = options.dir
+        this.dist = options.dist
+        this.page = options.page
     }
 
-    async routers() { 
+    async routes() { 
 
         let _main = await glob('main.js', { cwd: this.dir })
 
         //设置了main.js
         if (_main.length) {
 
+            this.options.entry = { 'bundles/main.js': join(this.dir, `main.js`) }
+
             const [compiler] = await Promise.all([
-                webpack(this.dir, {}, { 'bundles/main.js': join(this.dir, `main.js`) }),
-                clean(this.dir)
+                webpack(this.options),
+                clean(this.options)
             ])
 
             WebpackDevMiddleware(compiler, {
@@ -48,7 +54,7 @@ export default class Router {
     //这里获取的是默认路由
     async getRoutes() {
 
-        const pages = await glob('page/**/*.js', { cwd: this.dir })
+        const pages = await glob(`${this.page}/**/*.js`, { cwd: this.dir })
 
         const routes = []
         
@@ -68,10 +74,10 @@ export default class Router {
                 if (_path.length) {
                     const join = _path.join('/')
                     path = `/${join}`
-                    page = '/page/' + join + (pop ? "/index" : '') + '.js'
+                    page = `/${this.page}/` + join + (pop ? "/index" : '') + '.js'
                 } else {
                     path = '/'
-                    page = '/page/index.js'
+                    page = `/${this.page}/index.js`
                 }
 
                 routes.push({
@@ -88,7 +94,7 @@ export default class Router {
     async getConfigRoutes() {
         global.SWRN_ROUTE = true
         let _Router
-        const routePath = join(this.dir, `.server/dist/main.js`)
+        const routePath = join(this.dir, `${this.dist}/dist/main.js`)
         _Router = require(routePath)
         const Router = _Router.default || _Router
 
@@ -109,11 +115,11 @@ export default class Router {
                 delete _tmp.render
 
                 routers.push(_tmp)
-
             })
-        }    
+        }
+        
         global.SWRN_ROUTE = false
-        routers.push({page:'/main.js',path:null})
+        routers.push({ page: '/main.js', path: null })
         return routers
     }
 }

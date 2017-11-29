@@ -3,13 +3,10 @@
 import { join, resolve } from 'path'
 import { spawn } from 'cross-spawn'
 import { watchFile } from 'fs'
+import pkg from '../../package.json'
 
 const defaultCommand = 'dev'
 const commands = new Set([
-  'init',
-  'build',
-  'start',
-  'export',
   defaultCommand
 ])
 
@@ -17,14 +14,14 @@ let cmd = process.argv[2]
 let args
 
 if (new Set(['--version', '-v']).has(cmd)) {
-  console.log(`next.js v${pkg.version}`)
+  console.log(`swrn.js v${pkg.version}`)
   process.exit(0)
 }
 
 if (new Set(['--help', '-h']).has(cmd)) {
   console.log(`
     Usage
-      $ next <command>
+      $ swrn <command>
 
     Available commands
       ${Array.from(commands).join(', ')}
@@ -66,6 +63,8 @@ const startProcess = () => {
 }
 
 let proc = startProcess()
+
+//监听配置文件
 // const { pagesDirectory = resolve(process.cwd(), 'pages') } = getConfig(process.cwd())
 
 // if (cmd === 'dev') {
