@@ -8,6 +8,7 @@
   - [自定义路由](#自定义路由)
   - [异步加载初始化数据](#异步加载初始化数据)
   - [mock数据](#mock数据)
+  - [scss](#样式)
 - [基础架构](#基础架构)
   
   
@@ -89,6 +90,26 @@ module.exports = (server) => {
 }
 ```
 
+## 样式
+
+可以直接在项目通过`import`引用对应的`scss`文件,具体可以查看`example/with-style-sass`
+```js
+import React from 'react'
+import '../style/index.scss'
+
+export default class Index extends React.Component { 
+    render() { 
+        return (
+            <div>
+                <h1 className="name">
+                    hello world 
+                </h1>
+            </div>    
+        )
+    }
+}
+```
+
 ## 总结的问题
 
     一份需要webpack打包的js文件，需要两份打包结果
@@ -110,9 +131,10 @@ module.exports = (server) => {
 - [x] mock数据，方便本地数据模拟开发
 - [x] 客户端和服务端的热更新
 - [x] 功能精简，仅仅一个swrn命令即可
+- [x] css资源处理
+- [ ] 图片资源处理
 - [ ] 区分环境
 - [ ] 错误异常处理
-- [ ] 静态文件处理，如css、图片资源
 - [ ] 离线包发布
 
 ## 说明

@@ -7,3 +7,7 @@
 > server
 
 > client
+
+### 关于webpack编译
+
+css的require才会进行loader加载应用
