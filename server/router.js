@@ -42,8 +42,7 @@ export default class Router {
                 compiler.plugin('done', () => {
                     resolve()
                 })
-            }).then(async () => {
-                await clean(this.options)
+            }).then(async () => {                
                 return await this.getConfigRoutes()
             })
             
@@ -123,6 +122,7 @@ export default class Router {
         
         global.SWRN_ROUTE = false
         routers.push({ page: '/main.js', path: null })
+        await clean(this.options)
         return routers
     }
 }
