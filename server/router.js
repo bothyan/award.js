@@ -10,6 +10,7 @@ export default class Router {
     constructor(options) { 
         this.options = options
         
+        this.dev = options.dev
         this.dir = options.dir
         this.dist = options.dist
         this.page = options.page
@@ -23,7 +24,8 @@ export default class Router {
         if (_main.length) {
 
             this.options.entry = { 'bundles/main.js': join(this.dir, `main.js`) }
-
+            this.options.dist = this.dev ? this.dist : '.tmp'
+            
             const [compiler] = await Promise.all([
                 webpack(this.options),
                 clean(this.options)
@@ -41,6 +43,7 @@ export default class Router {
                     resolve()
                 })
             }).then(async () => {
+                await clean(this.options)
                 return await this.getConfigRoutes()
             })
             

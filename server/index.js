@@ -135,6 +135,8 @@ export default class Server {
         // webpack编译
         if (this.dev) {
             options.routes = routes
+            options.dist = this.dist
+            options.entry = false
             await new HotReloader(options).start()
         }    
     }

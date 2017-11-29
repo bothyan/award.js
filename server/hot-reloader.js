@@ -11,8 +11,6 @@ export default class HotReloader {
 
     async start() {
 
-        this.options.entry = false
-
         const [compiler] = await Promise.all([
             webpack(this.options),
             clean(this.options)
