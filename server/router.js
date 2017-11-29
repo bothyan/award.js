@@ -9,7 +9,7 @@ export default class Router {
 
     constructor(options) { 
         this.options = options
-
+        
         this.dir = options.dir
         this.dist = options.dist
         this.page = options.page

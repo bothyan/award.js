@@ -1,10 +1,8 @@
-import 'react-hot-loader/patch'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import PropTypes from 'prop-types'
 import { Link, Router, Route } from 'swrn/router'
-import webpackHotMiddlewareClient from 'webpack-hot-middleware/client?overlay=false&reload=true&path=/_swrn/webpack-hmr'
 import App from '../lib/app'
+
 //获取服务器数据
 const AppDOM = document.getElementById('wrap')
 const Obj = document.getElementById('data')
@@ -42,8 +40,8 @@ window.__SWRN_REGISTER_PAGE__ = async (route, fn) => {
     if (route == '/main.js') {
         Main = fn()
     } else { 
-        let Component = fn(),initialProps = {}
-
+        let Component = fn(), initialProps = {}
+        
         if (_loaded) {
             initialProps = !Component.getInitialProps ? {} : await Component.getInitialProps()
         } 
@@ -55,7 +53,7 @@ window.__SWRN_REGISTER_PAGE__ = async (route, fn) => {
     }
 }
 
-function render(Component, props = {}) {
+function render(Component, props = {}) {    
     if (!!Component) {
         props.Main = Component
         ReactDOM.render(
@@ -72,4 +70,7 @@ function render(Component, props = {}) {
     }    
 }
 
+export default async () => { 
+    
+}
 

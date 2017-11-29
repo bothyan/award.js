@@ -4,7 +4,9 @@
     "description": "",
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
-      "dev": "swrn"
+      "dev": "swrn",
+      "build":"swrn build",
+      "start":"swrn start"
     },
     "author": "",
     "license": "ISC",

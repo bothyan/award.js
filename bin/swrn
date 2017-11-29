@@ -7,6 +7,8 @@ import pkg from '../../package.json'
 
 const defaultCommand = 'dev'
 const commands = new Set([
+  'build',
+  'start',
   defaultCommand
 ])
 

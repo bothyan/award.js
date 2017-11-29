@@ -9,6 +9,7 @@
   - [异步加载初始化数据](#异步加载初始化数据)
   - [mock数据](#mock数据)
   - [scss](#样式)
+- [基础命令](#基础命令)
 - [基础架构](#基础架构)
   
   
@@ -35,9 +36,23 @@ package.json
 export default () => <div>Welcome to swrn.js!</div>
 ```
 
-接下来执行 `npm run dev` 然后访问站点 `http://localhost:4000`
+接下来执行 `npm run dev` 然后访问站点 `http://localhost:3000`
 
 另外在项目的`example`文件夹中，有相关功能的demo
+
+## 基础命令
+
+```shell
+#执行开发环境命令
+swrn 
+
+#执行编译打包
+swrn build
+
+#开启正式环境命令
+#这个启动之前 必须先执行`swrn build`
+swrn start
+```
 
 ## 自定义路由
 
@@ -132,8 +147,8 @@ export default class Index extends React.Component {
 - [x] 客户端和服务端的热更新
 - [x] 功能精简，仅仅一个swrn命令即可
 - [x] css资源处理
+- [x] 区分环境
 - [ ] 图片资源处理
-- [ ] 区分环境
 - [ ] 错误异常处理
 - [ ] 离线包发布
 

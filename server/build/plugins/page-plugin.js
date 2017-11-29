@@ -29,10 +29,10 @@ export default class PagesPlugin {
                 const content = page.source()
                 const newContent = `
             window.__SWRN_REGISTER_PAGE__('${routeName}', function() {
-              var comp = ${content}
-              return comp.default
+                var comp = ${content}
+                return comp.default 
             })
-          `
+          `     
             // Replace the exisiting chunk with the new content
                 compilation.assets[chunk.name] = {
                     source: () => newContent,

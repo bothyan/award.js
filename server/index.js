@@ -21,7 +21,7 @@ global.SWRN_InServer = true
  */
 
 export default class Server {
-    constructor({ dev, dir }) {
+    constructor({ dev = false, dir }) {
         this.dir = resolve(dir)
         this.dev = dev
         this.server = express()
@@ -46,7 +46,7 @@ export default class Server {
 
                 let _Component = null, _Main = null
 
-                if (this.dev) {
+                //if (this.dev) {
                     //开发
                     const ComponentPath = join(this.dir, `./${this.dist}/dist/`, item.page)
                     const MainPath = join(this.dir, `./${this.dist}/dist/main.js`)
@@ -61,11 +61,11 @@ export default class Server {
                         _Main = require(MainPath)
                     }
 
-                } else {
+                //} else {
 
                     //发布
 
-                }
+                //}
 
                 const Component = _Component.default || _Component
                 const Main = !!_Main && (_Main.default || _Main)
@@ -81,10 +81,8 @@ export default class Server {
 
             })
 
-            // 注册该页面的静态路由
-            if (this.dev) {
-                this.publicSource(item.page)
-            }
+            // 注册该页面的静态路由            
+            this.publicSource(item.page)
         })
 
         //注册mock路由
@@ -101,10 +99,12 @@ export default class Server {
         })
 
         //获取css
-        this.server.get(`/swrn/style/bundles${page}.css`, async (req, res) => {
-            const path = join(this.dir, this.dist, `style/bundles/${page}.css`)
-            return await serveStatic(req, res, path)
-        })
+        if (!this.dev) {
+            this.server.get(`/swrn/style/bundles${page}.css`, async (req, res) => {
+                const path = join(this.dir, this.dist, `style/bundles/${page}.css`)
+                return await serveStatic(req, res, path)
+            })
+        }    
     }
 
     // mock数据
@@ -133,8 +133,10 @@ export default class Server {
         await this.registerRouter(routes)
 
         // webpack编译
-        options.routes = routes
-        await new HotReloader(options).start()
+        if (this.dev) {
+            options.routes = routes
+            await new HotReloader(options).start()
+        }    
     }
 
     //开启服务
