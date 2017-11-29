@@ -4,7 +4,6 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import glob from 'glob-promise'
 import WriteFilePlugin from 'write-file-webpack-plugin'
 import PagesPlugin from './plugins/page-plugin'
-import TestPlugin from './plugins/test-plugin'
 import * as babelCore from 'babel-core'
 import _ from 'lodash'
 

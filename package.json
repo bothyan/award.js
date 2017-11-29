@@ -1,6 +1,6 @@
 {
   "name": "swrn",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "server side rendered && webpack && react && nodejs",
   "main": "./dist/server/index.js",
   "bin": {
@@ -48,7 +48,6 @@
     "sass-loader": "^6.0.6",
     "send": "^0.16.1",
     "style-loader": "^0.19.0",
-    "styled-jsx": "^2.2.0",
     "webpack": "^3.8.1",
     "webpack-dev-middleware": "^1.12.0",
     "webpack-hot-middleware": "^2.20.0",

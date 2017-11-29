@@ -8,16 +8,12 @@ import glob from 'glob-promise'
 import Document from './document'
 import App from '../lib/app'
 import { renderToString, renderToStaticMarkup } from 'react-dom/server'
-import { flushToHTML } from 'styled-jsx/server'
 
 require('babel-register')({
     presets: ['react', 'es2015']
 })
 
 global.SWRN_InServer = true
-
-import CssApp from './app'
-
 
 /**
  * 注册express路由
@@ -140,20 +136,7 @@ export default class Server {
     }
 
     async start(prot, hostname) {
-        await this.prepare()
-        this.server.get('/css',(req, res) => {
-            const app = renderToString(<CssApp />)
-            const styles = flushToHTML()
-            console.log(styles)
-            const html = `<!doctype html>
-              <html>
-                <head>${styles}</head>
-                <body>
-                  <div id="root">${app}</div>
-                </body>
-              </html>`
-            res.end(html)
-        })
+        await this.prepare()        
         this.server.listen(4000, () => {
             console.log('http://localhost:4000')
         })
