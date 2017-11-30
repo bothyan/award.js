@@ -1,14 +1,17 @@
 # Swrn &middot; [![NPM version](https://img.shields.io/npm/v/swrn.svg)](https://www.npmjs.com/package/swrn) 
 
 ## 写在前面
-    利用nodejs、react、webpack、express实现了一个服务端渲染的框架
-    nodejs作为服务器，express作为路由入口，webpack将同一份react项目代码编译打包，实现了对服务端和客户端的展现
+    
+利用nodejs、react、webpack、express实现了一个服务端渲染的框架
+    
+nodejs作为服务器，express作为路由入口，webpack将同一份react项目代码编译打包，实现了对服务端和客户端的展现
 
 - [快速体验](#快速体验)
   - [自定义路由](#自定义路由)
   - [异步加载初始化数据](#异步加载初始化数据)
   - [mock数据](#mock数据)
-  - [scss](#样式)
+  - [样式资源](#样式)
+  - [图片资源](#图片资源)
 - [基础命令](#基础命令)
 - [基础架构](#基础架构)
   
@@ -119,6 +122,30 @@ export default class Index extends React.Component {
                 <h1 className="name">
                     hello world 
                 </h1>
+            </div>    
+        )
+    }
+}
+```
+## 图片资源
+可以直接在项目通过`import`引用对应的图片文件,具体可以查看`example/style-images-fonts`
+```js
+import React from 'react'
+import '../style/about.scss'
+import { Link } from 'swrn/router'
+import bg from '../images/2.jpg'
+
+var bgs = require('../images/3.jpg')
+
+export default class Index extends React.Component { 
+    render() { 
+        return (
+            <div>
+                <h1 className="name12345678">
+                    hello about    
+                </h1>
+                <Link to="/"><img src={bg} /></Link>
+                <img src={bgs} />
             </div>    
         )
     }
