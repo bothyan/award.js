@@ -104,7 +104,10 @@ export default class Server {
                 const path = join(this.dir, this.dist, `style/bundles/${page}.css`)
                 return await serveStatic(req, res, path)
             })
-        }    
+        }
+        
+        //获取图片资源
+        this.server.use('/swrn/images', express.static(join(this.dir,this.dist,'images')))
     }
 
     // mock数据

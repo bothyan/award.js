@@ -39,26 +39,38 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
     const rules = []
     
     if (dev) {
-        rules.push({
-            test: /\.js(\?[^?]*)?$/,
-            loader: 'hot-self-accept-loader',
-            include: [join(dir, page)],
-        }, {
-            test: /\.js(\?[^?]*)?$/,
-            loader: 'react-hot-loader/webpack',
-            exclude: /node_modules/
-        }, {
-            test: /\.scss$/,
-            exclude: /node_modules/,
-            loader: 'style-loader!css-loader!sass-loader'
-        })
+        rules.push(
+            {
+                test: /\.js(\?[^?]*)?$/,
+                loader: 'hot-self-accept-loader',
+                include: [join(dir, page)],
+            }, {
+                test: /\.js(\?[^?]*)?$/,
+                loader: 'react-hot-loader/webpack',
+                exclude: /node_modules/
+            }, {
+                test: /\.scss$/,
+                exclude: /node_modules/,
+                loader: 'style-loader!css-loader!sass-loader'
+            }, {
+                test: /\.(jpg|png)$/,
+                exclude: /node_modules/,
+                loader: 'file-loader'
+            }
+        )
         
     } else { 
-        rules.push({
-            test: /\.scss$/,
-            exclude: /node_modules/,
-            loader: extractCss.extract(['css-loader', 'sass-loader'])
-        })
+        rules.push(
+            {
+                test: /\.scss$/,
+                exclude: /node_modules/,
+                loader: extractCss.extract(['css-loader', 'sass-loader'])
+            },{
+                test: /\.(jpg|png)$/,
+                exclude: /node_modules/,
+                loader: 'file-loader?name=images/[name].[hash:8].[ext]'
+            }
+        )
     }
 
     rules.push({
@@ -170,7 +182,7 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
         output: {
             path: resolve(dir, `./${dist}`),
             filename: "[name]",
-            publicPath: '/_swrn/webpack/',
+            publicPath: dev ? '/_swrn/webpack/' : '/swrn/',
             libraryTarget: 'commonjs2',
             strictModuleExceptionHandling: true,
             chunkFilename: '[name]'
