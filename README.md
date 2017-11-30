@@ -2,7 +2,7 @@
 
 ## 写在前面
 
-只需一个命令，即可完成一个网站的搭建
+`仅需一个命令，即可搭建一个基于react的服务端渲染的网站`
 
 利用nodejs、react、webpack、express实现了一个服务端渲染的框架
     
@@ -31,7 +31,9 @@ package.json
 ```json
 {
   "scripts": {
-    "dev": "swrn"
+    "dev": "swrn",
+    "build": "swrn build",
+    "start": "swrn start"
   }
 }
 ```
@@ -41,7 +43,13 @@ package.json
 export default () => <div>Welcome to swrn.js!</div>
 ```
 
-接下来执行 `npm run dev` 然后访问站点 `http://localhost:3000`
+`开发环境` 部分服务端渲染，主要用来开发环境使用
+
+执行 `npm run dev` 然后访问站点 `http://localhost:3000`
+
+`发布环境` 全部服务端渲染，主要是发布环境使用
+
+执行 `npm run build && npm run start` 然后访问站点 `http://localhost:3000`
 
 另外在项目的`example`文件夹中，有相关功能的demo
 
@@ -177,7 +185,7 @@ export default class Index extends React.Component {
 - [x] 功能精简，仅仅一个swrn命令即可
 - [x] css资源处理
 - [x] 区分环境
-- [ ] 图片资源处理
+- [x] 图片资源处理
 - [ ] 错误异常处理
 - [ ] 离线包发布
 
