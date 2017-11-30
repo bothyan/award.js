@@ -182,6 +182,7 @@ export default class Index extends React.Component {
 - [x] 区分环境
 - [x] 图片资源处理
 - [ ] css modules
+- [ ] 客户端跳转静态资源加载优化，即客户端路由优化
 - [ ] 错误页面
 - [ ] 离线包发布
 
