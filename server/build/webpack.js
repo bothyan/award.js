@@ -52,10 +52,7 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
                 test: /\.scss$/,
                 exclude: /node_modules/,
                 loader: 'style-loader!css-loader!sass-loader'
-            },{ 
-                test:/\.(woff|woff2|svg|ttf|eot)($|\?)/, 
-                loader:'file-loader'
-            }  
+            }
         )
         
     } else { 
@@ -64,10 +61,7 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
                 test: /\.scss$/,
                 exclude: /node_modules/,                
                 loader: extractCss.extract(['css-loader', 'sass-loader'])
-            },{ 
-                test:/\.(woff|woff2|svg|ttf|eot)($|\?)/, 
-                loader:'file-loader?name=static/fonts/[name].[hash:8].[ext]'
-            }  
+            }
         )
     }
 
@@ -77,6 +71,10 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
             exclude: /node_modules/,
             loader: 'file-loader?name=static/images/[name].[hash:8].[ext]'
         },
+        { 
+            test:/\.(woff|woff2|svg|ttf|eot)($|\?)/, 
+            loader:'file-loader?name=static/fonts/[name].[hash:8].[ext]'
+        },  
         {
             test: /\.(js|json)(\?[^?]*)?$/,
             loader: 'emit-file-loader',

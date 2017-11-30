@@ -4,6 +4,7 @@ import WebpackDevMiddleware from 'webpack-dev-middleware'
 import render from './render'
 import webpack from './build/webpack'
 import clean from './build/clean'
+import { replaceImages } from './compiler'
 
 export default class Router {
 
@@ -40,7 +41,9 @@ export default class Router {
 
             return new Promise((resolve, reject) => {
                 compiler.plugin('done', () => {
-                    resolve()
+                    replaceImages(this.options).then(() => { 
+                        resolve()
+                    })  
                 })
             }).then(async () => {                
                 return await this.getConfigRoutes()
