@@ -2,6 +2,7 @@ import WebpackDevMiddleware from 'webpack-dev-middleware'
 import Router from '../router'
 import webpack from './webpack'
 import clean from './clean'
+import { replaceImages } from '../compiler'
 
 global.SWRN_InServer = true
 
@@ -13,7 +14,8 @@ export default async function build(dir, conf = null) {
         dir: dir,
         dev: false,
         dist,
-        page: 'pages'
+        page: 'pages',
+        assetPrefix: '/swrn'
     }
 
     // 获取路由
@@ -36,9 +38,11 @@ export default async function build(dir, conf = null) {
     })
 
     return new Promise((resolve, reject) => {
-        compiler.plugin('done', () => {
-            console.log('build done')
-            resolve()
+        compiler.plugin('done', () => {            
+            replaceImages(options).then(() => { 
+                console.log('build done')
+                resolve()
+            }) 
         })
     })
 

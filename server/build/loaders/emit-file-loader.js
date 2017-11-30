@@ -17,20 +17,15 @@ module.exports = function (content, sourceMap) {
   const opts = { context, content, regExp }
   const interpolatedName = loaderUtils.interpolateName(this, name, opts)
 
-  /**
-   * 
-   * @param newcode 去除require引用css的部分代码，这里需要直接导出，交给node在服务端解析
-   * @param oldcode babel-loader编译的代码，这里需要传给css进行解析
-   */
-  const emit = (newcode,oldcode, map) => {
-    this.emitFile(interpolatedName, newcode, map)
-    this.callback(null, oldcode, map)
+  const emit = (code, map) => {
+    this.emitFile(interpolatedName, code, map)
+    this.callback(null, code, map)
   }
 
   if (query.transform) {
     const transformed = query.transform({ content, sourceMap, interpolatedName })
-    return emit(transformed._content, transformed.content, transformed.sourceMap)
+    return emit(transformed.content, transformed.sourceMap)
   }
 
-  return emit(content, content, sourceMap)
+  return emit(content, sourceMap)
 }

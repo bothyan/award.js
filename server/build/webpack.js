@@ -33,7 +33,7 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
         }    
     }
 
-    let extractCss = new ExtractTextPlugin('style/[name].css')
+    let extractCss = new ExtractTextPlugin('static/style/[name].css')
 
     // 根据环境定义loader规则
     const rules = []
@@ -52,100 +52,67 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
                 test: /\.scss$/,
                 exclude: /node_modules/,
                 loader: 'style-loader!css-loader!sass-loader'
-            }, {
-                test: /\.(jpg|png)$/,
-                exclude: /node_modules/,
-                loader: 'file-loader'
-            }
+            },{ 
+                test:/\.(woff|woff2|svg|ttf|eot)($|\?)/, 
+                loader:'file-loader'
+            }  
         )
         
     } else { 
         rules.push(
             {
                 test: /\.scss$/,
-                exclude: /node_modules/,
+                exclude: /node_modules/,                
                 loader: extractCss.extract(['css-loader', 'sass-loader'])
-            },{
-                test: /\.(jpg|png)$/,
-                exclude: /node_modules/,
-                loader: 'file-loader?name=images/[name].[hash:8].[ext]'
-            }
+            },{ 
+                test:/\.(woff|woff2|svg|ttf|eot)($|\?)/, 
+                loader:'file-loader?name=static/fonts/[name].[hash:8].[ext]'
+            }  
         )
     }
 
-    rules.push({
-        test: /\.(js|json)(\?[^?]*)?$/,
-        loader: 'emit-file-loader',
-        include: [dir, join(dir, page)],
-        exclude: /node_modules/,
-        options: {
-            name: 'dist/[path][name].[ext]',
-            transform({ content, sourceMap, interpolatedName }) {
-                // Only handle .js files
-                if (!(/\.js$/.test(interpolatedName))) {
-                    return { content, sourceMap }
-                }
-
-                // 去除require的scss代码
-                // 比如require('./index.scss') 将其删掉
-                var line = 0
-                var style = []
-                var _content = ''
-                content = `${content}\r\n`
-                for (let i = 0; i < content.length; i++) {
-                    if (content[i].match(/\n/) != null) {
-                        var res = ''
-                        for (let j = line; j < i; j++) {
-                            res += content[j]
-                        }
-
-                        res = res.replace(/(^\s*)|(\s*$)/g, "")
-
-                        //注释行信息
-                        if (res.substr(0, 2) == "//") {
-                            // console.log(res)
-                        }
-
-                        //匹配未注释的css代码
-                        var _res = res.match(/^require\(['|"](.*)(\.(css|scss))['|"]\)/)
-
-                        if (_res != null) {
-                            res = ''
-                            var _tmp = _res[1] + _res[2]
-                            style.push(_tmp)
-                        }
-
-                        _content += res + '\n'
-
-                        line = i
+    rules.push(
+        {
+            test:/\.(png|gif|jpg|jpeg|bmp)$/, 
+            exclude: /node_modules/,
+            loader: 'file-loader?name=static/images/[name].[hash:8].[ext]'
+        },
+        {
+            test: /\.(js|json)(\?[^?]*)?$/,
+            loader: 'emit-file-loader',
+            include: [dir, join(dir, page)],
+            exclude: /node_modules/,
+            options: {
+                name: 'dist/[path][name].[ext]',
+                transform({ content, sourceMap, interpolatedName }) {
+                    if (!(/\.js$/.test(interpolatedName))) {
+                        return { content, sourceMap }
                     }
-                }
-
-                return {
-                    content,
-                    _content
+                    return {
+                        content
+                    }
                 }
             }
-        }
-    },
-    {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        options: {
-            presets: ["react", "es2015", "stage-0"],
-            plugins: ["react-require", "transform-runtime",
-                [
-                    require.resolve('babel-plugin-module-resolver'),
-                    {
-                        alias: {
-                            'swrn/router': require.resolve('../../lib/router')
+        },
+        {
+            test: /\.(js|jsx)$/,
+            exclude: /node_modules/,
+            loader: 'babel-loader',
+            options: {
+                presets: ["react", "es2015", "stage-0"],
+                plugins: ["react-require", "transform-runtime",
+                    [
+                        require.resolve('babel-plugin-module-resolver'),
+                        {
+                            alias: {
+                                'swrn/router': require.resolve('../../lib/router')
+                            }
                         }
-                    }
+                    ]
                 ]
-            ]
+            }
         }
-    })
+    )
 
     // 根据环境定义插件
     const plugins = [

@@ -27,16 +27,39 @@ export default class Server {
         this.server = express()
         this.dist = '.swrn'
         this.page = 'pages'
+
+        this.assetPrefix = '/swrn'
+        this.exist_mainjs = false
+        this.exist_maincss = false
     }
 
     // 注册路由
     async registerRouter(routes) {
 
-        // 客户端入口文件路由
-        this.server.get('/swrn/main.js', async (req, res) => {
-            const path = join(this.dir, this.dist, 'main.js')
+        this.exist_mainjs = await glob(join(this.dir, `./${this.dist}/dist/main.js`))
+        this.exist_maincss = await glob(join(this.dir, this.dist , 'static/style/bundles/main.js.css'))        
+        
+        
+        //js入口文件
+        this.server.get(`${this.assetPrefix}/main.js`, async (req, res) => {
+            const path = join(this.dir, this.dist, `main.js`)
             return await serveStatic(req, res, path)
         })
+        
+        if (this.exist_mainjs.length) { 
+            // 客户端入口文件 js
+            this.server.get(`${this.assetPrefix}/static/main.js`, async (req, res) => {
+                const path = join(this.dir, this.dist, `bundles/main.js`)
+                return await serveStatic(req, res, path)
+            })
+        }
+
+        if (this.exist_maincss.length) {
+            // 客户端入口文件 css
+            this.server.get(`${this.assetPrefix}/static/style/main.css`, async (req, res) => {
+                return await serveStatic(req, res, this.exist_maincss[0])
+            })
+        }     
 
         // 注册各个页面路由
         routes.map(async (item, index) => {
@@ -49,16 +72,14 @@ export default class Server {
                 //if (this.dev) {
                     //开发
                     const ComponentPath = join(this.dir, `./${this.dist}/dist/`, item.page)
-                    const MainPath = join(this.dir, `./${this.dist}/dist/main.js`)
-
+                    
                     //这里需要删除require的缓存
                     delete require.cache[require.resolve(ComponentPath)]
                     _Component = require(ComponentPath)
 
-                    const mainFile = await glob(MainPath)
-                    if (mainFile.length) {
-                        delete require.cache[require.resolve(MainPath)]
-                        _Main = require(MainPath)
+                    if (this.exist_mainjs.length) {
+                        delete require.cache[require.resolve(this.exist_mainjs[0])]
+                        _Main = require(this.exist_mainjs[0])
                     }
 
                 //} else {
@@ -93,21 +114,25 @@ export default class Server {
     async publicSource(page) {
 
         //获取js
-        this.server.get(`/swrn/bundles${page}`, async (req, res) => {
+        this.server.get(`${this.assetPrefix}${page}`, async (req, res) => {
             const path = join(this.dir, this.dist, `bundles/${page}`)
             return await serveStatic(req, res, path)
         })
 
-        //获取css
+        //获取资源
+        //开发使用css内联模式  发布使用链接模式（缓存）
         if (!this.dev) {
-            this.server.get(`/swrn/style/bundles${page}.css`, async (req, res) => {
-                const path = join(this.dir, this.dist, `style/bundles/${page}.css`)
+
+            //特殊处理css资源
+            this.server.get(`${this.assetPrefix}/static/style${page.split('.')[0]}.css`, async (req, res) => {
+                const path = join(this.dir, this.dist, `static/style/bundles/${page}.css`)
                 return await serveStatic(req, res, path)
             })
+
+            //获取图片资源
+            this.server.use(`${this.assetPrefix}/static`, express.static(join(this.dir,this.dist,'static')))
         }
         
-        //获取图片资源
-        this.server.use('/swrn/images', express.static(join(this.dir,this.dist,'images')))
     }
 
     // mock数据
@@ -127,13 +152,11 @@ export default class Server {
             dev: this.dev,
             server: this.server,
             dist: this.dist,
-            page: this.page
+            page: this.page,
+            assetPrefix: this.assetPrefix
         }
         // 获取路由
         const routes = await new Router(options).routes()
-
-        // 注册路由
-        await this.registerRouter(routes)
 
         // webpack编译
         if (this.dev) {
@@ -141,7 +164,10 @@ export default class Server {
             options.dist = this.dist
             options.entry = false
             await new HotReloader(options).start()
-        }    
+        } 
+        
+        // 注册路由
+        await this.registerRouter(routes)
     }
 
     //开启服务
@@ -165,23 +191,32 @@ export default class Server {
             html = render(Component, props)
         }
 
-        //资源路径
-        const sourcePath = `/swrn/`
+        //css、js资源地址配置
+        let cssPath = []
+        let jsPath = [join(this.assetPrefix,'/main.js')] //主要依赖的文件，也就是客户端入口
 
-        const mainBundle = Main ? sourcePath + 'bundles/main.js' : null
-        const mainPath = sourcePath + 'main.js'
-        const jsPath = sourcePath + join('bundles', page)
-        let cssPath = null
+        //客户端路由自定义配置页面
+        if (Main) { 
+            jsPath.push(join(this.assetPrefix,'static/main.js'))
+        }
 
-        const _cssPath = await glob(join(this.dir, this.dist , 'style', 'bundles', page + '.css'))
-        
+        //当前页面需要的js文件
+        jsPath.push(join(this.assetPrefix,page))
+
+        //判断是否有css，一个是当前页面 一个是公共的
+        const _cssPath = await glob(join(this.dir, this.dist , 'static/style/bundles', page + '.css'))
+
+        if (this.exist_maincss.length) { 
+            cssPath.push(`${this.assetPrefix}/static/style/main.css`)
+        }
+
         if (_cssPath.length) {
-            cssPath = sourcePath + join('style', 'bundles', page + '.css')
-        }    
+            cssPath.push(`${this.assetPrefix}/static/style${page.split('.')[0]}.css`)
+        }
+
+        props.assetPrefix = this.assetPrefix
 
         const _html = render(Document, {
-            mainBundle,
-            mainPath,
             jsPath,
             cssPath,
             props,

@@ -2,6 +2,7 @@ import WebpackDevMiddleware from 'webpack-dev-middleware'
 import WebpackHotMiddleware from 'webpack-hot-middleware'
 import webpack from './build/webpack'
 import clean from './build/clean'
+import { replaceImages } from './compiler'
 
 export default class HotReloader {
 
@@ -30,8 +31,10 @@ export default class HotReloader {
         }))
 
         return new Promise((resolve, reject) => {
-            compiler.plugin('done', () => {
-                resolve()
+            compiler.plugin('done', async () => {
+                replaceImages(this.options).then(() => { 
+                    resolve()
+                })                
             })
         })
 
