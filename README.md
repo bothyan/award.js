@@ -1,7 +1,9 @@
 # Swrn &middot; [![NPM version](https://img.shields.io/npm/v/swrn.svg)](https://www.npmjs.com/package/swrn) 
 
 ## 写在前面
-    
+
+只需一个命令，即可完成一个网站的搭建
+
 利用nodejs、react、webpack、express实现了一个服务端渲染的框架
     
 nodejs作为服务器，express作为路由入口，webpack将同一份react项目代码编译打包，实现了对服务端和客户端的展现
