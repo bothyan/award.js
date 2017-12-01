@@ -172,11 +172,6 @@ export default class Index extends React.Component {
 
 # swrn的项目简要
 
-## 技术难点
-
-  1.保证react-routerV4前端路由的数据加载方式和服务端路由数据加载的方式一致性,都是统一使用getInitialProps方法，兼容了redux和ajax方式
-
-
 ## 基础架构
 - [x] 前后端的路由统一处理方案，自定义前端路由
 - [x] 组件数据初始化方案
@@ -186,7 +181,9 @@ export default class Index extends React.Component {
 - [x] css资源处理
 - [x] 区分环境
 - [x] 图片资源处理
-- [ ] 错误异常处理
+- [ ] css modules
+- [ ] 客户端跳转静态资源加载优化，即客户端路由优化
+- [ ] 错误页面
 - [ ] 离线包发布
 
 ## 说明
