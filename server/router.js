@@ -4,7 +4,7 @@ import WebpackDevMiddleware from 'webpack-dev-middleware'
 import render from './render'
 import webpack from './build/webpack'
 import clean from './build/clean'
-import { replaceImages } from './compiler'
+import { replaceStaticSource } from './compiler'
 
 export default class Router {
 
@@ -40,10 +40,9 @@ export default class Router {
             })
 
             return new Promise((resolve, reject) => {
-                compiler.plugin('done', () => {
-                    replaceImages(this.options).then(() => { 
-                        resolve()
-                    })  
+                compiler.plugin('done', async () => {
+                    await replaceStaticSource(this.options)
+                    resolve() 
                 })
             }).then(async () => {                
                 return await this.getConfigRoutes()

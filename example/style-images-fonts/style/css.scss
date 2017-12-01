@@ -1,0 +1,46 @@
+.wraps{
+    .name{
+        color:red;
+    }
+
+    .input{
+        color:red;
+        .book{
+            color:red;
+            b{  
+                color: saddlebrown;
+            } 
+            
+            .tips{
+               color: saddlebrown; 
+            }
+        }
+
+        .line{
+            color: khaki;
+        }
+        
+    }
+
+    .line{
+        color: sandybrown;
+    }
+}
+
+#wraper{
+    font-size: 50px;
+}
+
+div {
+    h1{
+        line-height: 20px;
+    }
+    div{
+        span{
+            font-size: 30px;
+        }
+        a{
+            line-height: 40px;
+        }
+    }
+}

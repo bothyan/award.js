@@ -4,9 +4,12 @@ import '../style/about.scss'
 export default class Index extends React.Component { 
     render() { 
         return (
-            <h1 className="name12345678">
-                hello about    
-            </h1>
+            <div>
+                <h1 styleName="name12345678">
+                    hello about 123   
+                </h1>
+                <span styleName="uh">huhu</span>
+            </div>    
         )
     }
 }

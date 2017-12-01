@@ -2,7 +2,7 @@ import WebpackDevMiddleware from 'webpack-dev-middleware'
 import Router from '../router'
 import webpack from './webpack'
 import clean from './clean'
-import { replaceImages } from '../compiler'
+import { replaceStaticSource , replaceBundlesClassName } from '../compiler'
 
 global.SWRN_InServer = true
 
@@ -38,11 +38,11 @@ export default async function build(dir, conf = null) {
     })
 
     return new Promise((resolve, reject) => {
-        compiler.plugin('done', () => {            
-            replaceImages(options).then(() => { 
-                console.log('build done')
-                resolve()
-            }) 
+        compiler.plugin('done', async () => {  
+            await replaceStaticSource(options)
+            await replaceBundlesClassName(options)             
+            console.log('build done') 
+            resolve() 
         })
     })
 

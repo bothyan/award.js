@@ -7,7 +7,7 @@ import PagesPlugin from './plugins/page-plugin'
 import * as babelCore from 'babel-core'
 import _ from 'lodash'
 
-export default async function createCompiler({ dir, dev, dist, page, routes = {}, entry }) {
+export default async function createCompiler({ dir, dev, dist, page, routes = {}, entry, assetPrefix }) {
 
     if (!entry) {
 
@@ -37,22 +37,32 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
 
     // 根据环境定义loader规则
     const rules = []
+
+    const _tmpCss = []
+    
+    const JsonFile = (cssFileName, json, outputFileName) => { 
+        _tmpCss.push({
+            filename: cssFileName,
+            data:json
+        })
+    }
     
     if (dev) {
         rules.push(
             {
-                test: /\.js(\?[^?]*)?$/,
+                test: /\.js$/,
                 loader: 'hot-self-accept-loader',
                 include: [join(dir, page)],
             }, {
-                test: /\.js(\?[^?]*)?$/,
+                test: /\.js$/,
                 loader: 'react-hot-loader/webpack',
                 exclude: /node_modules/
-            }, {
+            }, 
+            {
                 test: /\.scss$/,
                 exclude: /node_modules/,
                 loader: 'style-loader!css-loader!sass-loader'
-            }
+            }                    
         )
         
     } else { 
@@ -60,7 +70,48 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
             {
                 test: /\.scss$/,
                 exclude: /node_modules/,                
-                loader: extractCss.extract(['css-loader', 'sass-loader'])
+                loader: extractCss.extract(['css-loader'])
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    {
+                        loader: 'emit-file-loader',
+                        options: {
+                            name: 'dist/[path][name].swrn',
+                            transform({ content, sourceMap, interpolatedName, resource }) {                            
+                                let _content = {}
+                                _tmpCss.map(item => { 
+                                    if (item.filename == resource) { 
+                                        _content = item
+                                    }
+                                })
+                                return {
+                                    content,
+                                    _content:JSON.stringify(_content)
+                                }
+                            }
+                        }
+                    },                
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins:[
+                                require('postcss-cssnext')({
+                                  warnForDuplicates: false
+                                }),
+                                require('postcss-modules')({
+                                    generateScopedName: '[name]_[local]_[hash:base64:5]]',
+                                    getJSON: function(cssFileName, json, outputFileName) {                                    
+                                        JsonFile(cssFileName, json, outputFileName)
+                                    }  
+                                }),
+                                require('cssnano')()
+                            ]
+                        }  
+                    },
+                    'sass-loader'
+                ]                
             }
         )
     }
@@ -74,9 +125,9 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
         { 
             test:/\.(woff|woff2|svg|ttf|eot)($|\?)/, 
             loader:'file-loader?name=static/fonts/[name].[hash:8].[ext]'
-        },  
+        },        
         {
-            test: /\.(js|json)(\?[^?]*)?$/,
+            test: /\.js$/,
             loader: 'emit-file-loader',
             include: [dir, join(dir, page)],
             exclude: /node_modules/,
@@ -86,9 +137,43 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
                     if (!(/\.js$/.test(interpolatedName))) {
                         return { content, sourceMap }
                     }
+
+                    //开发环境需要将styleName转为className
+                    //发布环境不再使用className,所有的转化的styleName全部交给服务器提供class
+                    const tag = dev ? 'className' : 'styleName'
+
+                    let line = 0
+                    let _content = ''
+                    content = `${content}\r\n`
+                    for (let i = 0; i < content.length; i++) {
+                        if (content[i].match(/\n/) != null) {
+                            let res = ''
+                            for (let j = line; j < i; j++) {
+                                res += content[j]
+                            }
+                            res = res.replace(/(^\s*)|(\s*$)/g, "")
+
+                            //匹配styleName => className
+                            //{ styleName: 'name' }
+                            //'styleName'
+                            //"styleName"
+                            const _className = res.match(/[{'"\s]styleName['":]/g)
+                        
+                            if (_className != null) {
+                                _className.map(item => {
+                                    let _match = item.match(/([{'"\s])styleName(['":])/)
+                                    res = res.replace(item, `${_match[1]}${tag}${_match[2]}`)
+                                })
+                            }
+        
+                            _content += res + '\n'
+                            line = i
+                        }
+                    }    
                     return {
-                        content
-                    }
+                        content: _content, //在webpack中传文件
+                        _content: dev ? _content : content //写文件
+                    }                      
                 }
             }
         },
@@ -97,6 +182,7 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
             exclude: /node_modules/,
             loader: 'babel-loader',
             options: {
+                //"babili",
                 presets: ["react", "es2015", "stage-0"],
                 plugins: ["react-require", "transform-runtime",
                     [
@@ -147,7 +233,7 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
         output: {
             path: resolve(dir, `./${dist}`),
             filename: "[name]",
-            publicPath: dev ? '/_swrn/webpack/' : '/swrn/',
+            publicPath: dev ? '/_swrn/webpack/' : `${assetPrefix}/`,
             libraryTarget: 'commonjs2',
             strictModuleExceptionHandling: true,
             chunkFilename: '[name]'

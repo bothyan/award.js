@@ -16,16 +16,18 @@ module.exports = function (content, sourceMap) {
   const regExp = query.regExp
   const opts = { context, content, regExp }
   const interpolatedName = loaderUtils.interpolateName(this, name, opts)
+  const resource = this._module.resource
 
-  const emit = (code, map) => {
-    this.emitFile(interpolatedName, code, map)
+  const emit = (code, map, writeCode) => {
+    writeCode = typeof writeCode != 'undefined' ? writeCode : code
+    this.emitFile(interpolatedName, writeCode , map)
     this.callback(null, code, map)
   }
 
   if (query.transform) {
-    const transformed = query.transform({ content, sourceMap, interpolatedName })
-    return emit(transformed.content, transformed.sourceMap)
+    const transformed = query.transform({ content, sourceMap, interpolatedName, resource })
+    return emit(transformed.content, transformed.sourceMap, transformed._content)
   }
 
-  return emit(content, sourceMap)
+  return emit(content, sourceMap, content)
 }

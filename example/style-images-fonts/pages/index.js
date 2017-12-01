@@ -9,12 +9,12 @@ export default class Index extends React.Component {
     render() { 
         return (
             <div>
-                <h1 className="name">
+                <h1 styleName='name'>
                     hello world 
                     <span>你好，世界</span>
                 </h1>
                 <IndexComponent /> 
-                <Link tag="span" className="click" to="/about">点击查看</Link>
+                <Link tag="span" styleName="click" to="/about">点击查看</Link>
             </div>    
         )
     }
