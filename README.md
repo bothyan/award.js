@@ -209,6 +209,7 @@ export default class Index extends React.Component {
 - [x] css modules
 - [ ] 客户端跳转静态资源加载优化，即客户端路由优化
 - [ ] 错误页面
+- [ ] 动态配置文件，主要配置cdn等一些资源路径，还有webpack的扩展，但是目前所要用到的都已经内置了
 - [ ] 离线包发布
 
 ## 说明
