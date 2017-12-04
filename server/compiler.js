@@ -6,7 +6,7 @@ const checkDistStaticSource = (content,distImages,options) => {
     // 解析require的代码
     const { dev,assetPrefix,dir,path } = options
     var line = 0
-    var _content = 'exports.swrn_style = [] \n'
+    var _content = `var _SWRN_STYLE = [] \n var _CSSModules = require('react-css-modules') \n`
     content = `${content}\r\n`
     for (let i = 0; i < content.length; i++) {
         if (content[i].match(/\n/) != null) {
@@ -41,7 +41,7 @@ const checkDistStaticSource = (content,distImages,options) => {
                             //判断是不是空对象
                             const _cssdata = JSON.stringify(cssJson.data)
                             if (_cssdata != '{}') {
-                                res = res + '\n' + `exports.swrn_style.push(${_cssdata})`
+                                res = res + '\n' + `_SWRN_STYLE.push(${_cssdata})`
                             }
                         } else { 
                             res = res.replace(item, `''`) + '\n'
@@ -76,7 +76,31 @@ const checkDistStaticSource = (content,distImages,options) => {
                     }
                     
                 })                   
-            }            
+            }
+            
+            //将这一行的export.default代码匹配出来
+            const _default = res.match(/exports.default(.*);$/)
+
+            if (_default != null) { 
+                const ComponentName = _default[1].replace(/[\s=]/g, '')
+                res = `
+                var ComponentStyle = {};                
+                if (_SWRN_STYLE.length) { 
+                    for (var i = 0; i < _SWRN_STYLE.length; i++) { 
+                        for (var key in _SWRN_STYLE[i]) { 
+                            ComponentStyle[key] = _SWRN_STYLE[i][key];
+                        }
+                    }
+                };
+                exports.default = _CSSModules(${ComponentName},ComponentStyle);`             
+            }
+
+            // //将这一行的use strict代码匹配出来
+            // const _strict = res.match(/use strict/)
+
+            // if (_strict != null) {
+            //     res = res.replace(/use strict/, '')
+            // }    
 
             _content += res + '\n'
             line = i
@@ -106,57 +130,4 @@ export const replaceStaticSource = (options) => {
         resolve()
     
     })
-}
-
-export const replaceBundlesClassName = (options) => { 
-    //读取bundle目录下文件
-    return new Promise( async (resolve,reject)=> {
-        
-        const bundleFiles = await glob(`${options.dist}/bundles/**/*.js`, { cwd: options.dir })
-        
-        if (bundleFiles.length) { 
-            bundleFiles.map(item => { 
-                const path = join(options.dir, item)
-                options.path = path
-                var content = checkBundleClassName(fs.readFileSync(path, "utf-8"))
-                fs.writeFileSync(path, content)
-            })
-        }
-
-        resolve()
-    
-    })
-}
-
-const checkBundleClassName = (content) => { 
-    var line = 0
-    var _content = ''
-    content = `${content}\r\n`
-    for (let i = 0; i < content.length; i++) {
-        if (content[i].match(/\n/) != null) {
-            var res = ''
-            for (let j = line; j < i; j++) {
-                res += content[j]
-            }
-            res = res.replace(/(^\s*)|(\s*$)/g, "")
-
-            //匹配styleName => className
-            //{ styleName: 'name' }
-            //'styleName'
-            //"styleName"
-            const _className = res.match(/[{'",\s]styleName['":]/g)
-            
-            if (_className != null) {
-                _className.map(item => {
-                    let _match = item.match(/([{'",\s])styleName(['":])/)
-                    res = res.replace(item, `${_match[1]}className${_match[2]}`)
-                })
-            }
-
-            _content += res + '\n'
-            line = i
-        }
-    }
-
-    return _content
 }

@@ -1,8 +1,8 @@
 import WebpackDevMiddleware from 'webpack-dev-middleware'
 import Router from '../router'
-import webpack from './webpack'
-import clean from './clean'
-import { replaceStaticSource , replaceBundlesClassName } from '../compiler'
+import webpack, { buildWebpack } from './webpack'
+import clean, { cleanBundles,cleanFile } from './clean'
+import { replaceStaticSource } from '../compiler'
 
 global.SWRN_InServer = true
 
@@ -23,9 +23,9 @@ export default async function build(dir, conf = null) {
     
     // webpack编译
     options.routes = routes
-    options.dist = dist    
+    options.dist = dist  
     options.entry = false
-    
+
     const [compiler] = await Promise.all([
         webpack(options),
         clean(options)
@@ -40,9 +40,32 @@ export default async function build(dir, conf = null) {
     return new Promise((resolve, reject) => {
         compiler.plugin('done', async () => {  
             await replaceStaticSource(options)
-            await replaceBundlesClassName(options)             
-            console.log('build done') 
-            resolve() 
+            console.log('build done 50%')
+            
+            const [compilerBuild] = await Promise.all([
+                buildWebpack(options),
+                cleanBundles(options)
+            ])
+
+            WebpackDevMiddleware(compilerBuild,{
+                noInfo: true,
+                quiet: true,
+                clientLogLevel: 'warning'
+            })
+
+            compilerBuild.plugin('done', async () => { 
+                
+                options.fileName = 'common.js'
+                await cleanFile(options)
+                options.fileName = 'app.js'
+                await cleanFile(options)
+                options.fileName = 'manifest.js'
+                await cleanFile(options)
+
+                console.log('build done 100%')
+                
+                resolve() 
+            })            
         })
     })
 

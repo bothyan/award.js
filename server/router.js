@@ -25,7 +25,7 @@ export default class Router {
         if (_main.length) {
 
             this.options.entry = { 'bundles/main.js': join(this.dir, `main.js`) }
-            this.options.dist = this.dev ? this.dist : '.tmp'
+            this.options.dist = '.tmp'
             
             const [compiler] = await Promise.all([
                 webpack(this.options),
@@ -45,7 +45,7 @@ export default class Router {
                     resolve() 
                 })
             }).then(async () => {                
-                return await this.getConfigRoutes()
+                return await this.getConfigRoutes(this.options)
             })
             
         } else { 
@@ -98,7 +98,7 @@ export default class Router {
     async getConfigRoutes() {
         global.SWRN_ROUTE = true
         let _Router
-        const routePath = join(this.dir, `${this.dist}/dist/main.js`)
+        const routePath = join(this.dir, `${this.options.dist}/dist/main.js`)
         _Router = require(routePath)
         const Router = _Router.default || _Router
 

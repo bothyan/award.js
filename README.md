@@ -14,6 +14,7 @@ nodejs作为服务器，express作为路由入口，webpack将同一份react项�
   - [mock数据](#mock数据)
   - [样式资源](#样式)
   - [图片资源](#图片资源)
+  - [react-css-modules](#react-css-modules)
 - [基础命令](#基础命令)
 - [基础架构](#基础架构)
   
@@ -161,6 +162,19 @@ export default class Index extends React.Component {
     }
 }
 ```
+
+## react-css-modules
+内置 `react-css-modules` 插件实现 css modules
+
+该功能主要是项目发布的时候，即`swrn build`的时候，会进行处理
+
+开发阶段，不采取css modules,不过写法都要按css modules来
+
+全局的样式使用`className`,如果使用局部的样式,写成`styleName`;发布的时候会进行自动转换
+
+具体可以查看`example/style-images-fonts`
+
+
 
 ## 总结的问题
 

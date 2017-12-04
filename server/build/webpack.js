@@ -1,21 +1,115 @@
 import webpack from 'webpack'
-import { resolve, join } from 'path'
+import { resolve, join , sep} from 'path'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import glob from 'glob-promise'
 import WriteFilePlugin from 'write-file-webpack-plugin'
 import PagesPlugin from './plugins/page-plugin'
-import * as babelCore from 'babel-core'
+import CombineAssetsPlugin from './plugins/combine-assets-plugin'
 import _ from 'lodash'
 
-export default async function createCompiler({ dir, dev, dist, page, routes = {}, entry, assetPrefix }) {
+export const buildWebpack = async ({ dir, dist, routes = {} }) => { 
+        
+    const entry = {}
 
+    routes.map(item => {
+        entry[join('bundles', item.page)] = join(dir, dist , 'dist' , item.page)
+    })
+
+    const totalPage = routes.filter(item=> item.path!=null).length
+
+    entry['app.js'] = join(__dirname, '..', '..', 'client/swrn.js')
+    
+    let webpackConfig = {
+        entry,
+        output: {
+            path: resolve(dir, `./${dist}`),
+            libraryTarget: 'commonjs2',
+            filename: "[name]",
+            chunkFilename: "[name]",
+            strictModuleExceptionHandling: true
+        }, 
+        resolve: {
+            extensions: ['.js', '.jsx']
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.(js)$/,
+                    exclude: /node_modules/,
+                    loader: 'babel-loader',
+                    options: {
+                        plugins: [
+                            [
+                                require.resolve('babel-plugin-module-resolver'),
+                                {
+                                    alias: {
+                                        'swrn/router': require.resolve('../../lib/router')
+                                    }
+                                }
+                            ]
+                        ]
+                    }
+                }
+            ]
+        },
+        plugins: [                        
+            new WriteFilePlugin({
+                exitOnErrors: false,
+                log: false,
+                useHashIndex: false
+            }),
+            new webpack.optimize.CommonsChunkPlugin({
+                name:'common',
+                filename: 'common.js',
+                minChunks (module, count) {
+                    
+                    if (module.context && module.context.indexOf(`${sep}react-dom${sep}`) >= 0) {
+                      return true
+                    }
+
+                    if(totalPage < 2){
+                        return false
+                    }
+                    
+                    return count >= totalPage * 0.5
+                    
+                }
+            }),            
+            new webpack.optimize.CommonsChunkPlugin({
+                name:'manifest',
+                filename: 'manifest.js'
+            }),
+            new CombineAssetsPlugin({
+                input: ['manifest.js', 'common.js', 'app.js'],
+                output: 'main.js'
+            }),
+            new PagesPlugin(),
+            new webpack.DefinePlugin({
+                'process.env.NODE_ENV': JSON.stringify('production')
+            }),
+            new webpack.optimize.UglifyJsPlugin({
+                compress: { warnings: false },
+                sourceMap: false
+            }),
+            new webpack.optimize.ModuleConcatenationPlugin()            
+        ]
+    }  
+
+    return webpack(webpackConfig)
+                
+}
+
+export default async function createCompiler({ dir, dev, dist, page, routes = {}, entry, assetPrefix }) {
+    
     if (!entry) {
 
         const _main = await glob('main.js', { cwd: dir })
+        
+        entry = {}
 
-        entry = {
-            'main.js': join(__dirname, '..', '..', dev ? 'client/swrn-dev.js' : 'client/swrn.js')
-        }
+        if (dev) {
+            entry['main.js'] = join(__dirname, '..', '..', 'client/swrn.js')
+        }    
 
         if (_main.length) {
             entry['bundles/main.js'] = join(dir, `main.js`)
@@ -30,8 +124,10 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
                 'webpack-hot-middleware/client?path=/_swrn/webpack-hmr&timeout=2000',
                 val
             ])
-        }    
+        }  
     }
+
+    
 
     let extractCss = new ExtractTextPlugin('static/style/[name].css')
 
@@ -157,14 +253,15 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
                             //{ styleName: 'name' }
                             //'styleName'
                             //"styleName"
+                            
                             const _className = res.match(/[{'"\s]styleName['":]/g)
-                        
+                    
                             if (_className != null) {
                                 _className.map(item => {
                                     let _match = item.match(/([{'"\s])styleName(['":])/)
                                     res = res.replace(item, `${_match[1]}${tag}${_match[2]}`)
                                 })
-                            }
+                            }   
         
                             _content += res + '\n'
                             line = i
@@ -182,9 +279,8 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
             exclude: /node_modules/,
             loader: 'babel-loader',
             options: {
-                //"babili",
                 presets: ["react", "es2015", "stage-0"],
-                plugins: ["react-require", "transform-runtime",
+                plugins: ["transform-runtime",
                     [
                         require.resolve('babel-plugin-module-resolver'),
                         {
@@ -223,12 +319,12 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
             new webpack.optimize.UglifyJsPlugin({
                 compress: { warnings: false },
                 sourceMap: false
-            }),
+            }),            
             new webpack.optimize.ModuleConcatenationPlugin()
         )
     }
 
-    const webpackConfig = {
+    let webpackConfig = {
         entry,
         output: {
             path: resolve(dir, `./${dist}`),
@@ -252,6 +348,7 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
             ]
         },
         plugins
-    }
+    }  
+
     return webpack(webpackConfig)
 }

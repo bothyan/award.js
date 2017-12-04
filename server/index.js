@@ -8,7 +8,6 @@ import glob from 'glob-promise'
 import Document from './document'
 import App from '../lib/app'
 import { renderToString, renderToStaticMarkup } from 'react-dom/server'
-import CSSModules from 'react-css-modules';
 
 require('babel-register')({
     presets: ['react', 'es2015']
@@ -43,7 +42,7 @@ export default class Server {
 
         //js入口文件
         this.server.get(`${this.assetPrefix}/main.js`, async (req, res) => {
-            const path = join(this.dir, this.dist, `main.js`)
+            const path = join(this.dir, this.dist, 'main.js')
             return await serveStatic(req, res, path)
         })
 
@@ -68,8 +67,7 @@ export default class Server {
             //获取动态页面渲染
             item.path && this.server.get(item.path, async (req, res) => {
 
-                let _Component = null, _Main = null,
-                    SwrnStyle = [], ComponentStyle = {}, MainStyle = {}
+                let _Component = null, _Main = null
 
                 //if (this.dev) {
                 //开发
@@ -90,34 +88,14 @@ export default class Server {
 
                 //}
 
-                // 获取当前页面组件的样式表
-                SwrnStyle = _Component.swrn_style
-                SwrnStyle && SwrnStyle.map(item => {
-                    for (let key in item) {
-                        ComponentStyle[key] = item[key]
-                    }
-                })
-
                 const Component = _Component.default || _Component
                 const Main = !!_Main && (_Main.default || _Main)
-
-                // 获取Main组件的样式表
-                if (Main) {
-                    SwrnStyle = _Main.swrn_style
-                    SwrnStyle.length && SwrnStyle.map(item => {
-                        for (let key in item) {
-                            MainStyle[key] = item[key]
-                        }
-                    })
-                }
 
                 await this.renderHtml({
                     req,
                     res,
                     Main,
-                    MainStyle,
                     Component,
-                    ComponentStyle,
                     routes,
                     page: item.page
                 })
@@ -199,17 +177,14 @@ export default class Server {
     }
 
     //send Html资源
-    async renderHtml({ req, res, page, routes, Component, ComponentStyle, Main, MainStyle }) {
+    async renderHtml({ req, res, page, routes, Component, Main }) {
 
         const query = req.params
         const initialProps = !Component.getInitialProps ? {} : await Component.getInitialProps({ req, res })
 
-        Component = CSSModules(Component, ComponentStyle)
-
-        let html, props = { ...initialProps, route: page, query, routes }
+        let html, props = { ...initialProps, route: page, query, routes}
 
         if (Main) {
-            Main = CSSModules(Main, MainStyle)
             props = { ...props, Component, Main }
             html = renderToStaticMarkup(React.createElement(App, props), props)
         } else {
