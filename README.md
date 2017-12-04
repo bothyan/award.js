@@ -4,6 +4,8 @@
 
 `仅需一个命令，即可搭建一个基于react的服务端渲染的网站`
 
+`单页面应用的写法，服务端渲染的实现`
+
 利用nodejs、react、webpack、express实现了一个服务端渲染的框架
     
 nodejs作为服务器，express作为路由入口，webpack将同一份react项目代码编译打包，实现了对服务端和客户端的展现
