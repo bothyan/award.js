@@ -174,6 +174,15 @@ export default class Index extends React.Component {
 
 具体可以查看`example/style-images-fonts`
 
+全局样式，需要这样写
+```scss
+// 局部样式 就不需要加:global,采用styleName关键字生效
+:global{
+    /**
+     * 这里写全局使用的css样式，这个时候class用className
+     /
+}
+```
 
 
 ## 总结的问题
