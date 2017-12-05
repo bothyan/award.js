@@ -208,6 +208,7 @@ export default class Index extends React.Component {
 - [x] 图片资源处理
 - [x] css modules
 - [x] 客户端跳转静态资源加载优化，即客户端路由优化
+- [ ] Head处理，即SEO优化处理
 - [ ] 错误页面
 - [ ] 动态配置文件，主要配置cdn等一些资源路径，还有webpack的扩展，但是目前所要用到的都已经内置了
 - [ ] 离线包发布
