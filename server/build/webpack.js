@@ -108,7 +108,7 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
         entry = {}
 
         if (dev) {
-            entry['main.js'] = join(__dirname, '..', '..', 'client/swrn.js')
+            entry['main.js'] = join(__dirname, '..', '..', 'client/swrn-dev.js')
         }    
 
         if (_main.length) {

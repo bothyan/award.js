@@ -185,7 +185,7 @@ export default class Server {
         let html, props = { ...initialProps, route: page, query, routes}
 
         if (Main) {
-            props = { ...props, Component, Main }
+            props = { ...props , Component, Main }
             html = renderToStaticMarkup(React.createElement(App, props), props)
         } else {
             html = render(Component, props)
@@ -193,15 +193,24 @@ export default class Server {
 
         //css、js资源地址配置
         let cssPath = []
-        let jsPath = [join(this.assetPrefix, '/main.js')] //主要依赖的文件，也就是客户端入口
+        let jsPath = [] //主要依赖的文件，也就是客户端入口
 
         //客户端路由自定义配置页面
         if (Main) {
-            jsPath.push(join(this.assetPrefix, 'static/main.js'))
+            jsPath.push({
+                route:'/main.js',
+                src:join(this.assetPrefix, 'static/main.js')
+            })
         }
-
+        
         //当前页面需要的js文件
-        jsPath.push(join(this.assetPrefix, page))
+        jsPath.push({
+            route: page,
+            src:join(this.assetPrefix, page)
+        },{
+            route: '',
+            src:join(this.assetPrefix, '/main.js')
+        })
 
         //判断是否有css，一个是当前页面 一个是公共的
         const _cssPath = await glob(join(this.dir, this.dist, 'static/style/bundles', page + '.css'))

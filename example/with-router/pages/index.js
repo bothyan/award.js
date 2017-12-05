@@ -29,7 +29,7 @@ export default class Index extends React.Component {
             <h1 className="hello" onClick={this.change.bind(this)} style={{ color: this.state.new ? 'red' : 'black' }}>
                 hello {this.props.name}      
             </h1>
-                <Link to="/about/12/home/140" tag="span"><a>查看详情</a></Link>                  
+                <Link to="/about/12/home/14" tag="span">查看详情12</Link>                  
             </div>    
         )
     }

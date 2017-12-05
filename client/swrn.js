@@ -1,6 +1,6 @@
-import initSwrn from './'
+import swrn from './'
 
-initSwrn()
+swrn()
 .catch((err) => {
     console.error(`${err.message}\n${err.stack}`)
 })

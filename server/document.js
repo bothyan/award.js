@@ -13,14 +13,11 @@ class Main extends React.Component {
                         return <link rel="stylesheet" href={item} key={index}></link>
                     }) : null}
                 </head>
-                <div id="wrap" dangerouslySetInnerHTML={{ __html: html }}></div>
+                <div id="root" dangerouslySetInnerHTML={{ __html: html }}></div>
                 <div id="data" data-state={JSON.stringify(props)}></div>
-                <script dangerouslySetInnerHTML={{
-                    __html: `
-                    module={}                    
-                `}} />
+                <script dangerouslySetInnerHTML={{__html: `module={};__SWRN_LOADED_PAGE__ = [];__SWRN_REGISTER_PAGE__ = function (route, fn) {__SWRN_LOADED_PAGE__.push({ route: route, fn: fn })};`}} />
                 {jsPath.length ? jsPath.map((item,index) => { 
-                    return <script src={item} key={index}></script>
+                    return <script src={item.src} key={index} id={`__SWRN_PAGE__${item.route}`}></script>
                 }) : null}
             </html>
         )
