@@ -47,8 +47,6 @@ export default async () => {
     // 路由切换页面加载
     routeLoader.subscribe(async ({ Component, route }) => {
 
-        console.log(2)
-
         initialProps = !Component.getInitialProps ? {} : await Component.getInitialProps()
 
         props.data = { ...initialProps, assetPrefix, route, routes }
