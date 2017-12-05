@@ -1,6 +1,6 @@
 {
   "name": "swrn",
-  "version": "0.2.3",
+  "version": "0.2.6",
   "description": "server side rendered && webpack && react && nodejs",
   "main": "./dist/server/index.js",
   "bin": {
