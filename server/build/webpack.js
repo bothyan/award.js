@@ -254,12 +254,12 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
                             //'styleName'
                             //"styleName"
                             
-                            const _className = res.match(/[{'"\s]styleName['":]/g)
+                            const _className = res.match(/styleName['":]/g)
                     
                             if (_className != null) {
                                 _className.map(item => {
-                                    let _match = item.match(/([{'"\s])styleName(['":])/)
-                                    res = res.replace(item, `${_match[1]}${tag}${_match[2]}`)
+                                    let _match = item.match(/styleName(['":])/)
+                                    res = res.replace(item, `${tag}${_match[1]}`)
                                 })
                             }   
         
