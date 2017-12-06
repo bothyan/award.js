@@ -6,7 +6,7 @@ const checkDistStaticSource = (content,distImages,options) => {
     // 解析require的代码
     const { dev,assetPrefix,dir,path } = options
     var line = 0
-    var _content = `var _SWRN_STYLE = [] \n var _CSSModules = require('react-css-modules') \n`
+    var _content = `var _AWARD_STYLE = [] \n var _CSSModules = require('react-css-modules') \n`
     content = `${content}\r\n`
     for (let i = 0; i < content.length; i++) {
         if (content[i].match(/\n/) != null) {
@@ -27,12 +27,12 @@ const checkDistStaticSource = (content,distImages,options) => {
                     if (_css != null) { 
                         //这里需要拿到css modules 对应的css json字符
 
-                        //先获取存放键值对的 swrn文件
+                        //先获取存放键值对的 award文件
                         if (!dev) {
                             let _path = path.split('/')
                             _path.pop()
                             _path = _path.join('/')
-                            _path = join(_path, `${_css[1]}swrn`)
+                            _path = join(_path, `${_css[1]}award`)
                         
                             let cssJson = JSON.parse(fs.readFileSync(_path, "utf-8"))
 
@@ -41,7 +41,7 @@ const checkDistStaticSource = (content,distImages,options) => {
                             //判断是不是空对象
                             const _cssdata = JSON.stringify(cssJson.data)
                             if (_cssdata != '{}') {
-                                res = res + '\n' + `_SWRN_STYLE.push(${_cssdata})`
+                                res = res + '\n' + `_AWARD_STYLE.push(${_cssdata})`
                             }
                         } else { 
                             res = res.replace(item, `''`) + '\n'
@@ -85,10 +85,10 @@ const checkDistStaticSource = (content,distImages,options) => {
                 const ComponentName = _default[1].replace(/[\s=]/g, '')
                 res = `
                 var ComponentStyle = {};                
-                if (_SWRN_STYLE.length) { 
-                    for (var i = 0; i < _SWRN_STYLE.length; i++) { 
-                        for (var key in _SWRN_STYLE[i]) { 
-                            ComponentStyle[key] = _SWRN_STYLE[i][key];
+                if (_AWARD_STYLE.length) { 
+                    for (var i = 0; i < _AWARD_STYLE.length; i++) { 
+                        for (var key in _AWARD_STYLE[i]) { 
+                            ComponentStyle[key] = _AWARD_STYLE[i][key];
                         }
                     }
                 };

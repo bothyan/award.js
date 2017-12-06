@@ -3,7 +3,7 @@ import IndexComponent from '../components/index'
 import '../style/index.scss'
 import '../style/tmp.scss'
 
-import { Link } from 'swrn/router'
+import { Link } from 'award/router'
 
 export default class Index extends React.Component { 
     render() { 

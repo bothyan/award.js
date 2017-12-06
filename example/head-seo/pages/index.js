@@ -1,18 +1,13 @@
 
 import React from 'react'
 import { Link } from 'award/router'
-import axios from 'axios'
 import '../style/index.scss'
 
 export default class Index extends React.Component { 
 
     static async getInitialProps() {
-        
-        const { data: { list } } = await axios.get('http://localhost:3000/api/list')
-
         return {
-            name: 'top',
-            list
+            name: 'top'
         }
     }
 
@@ -32,13 +27,10 @@ export default class Index extends React.Component {
     render() { 
         return (
             <div>
-            <h1 styleName="hello" onClick={this.change.bind(this)}>
+            <h1 styleName="hello">
                 hello {this.props.name}      
             </h1>
-                <Link to="/mine/12/home/140" tag="span">mine</Link>
-                <ul>{this.props.list.map(item => { 
-                    return <li key={item.id}>{item.name}</li>
-                })}</ul>    
+                <Link to="/12/about/14" tag="span">查看详情</Link>                  
             </div>    
         )
     }

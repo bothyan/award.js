@@ -13,7 +13,7 @@ require('babel-register')({
     presets: ['react', 'es2015']
 })
 
-global.SWRN_InServer = true
+global.AWARD_InServer = true
 
 /**
  * 注册express路由
@@ -25,10 +25,10 @@ export default class Server {
         this.dir = resolve(dir)
         this.dev = dev
         this.server = express()
-        this.dist = '.swrn'
+        this.dist = '.award'
         this.page = 'pages'
 
-        this.assetPrefix = '/swrn'
+        this.assetPrefix = '/award'
         this.exist_mainjs = false
         this.exist_maincss = false
     }

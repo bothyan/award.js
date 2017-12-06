@@ -6,7 +6,7 @@ module.exports = function (content, sourceMap) {
     (function (Component) {
       
       module.hot.accept()
-      swrn.routeLoader.update({Component:Component})
+      award.routeLoader.update({Component:Component})
    
     })(typeof __webpack_exports__ !== 'undefined' ? __webpack_exports__.default : (module.exports.default || module.exports))
   `, sourceMap)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Router,Route } from 'swrn/router'
+import { Router,Route } from 'award/router'
 
 //import './style/font.scss'
 //import bg from './images/1.jpg'

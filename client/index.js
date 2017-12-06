@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import { Link, Router, Route, ResolveRouter } from 'swrn/router'
+import { Link, Router, Route, ResolveRouter } from 'award/router'
 import App from '../lib/app'
 import Loader from '../lib/loader'
 
@@ -18,12 +18,12 @@ export default async () => {
 
     routeLoader = new Loader(assetPrefix)
 
-    window.__SWRN_LOADED_PAGE__.forEach(({ route, fn }) => {
+    window.__AWARD_LOADED_PAGE__.forEach(({ route, fn }) => {
         routeLoader.registerPage(route, fn)
     })
-    delete window.__SWRN_LOADED_PAGE__
+    delete window.__AWARD_LOADED_PAGE__
 
-    window.__SWRN_REGISTER_PAGE__ = async (route, fn) => {
+    window.__AWARD_REGISTER_PAGE__ = async (route, fn) => {
         routeLoader.registerPage(route, fn)
     }
 

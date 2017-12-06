@@ -4,18 +4,18 @@ import webpack, { buildWebpack } from './webpack'
 import clean, { cleanBundles,cleanFile } from './clean'
 import { replaceStaticSource } from '../compiler'
 
-global.SWRN_InServer = true
+global.AWARD_InServer = true
 
 export default async function build(dir, conf = null) {
 
-    const dist = '.swrn'
+    const dist = '.award'
 
     const options = {
         dir: dir,
         dev: false,
         dist,
         page: 'pages',
-        assetPrefix: '/swrn'
+        assetPrefix: '/award'
     }
 
     // 获取路由

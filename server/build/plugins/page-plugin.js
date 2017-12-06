@@ -21,7 +21,7 @@ export default class PagesPlugin {
                 routeName = `/${routeName.replace(/(^|\/)index$/, '')}`
 
                 const content = page.source()
-                const newContent = `window.__SWRN_REGISTER_PAGE__('${routeName}', function(){var comp = ${content};return comp.default})`     
+                const newContent = `window.__AWARD_REGISTER_PAGE__('${routeName}', function(){var comp = ${content};return comp.default})`     
                 
                 compilation.assets[chunk.name] = {
                     source: () => newContent,

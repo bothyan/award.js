@@ -16,14 +16,14 @@ let cmd = process.argv[2]
 let args
 
 if (new Set(['--version', '-v']).has(cmd)) {
-  console.log(`swrn.js v${pkg.version}`)
+  console.log(`award.js v${pkg.version}`)
   process.exit(0)
 }
 
 if (new Set(['--help', '-h']).has(cmd)) {
   console.log(`
     Usage
-      $ swrn <command>
+      $ award <command>
 
     Available commands
       ${Array.from(commands).join(', ')}
@@ -41,7 +41,7 @@ if (commands.has(cmd)) {
   args = process.argv.slice(2)
 }
 
-const bin = join(__dirname, 'swrn-' + cmd)
+const bin = join(__dirname, 'award-' + cmd)
 
 const startProcess = () => {
   const proc = spawn(bin, args, { stdio: 'inherit', customFds: [0, 1, 2] })

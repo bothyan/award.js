@@ -4,12 +4,12 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "swrn"
+    "dev": "award"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.17.1",
-    "swrn": "latest"
+    "award": "latest"
   }
 }

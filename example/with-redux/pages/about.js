@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { Link } from 'swrn/router'
+import { Link } from 'award/router'
 import { initStore, add } from '../store'
 import withRedux from 'next-redux-wrapper'
 

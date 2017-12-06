@@ -1,4 +1,4 @@
-# Swrn &middot; [![NPM version](https://img.shields.io/npm/v/swrn.svg)](https://www.npmjs.com/package/swrn) 
+# Award &middot; [![NPM version](https://img.shields.io/npm/v/award.svg)](https://www.npmjs.com/package/award) 
 
 ## 写在前面
 
@@ -27,23 +27,23 @@ nodejs作为服务器，express作为路由入口，webpack将同一份react项�
 安装
 ```bash
 //node > 8
-npm install --save swrn
+npm install --save award
 ```
 
 package.json
 ```json
 {
   "scripts": {
-    "dev": "swrn",
-    "build": "swrn build",
-    "start": "swrn start"
+    "dev": "award",
+    "build": "award build",
+    "start": "award start"
   }
 }
 ```
 在项目中创建文件`./pages/index.js`
 
 ```jsx
-export default () => <div>Welcome to swrn.js!</div>
+export default () => <div>Welcome to award.js!</div>
 ```
 
 `开发环境` 部分服务端渲染，主要用来开发环境使用
@@ -60,14 +60,14 @@ export default () => <div>Welcome to swrn.js!</div>
 
 ```shell
 #执行开发环境命令
-swrn 
+award 
 
 #执行编译打包
-swrn build
+award build
 
 #开启正式环境命令
-#这个启动之前 必须先执行`swrn build`
-swrn start
+#这个启动之前 必须先执行`award build`
+award start
 ```
 
 ## 自定义路由
@@ -79,13 +79,13 @@ path  访问的地址
 render 绝对地址，暂时是这样，后续优化
 ```jsx
 import React from 'react'
-import { Router,Route } from 'swrn/router'
+import { Router,Route } from 'award/router'
 
 export default class Main extends React.Component{ 
     render() { 
         return (
             <Router>
-                <h1>hello Swrn.js</h1>    
+                <h1>hello award.js</h1>    
                 <Route path="/" render="/pages/index.js"/>
                 <Route path="/about/:id" render="/pages/about.js"/>                 
             </Router>
@@ -145,7 +145,7 @@ export default class Index extends React.Component {
 ```js
 import React from 'react'
 import '../style/about.scss'
-import { Link } from 'swrn/router'
+import { Link } from 'award/router'
 import bg from '../images/2.jpg'
 
 var bgs = require('../images/3.jpg')
@@ -168,7 +168,7 @@ export default class Index extends React.Component {
 ## react-css-modules
 内置 `react-css-modules` 插件实现 css modules
 
-该功能主要是项目发布的时候，即`swrn build`的时候，会进行处理
+该功能主要是项目发布的时候，即`award build`的时候，会进行处理
 
 开发阶段，不采取css modules,不过写法都要按css modules来
 
@@ -195,14 +195,14 @@ export default class Index extends React.Component {
     请写下实现此打包方式的webpack配置
 
 
-# swrn的项目简要
+# award的项目简要
 
 ## 基础架构
 - [x] 前后端的路由统一处理方案，自定义前端路由
 - [x] 组件数据初始化方案
 - [x] mock数据，方便本地数据模拟开发
 - [x] 客户端和服务端的热更新
-- [x] 功能精简，仅仅一个swrn命令即可
+- [x] 功能精简，仅仅一个award命令即可
 - [x] css资源处理
 - [x] 区分环境
 - [x] 图片资源处理
@@ -224,13 +224,13 @@ export default class Index extends React.Component {
 
 ## 开发
 ```shell
-git clone https://github.com/Topthinking/swrn.js.git
+git clone https://github.com/Topthinking/award.js.git
 npm install
 npm run build //启动源码编译服务
 cd example/fast
-../../dist/bin/swrn //开启服务，当看到访问的地址，即可访问
+../../dist/bin/award //开启服务，当看到访问的地址，即可访问
 ```
-然后访问站点 `http://localhost:4000` 进行修改源码，编译，调试，开发
+然后访问站点 `http://localhost:3000` 进行修改源码，编译，调试，开发
 
 ## License
 

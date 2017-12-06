@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "swrn"
+    "dev": "award"
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +12,6 @@
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0",
-    "swrn": "latest"
+    "award": "latest"
   }
 }

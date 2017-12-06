@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Router,Route } from 'swrn/router'
+import { Router,Route } from 'award/router'
 
 
 export default class Main extends React.Component{ 

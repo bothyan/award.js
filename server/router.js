@@ -33,7 +33,7 @@ export default class Router {
             ])
 
             WebpackDevMiddleware(compiler, {
-                publicPath: '/_swrn/webpack/',
+                publicPath: '/_award/webpack/',
                 noInfo: true,
                 quiet: true,
                 clientLogLevel: 'warning'
@@ -94,9 +94,9 @@ export default class Router {
         return routes
     }
 
-    //获取引用swrn/router的路由
+    //获取引用awarn/router的路由
     async getConfigRoutes() {
-        global.SWRN_ROUTE = true
+        global.AWARD_ROUTE = true
         let _Router
         const routePath = join(this.dir, `${this.options.dist}/dist/main.js`)
         _Router = require(routePath)
@@ -104,9 +104,9 @@ export default class Router {
 
         const routerHtml = render(Router)
 
-        const singleRouter = /swrn_route=[\'\"]?([^\'\"]*)[\'\"]?/i
+        const singleRouter = /award_route=[\'\"]?([^\'\"]*)[\'\"]?/i
 
-        const _routers = routerHtml.match(/swrn_route=[\'\"]?([^\'\"]*)[\'\"]?/gi)
+        const _routers = routerHtml.match(/award_route=[\'\"]?([^\'\"]*)[\'\"]?/gi)
 
         const routers = []
 
@@ -122,7 +122,7 @@ export default class Router {
             })
         }
         
-        global.SWRN_ROUTE = false
+        global.AWARD_ROUTE = false
         routers.push({ page: '/main.js', path: null })
         await clean(this.options)
         return routers

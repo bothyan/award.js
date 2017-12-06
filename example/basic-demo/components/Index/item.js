@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'swrn/router'
+import { Link } from 'award/router'
 //import './style/item.scss'
 
 class Item extends React.Component {

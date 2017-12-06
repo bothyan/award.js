@@ -1,5 +1,9 @@
 node_modules
-.swrn
+
+.award
+.tmp
+
 publish
 publish.js
+
 dist

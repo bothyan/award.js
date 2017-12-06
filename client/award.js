@@ -1,6 +1,6 @@
-import swrn from './'
+import award from './'
 
-swrn()
+award()
 .catch((err) => {
     console.error(`${err.message}\n${err.stack}`)
 })

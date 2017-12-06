@@ -1,6 +1,6 @@
 import React from 'react'
 import '../style/about.scss'
-import { Link } from 'swrn/router'
+import { Link } from 'award/router'
 import bg from '../images/2.jpg'
 
 var bgs = require('../images/3.jpg')

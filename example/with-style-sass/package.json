@@ -4,14 +4,14 @@
     "description": "",
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
-      "dev": "swrn",
-      "build":"swrn build",
-      "start":"swrn start"
+      "dev": "award",
+      "build":"award build",
+      "start":"award start"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
-      "swrn": "latest"
+      "award": "latest"
     }
   }
   

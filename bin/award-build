@@ -20,7 +20,7 @@ if (argv.help) {
       Compiles the application for production deployment
 
     Usage
-      $ swrn build <dir>
+      $ award build <dir>
 
     <dir> represents where the compiled dist folder should go.
     If no directory is provided, the dist folder will be created in the current directory.

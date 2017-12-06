@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { Link } from 'swrn/router'
+import { Link } from 'award/router'
 
 export default class Index extends React.Component { 
 

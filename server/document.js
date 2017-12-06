@@ -15,9 +15,9 @@ class Main extends React.Component {
                 </head>
                 <div id="root" dangerouslySetInnerHTML={{ __html: html }}></div>
                 <div id="data" data-state={JSON.stringify(props)}></div>
-                <script dangerouslySetInnerHTML={{__html: `module={};__SWRN_LOADED_PAGE__ = [];__SWRN_REGISTER_PAGE__ = function (route, fn) {__SWRN_LOADED_PAGE__.push({ route: route, fn: fn })};`}} />
+                <script dangerouslySetInnerHTML={{__html: `module={};__AWARD_LOADED_PAGE__ = [];__AWARD_REGISTER_PAGE__ = function (route, fn) {__AWARD_LOADED_PAGE__.push({ route: route, fn: fn })};`}} />
                 {jsPath.length ? jsPath.map((item,index) => { 
-                    return <script src={item.src} key={index} id={`__SWRN_PAGE__${item.route}`}></script>
+                    return <script src={item.src} key={index} id={`__AWARD_PAGE__${item.route}`}></script>
                 }) : null}
             </html>
         )

@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { bindActionCreators } from 'redux'
-import { Link } from 'swrn/router'
+import { Link } from 'award/router'
 import { initStore, add } from '../store'
 import withRedux from 'next-redux-wrapper'
 

@@ -17,7 +17,7 @@ export const buildWebpack = async ({ dir, dist, routes = {} }) => {
 
     const totalPage = routes.filter(item=> item.path!=null).length
 
-    entry['app.js'] = join(__dirname, '..', '..', 'client/swrn.js')
+    entry['app.js'] = join(__dirname, '..', '..', 'client/award.js')
     
     let webpackConfig = {
         entry,
@@ -43,7 +43,8 @@ export const buildWebpack = async ({ dir, dist, routes = {} }) => {
                                 require.resolve('babel-plugin-module-resolver'),
                                 {
                                     alias: {
-                                        'swrn/router': require.resolve('../../lib/router')
+                                        'award/router': require.resolve('../../lib/router'),
+                                        'award/head': require.resolve('../../lib/head')
                                     }
                                 }
                             ]
@@ -108,7 +109,7 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
         entry = {}
 
         if (dev) {
-            entry['main.js'] = join(__dirname, '..', '..', 'client/swrn-dev.js')
+            entry['main.js'] = join(__dirname, '..', '..', 'client/award-dev.js')
         }    
 
         if (_main.length) {
@@ -121,7 +122,7 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
 
         if (dev) {
             entry = _.mapValues(entry, val => [
-                'webpack-hot-middleware/client?path=/_swrn/webpack-hmr&timeout=2000',
+                'webpack-hot-middleware/client?path=/_award/webpack-hmr&timeout=2000',
                 val
             ])
         }  
@@ -174,7 +175,7 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
                     {
                         loader: 'emit-file-loader',
                         options: {
-                            name: 'dist/[path][name].swrn',
+                            name: 'dist/[path][name].award',
                             transform({ content, sourceMap, interpolatedName, resource }) {                            
                                 let _content = {}
                                 _tmpCss.map(item => { 
@@ -285,7 +286,8 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
                         require.resolve('babel-plugin-module-resolver'),
                         {
                             alias: {
-                                'swrn/router': require.resolve('../../lib/router')
+                                'award/router': require.resolve('../../lib/router'),
+                                'award/head': require.resolve('../../lib/head')
                             }
                         }
                     ]
@@ -329,7 +331,7 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
         output: {
             path: resolve(dir, `./${dist}`),
             filename: "[name]",
-            publicPath: dev ? '/_swrn/webpack/' : `${assetPrefix}/`,
+            publicPath: dev ? '/_award/webpack/' : `${assetPrefix}/`,
             libraryTarget: 'commonjs2',
             strictModuleExceptionHandling: true,
             chunkFilename: '[name]'
