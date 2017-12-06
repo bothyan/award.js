@@ -12,7 +12,10 @@ export default class Index extends React.Component {
 
         return {
             name: 'top',
-            list
+            list,
+            header: {
+                title:'123'
+            }
         }
     }
 
