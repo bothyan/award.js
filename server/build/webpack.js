@@ -43,8 +43,7 @@ export const buildWebpack = async ({ dir, dist, routes = {} }) => {
                                 require.resolve('babel-plugin-module-resolver'),
                                 {
                                     alias: {
-                                        'award/router': require.resolve('../../lib/router'),
-                                        'award/head': require.resolve('../../lib/head')
+                                        'award/router': require.resolve('../../lib/router')
                                     }
                                 }
                             ]
@@ -286,8 +285,7 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
                         require.resolve('babel-plugin-module-resolver'),
                         {
                             alias: {
-                                'award/router': require.resolve('../../lib/router'),
-                                'award/head': require.resolve('../../lib/head')
+                                'award/router': require.resolve('../../lib/router')
                             }
                         }
                     ]

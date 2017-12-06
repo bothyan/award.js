@@ -1,6 +1,6 @@
 import glob from 'glob-promise'
 import { resolve, join } from 'path'
-import fs from 'fs'
+import fs, { existsSync } from 'fs'
 
 const checkDistStaticSource = (content,distImages,options) => { 
     // 解析require的代码
@@ -20,7 +20,7 @@ const checkDistStaticSource = (content,distImages,options) => {
             const _require = res.match(/require\(['"][^'"]*['"]\)/g)
             
             if (_require != null) {
-                _require.map(item => { 
+                _require.map((item) => { 
                     //匹配css
                     const _css = item.match(/require\(['"](.*)(\.css|less|scss)['"]\)/)
 
@@ -33,16 +33,20 @@ const checkDistStaticSource = (content,distImages,options) => {
                             _path.pop()
                             _path = _path.join('/')
                             _path = join(_path, `${_css[1]}award`)
-                        
-                            let cssJson = JSON.parse(fs.readFileSync(_path, "utf-8"))
+                            
+                            //查询是否存在 award文件
+                            if (existsSync(_path)) {
+                                let cssJson = JSON.parse(fs.readFileSync(_path, "utf-8"))
 
-                            res = res.replace(item, `''`) + '\n'
+                                res = res.replace(item, `''`) + '\n'
                         
-                            //判断是不是空对象
-                            const _cssdata = JSON.stringify(cssJson.data)
-                            if (_cssdata != '{}') {
-                                res = res + '\n' + `_AWARD_STYLE.push(${_cssdata})`
-                            }
+                                //判断是不是空对象
+                                const _cssdata = JSON.stringify(cssJson.data)
+
+                                if (_cssdata != '{}') {
+                                    res = res + '\n' + `_AWARD_STYLE.push(${_cssdata})`
+                                }
+                            }    
                         } else { 
                             res = res.replace(item, `''`) + '\n'
                         }    
@@ -91,8 +95,11 @@ const checkDistStaticSource = (content,distImages,options) => {
                             ComponentStyle[key] = _AWARD_STYLE[i][key];
                         }
                     }
-                };
-                exports.default = _CSSModules(${ComponentName},ComponentStyle);`             
+                    exports.default = _CSSModules(${ComponentName},ComponentStyle);
+                }else{
+                    ${_default[0]}
+                }
+                `             
             }
 
             // //将这一行的use strict代码匹配出来
@@ -119,10 +126,10 @@ export const replaceStaticSource = (options) => {
         const distImages = await glob(`${options.dist}/static/**/*`, { cwd: options.dir })
         
         if (distFile.length) { 
-            distFile.map(item => { 
+            distFile.map((item) => { 
                 const path = join(options.dir, item)
                 options.path = path
-                var content = checkDistStaticSource(fs.readFileSync(path, "utf-8"),distImages,options)
+                var content =  checkDistStaticSource(fs.readFileSync(path, "utf-8"),distImages,options)
                 fs.writeFileSync(path, content)
             })
         }

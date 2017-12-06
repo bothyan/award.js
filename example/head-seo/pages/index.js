@@ -7,7 +7,12 @@ export default class Index extends React.Component {
 
     static async getInitialProps() {
         return {
-            name: 'top'
+            name: 'top',
+            header: {
+                title: {
+                    children: '首页'
+                }
+            }
         }
     }
 

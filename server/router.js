@@ -25,7 +25,7 @@ export default class Router {
         if (_main.length) {
 
             this.options.entry = { 'bundles/main.js': join(this.dir, `main.js`) }
-            this.options.dist = '.tmp'
+            this.options.dist = '.main'
             
             const [compiler] = await Promise.all([
                 webpack(this.options),

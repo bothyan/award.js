@@ -17,6 +17,7 @@ nodejs作为服务器，express作为路由入口，webpack将同一份react项�
   - [样式资源](#样式)
   - [图片资源](#图片资源)
   - [react-css-modules](#react-css-modules)
+  - [header-seo](#header-seo)
 - [基础命令](#基础命令)
 - [基础架构](#基础架构)
   
@@ -176,6 +177,8 @@ export default class Index extends React.Component {
 
 具体可以查看`example/style-images-fonts`
 
+⚠️ 如果项目中没有 引用`scss`文件，那么不要写`styleName`,这样会在发布时候的访问报警告
+
 全局样式，需要这样写
 ```scss
 // 局部样式 就不需要加:global,采用styleName关键字生效
@@ -186,6 +189,24 @@ export default class Index extends React.Component {
 }
 ```
 
+## header-seo
+主要是设置每个页面的`title` `meta` 等标签用来进行seo优化
+
+该功能具体的实现，可以在例子`example/head-seo`中看到
+
+简单说明，即通过`getInitialProps`方法，返回对象中含有`header`字段，会进行解析
+
+可以在`main.js`中设置全局通用的头，比如浏览器缩放等，也可以设置一些全局参数
+
+如果在页面级组件内页设置了`getInitialProps`方法，如果返回的字段名称重复，会覆盖`main.js`中返回的
+
+其实在代码中实现的一个对象的深拷贝动作，即类似`JQuery`的`$.extend`方法
+
+
+---
+---
+
+# Award系统简要
 
 ## 总结的问题
 
@@ -195,7 +216,7 @@ export default class Index extends React.Component {
     请写下实现此打包方式的webpack配置
 
 
-# award的项目简要
+
 
 ## 基础架构
 - [x] 前后端的路由统一处理方案，自定义前端路由
@@ -208,7 +229,7 @@ export default class Index extends React.Component {
 - [x] 图片资源处理
 - [x] css modules
 - [x] 客户端跳转静态资源加载优化，即客户端路由优化
-- [ ] Head处理，即SEO优化处理
+- [x] Head处理，即SEO优化处理
 - [ ] 错误页面
 - [ ] 动态配置文件，主要配置cdn等一些资源路径，还有webpack的扩展，但是目前所要用到的都已经内置了
 - [ ] 离线包发布

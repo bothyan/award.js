@@ -8,6 +8,8 @@ import glob from 'glob-promise'
 import Document from './document'
 import App from '../lib/app'
 import { renderToString, renderToStaticMarkup } from 'react-dom/server'
+import { existsSync } from 'fs'
+import extend from 'extend'
 
 require('babel-register')({
     presets: ['react', 'es2015']
@@ -126,7 +128,11 @@ export default class Server {
             //特殊处理css资源
             this.server.get(`${this.assetPrefix}/static/style${page.split('.')[0]}.css`, async (req, res) => {
                 const path = join(this.dir, this.dist, `static/style/bundles/${page}.css`)
-                return await serveStatic(req, res, path)
+                if (existsSync(path)) {
+                    return await serveStatic(req, res, path)
+                } else { 
+                    res.send('')
+                }    
             })
 
             //获取图片资源
@@ -185,7 +191,10 @@ export default class Server {
         let html, props = { ...initialProps, route: page, query, routes}
 
         if (Main) {
-            props = { ...props , Component, Main }
+            //对象深拷贝
+            const MainProps = !Main.getInitialProps ? {} : await Main.getInitialProps({ req, res })
+            props = extend(true, MainProps, { ...props, Component, Main })
+            
             html = renderToStaticMarkup(React.createElement(App, props), props)
         } else {
             html = render(Component, props)

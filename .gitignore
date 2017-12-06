@@ -1,7 +1,7 @@
 node_modules
 
 .award
-.tmp
+.main
 
 publish
 publish.js
