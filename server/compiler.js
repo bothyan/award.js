@@ -5,8 +5,17 @@ import fs, { existsSync } from 'fs'
 const checkDistStaticSource = (content,distImages,options) => { 
     // 解析require的代码
     const { dev,assetPrefix,dir,path } = options
-    var line = 0
-    var _content = `var _AWARD_STYLE = [] \n var _CSSModules = require('react-css-modules') \n`
+    let line = 0
+    let _content = ''
+    if (!dev) { 
+        //发布环境需要同样的处理
+        _content = `var _AWARD_STYLE = [] \n var _CSSModules = require('react-css-modules') \n`            
+    }
+    const cssModuleOption = JSON.stringify({
+        allowMultiple: true,
+        handleNotFoundStyleName:'ignore'    
+    })
+
     content = `${content}\r\n`
     for (let i = 0; i < content.length; i++) {
         if (content[i].match(/\n/) != null) {
@@ -82,17 +91,18 @@ const checkDistStaticSource = (content,distImages,options) => {
                 })                   
             }
             
-            //将这一行的export.default代码匹配出来
-            //exports.default = (0, _Login2.default)(LoginBtn);
-            //exports.default = LoginBtn;
-            const _default = res.match(/exports.default(.*);$/)
+            if (!dev) {
+                //将这一行的export.default代码匹配出来
+                //exports.default = (0, _Login2.default)(LoginBtn);
+                //exports.default = LoginBtn;
+                const _default = res.match(/exports.default(.*);$/)
 
-            if (_default != null) {
-                //拿到等于号后面的值
-                let ComponentName = _default[1].replace(/[\s=]/g, '')
-                const _matchMore = ComponentName.match(/[^()]*[^()]/g)
+                if (_default != null) {
+                    //拿到等于号后面的值
+                    let ComponentName = _default[1].replace(/[\s=]/g, '')
+                    const _matchMore = ComponentName.match(/[^()]*[^()]/g)
 
-                res = `
+                    res = `
                 var ComponentStyle = {};                
                 if (_AWARD_STYLE.length) { 
                     for (var i = 0; i < _AWARD_STYLE.length; i++) { 
@@ -101,18 +111,19 @@ const checkDistStaticSource = (content,distImages,options) => {
                         }
                     }
                 `;
-                //判断是否有嵌套，即高阶组件的使用
-                if (_matchMore.length > 1) {
-                    ComponentName = _matchMore[_matchMore.length-1]
-                    res += _default[0].replace(`(${ComponentName})`,`(_CSSModules(${ComponentName},ComponentStyle))`)                        
-                } else {                        
-                    res += `exports.default = _CSSModules(${ComponentName},ComponentStyle);`
-                }                
-                res += `
+                    //判断是否有嵌套，即高阶组件的使用
+                    if (_matchMore.length > 1) {
+                        ComponentName = _matchMore[_matchMore.length - 1]
+                        res += _default[0].replace(`(${ComponentName})`, `(_CSSModules(${ComponentName},ComponentStyle,${cssModuleOption}))`)
+                    } else {
+                        res += `exports.default = _CSSModules(${ComponentName},ComponentStyle,${cssModuleOption});`
+                    }
+                    res += `
                 }else{
                     ${_default[0]}
-                }`             
-            }
+                }`
+                }
+            }    
 
             // //将这一行的use strict代码匹配出来
             // const _strict = res.match(/use strict/)

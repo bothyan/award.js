@@ -1,56 +1,33 @@
 const React = require('react')
 const ReactDom = require('react-dom/server')
-const className = []
+const CSSModules = require('react-css-modules')
 
-class Index extends React.Component { 
-    render() { 
+
+class Index extends React.Component {
+    render() {
+
+        const name = 'age'
+
         return (
-            <div className="age wraps">
-                <h1 className="name">hello world</h1>       
-                <div className="input">
-                    <span className="book">
-                        <b className="tips"></b>
-                    </span>
-                    <a className="line"></a>
-                </div>
-                <span className="line"></span>
-            </div> 
-        )    
+            <div styleName={`${name} wrap`} className="kiki">
+                <h1 styleName="name" className="hello">hello world</h1>
+                <span styleName="hello wrap">孙杨杰</span>
+            </div>
+        )
     }
 }
 
-class Mine extends Index { 
-    render() { 
-        const result = super.render()
-        linkClass(result.props)
-        console.log(className)
-        return result
-    }
-}
+const cssm = CSSModules(Index, {
+    age: 'age_2',
+    wrap: 'wrap_3',
+    name:'name_2'
+}, {
+    allowMultiple: true,
+    handleNotFoundStyleName:'ignore'    
+})
 
+console.log(React.createElement(Index))
 
-let i = 0
-
-const linkClass = (Component) => { 
-    
-    className[i] = (className[0] || '') + ' ' + Component.className
-
-    if (typeof Component.children === 'object') {
-        if (Component.children.length) {
-            i++
-            Component.children.map(item => {
-                linkClass(item.props)
-            })
-        } else {
-            linkClass(Component.children.props)
-        }    
-    }
-}
-
-const _c = React.createElement(Mine)
-
-const _d = React.Children.only(_c)
-
-const html = ReactDom.renderToString(_c)
+const html = ReactDom.renderToString(React.createElement(cssm))
 
 console.log(html)

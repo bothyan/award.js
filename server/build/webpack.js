@@ -142,6 +142,11 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
             data:json
         })
     }
+
+    const cssModuleOption = JSON.stringify({
+        allowMultiple: true,
+        handleNotFoundStyleName:'ignore'    
+    })
     
     if (dev) {
         rules.push(
@@ -157,7 +162,7 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
             {
                 test: /\.scss$/,
                 exclude: /node_modules/,
-                loader: 'style-loader!css-loader!sass-loader'
+                loader: 'style-loader!css-loader?modules!sass-loader'
             }                    
         )
         
@@ -234,12 +239,28 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
                         return { content, sourceMap }
                     }
 
+                    /**
+                     * 开发环境
+                     * 客户端：  
+                     *      传给下个流用的文件，var styles = require('./style/index.scss')
+                     *      合并 style1 style2 style3 交给 cssmodules 传给webpack输出
+                     * 服务端：
+                     *      编译的流程和发布一样
+                     * 
+                     * 发布环境，不变，交给下次编译流程，让webpack再编译一次
+                     */
+
                     //开发环境需要将styleName转为className
                     //发布环境不再使用className,所有的转化的styleName全部交给服务器提供class
-                    const tag = dev ? 'className' : 'styleName'
 
-                    let line = 0
-                    let _content = ''
+                    if (!dev) { 
+                        return {content}
+                    }
+
+                    //开发环境需要处理这些内容
+                    let _content = `var _AWARD_STYLE = [] \n var _CSSModules = require('react-css-modules') \n`    
+                    
+                    let line = 0                    
                     content = `${content}\r\n`
                     for (let i = 0; i < content.length; i++) {
                         if (content[i].match(/\n/) != null) {
@@ -249,27 +270,52 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
                             }
                             res = res.replace(/(^\s*)|(\s*$)/g, "")
 
-                            //匹配styleName => className
-                            //{ styleName: 'name' }
-                            //'styleName'
-                            //"styleName"
+                            const _css = res.match(/require\(['"](.*)(\.css|less|scss)['"]\)/)
                             
-                            const _className = res.match(/styleName['":]/g)
-                    
-                            if (_className != null) {
-                                _className.map(item => {
-                                    let _match = item.match(/styleName(['":])/)
-                                    res = res.replace(item, `${tag}${_match[1]}`)
-                                })
-                            }   
-        
+                            if (_css != null) { 
+                                res = res.replace(_css[0], `'';var _STYLE_${i} = ${_css[0]};_AWARD_STYLE.push(_STYLE_${i});`)
+                            } 
+
+
+                            //将这一行的export.default代码匹配出来
+                            //exports.default = (0, _Login2.default)(LoginBtn);
+                            //exports.default = LoginBtn;
+                            const _default = res.match(/exports.default(.*);$/)
+                
+                            if (_default != null) {
+                                //拿到等于号后面的值
+                                let ComponentName = _default[1].replace(/[\s=]/g, '')
+                                const _matchMore = ComponentName.match(/[^()]*[^()]/g)
+                
+                                res = `
+                                var ComponentStyle = {}; 
+                                if (_AWARD_STYLE.length) { 
+                                    for (var i = 0; i < _AWARD_STYLE.length; i++) { 
+                                        for (var key in _AWARD_STYLE[i]) { 
+                                            ComponentStyle[key] = _AWARD_STYLE[i][key];
+                                        }
+                                    }
+                                `;
+                                //判断是否有嵌套，即高阶组件的使用
+                                if (_matchMore.length > 1) {
+                                    ComponentName = _matchMore[_matchMore.length - 1]
+                                    res += _default[0].replace(`(${ComponentName})`, `(_CSSModules(${ComponentName},ComponentStyle,${cssModuleOption}))`)
+                                } else {
+                                    res += `exports.default = _CSSModules(${ComponentName},ComponentStyle,${cssModuleOption});`
+                                }
+                                res += `
+                                }else{
+                                    ${_default[0]}
+                                }`
+                            }
+                                                        
                             _content += res + '\n'
                             line = i
                         }
-                    }    
+                    } 
+                    
                     return {
-                        content: _content, //在webpack中传文件
-                        _content: dev ? _content : content //写文件
+                        content: _content //在webpack中传文件
                     }                      
                 }
             }
