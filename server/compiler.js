@@ -102,7 +102,7 @@ const checkDistStaticSource = (content,distImages,options) => {
                     }
                 `;
                 //判断是否有嵌套，即高阶组件的使用
-                if (_matchMore.length) {
+                if (_matchMore.length > 1) {
                     ComponentName = _matchMore[_matchMore.length-1]
                     res += _default[0].replace(`(${ComponentName})`,`(_CSSModules(${ComponentName},ComponentStyle))`)                        
                 } else {                        
