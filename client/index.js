@@ -13,11 +13,13 @@ dataObj.remove()
 
 export let routeLoader
 
+const dev = process.env.NODE_ENV === 'development'
+
 export default async () => {
 
     let Main, Component, initialProps = {}
     const { assetPrefix, route, routes } = serverData
-
+    
     routeLoader = new Loader(assetPrefix)
 
     window.__AWARD_LOADED_PAGE__.forEach(({ route, fn }) => {
@@ -47,9 +49,13 @@ export default async () => {
     render(props)
 
     // 路由切换页面加载
-    routeLoader.subscribe(async ({ Component, route }) => {
+    routeLoader.subscribe(async ({ Component, route, query }) => {
 
-        initialProps = !Component.getInitialProps ? {} : await Component.getInitialProps()
+        if(typeof query === 'undefined'){
+            return false
+        }
+
+        initialProps = !Component.getInitialProps ? {} : await Component.getInitialProps({query})
  
         if (!!Main) {
             //对象深拷贝
@@ -78,6 +84,10 @@ export default async () => {
 
 function render(props = {}) {
     ReactDOM.render(<App {...props} />, document.getElementById('main'))
+
+    if(dev){
+        document.body.hidden = false
+    }
 }
 
 function createElement(element,obj) { 

@@ -185,8 +185,8 @@ export default class Server {
     //send Html资源
     async renderHtml({ req, res, page, routes, Component, Main }) {
 
-        const query = req.params
-        const initialProps = !Component.getInitialProps ? {} : await Component.getInitialProps({ req, res })
+        const query = {...req.params,...req.query}
+        const initialProps = !Component.getInitialProps ? {} : await Component.getInitialProps({ req, res, query })
 
         let html, props = { ...initialProps, route: page, query, routes}
 
@@ -238,7 +238,8 @@ export default class Server {
             jsPath,
             cssPath,
             props,
-            html
+            html,
+            dev:this.dev
         })
 
         res.send('<!DOCTYPE html>' + _html)

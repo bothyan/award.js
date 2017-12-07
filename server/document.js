@@ -28,10 +28,9 @@ class Main extends React.Component {
     }
 
     render() {
-        const { cssPath, jsPath, html, props } = this.props
+        const { cssPath, jsPath, html, props, dev } = this.props
 
         createHeaderElements(props,this.createHeaderElement)        
-
         return (
             <html>
                 <head>
@@ -40,12 +39,14 @@ class Main extends React.Component {
                         return <link rel="stylesheet" href={item} key={index}></link>
                     }) : null}
                 </head>
-                <div id="main" dangerouslySetInnerHTML={{ __html: html }}></div>
-                <div id="data" data-state={JSON.stringify(props)}></div>
-                <script dangerouslySetInnerHTML={{ __html: `module={};__AWARD_LOADED_PAGE__ = [];__AWARD_REGISTER_PAGE__ = function (route, fn) {__AWARD_LOADED_PAGE__.push({ route: route, fn: fn })};` }} />
-                {jsPath.length ? jsPath.map((item, index) => {
-                    return <script src={item.src} key={index} id={`__AWARD_PAGE__${item.route}`}></script>
-                }) : null}
+                <body hidden={dev}>
+                    <div id="main" dangerouslySetInnerHTML={{ __html: html }}></div>
+                    <div id="data" data-state={JSON.stringify(props)}></div>                     
+                    <script dangerouslySetInnerHTML={{ __html: `module={};__AWARD_LOADED_PAGE__ = [];__AWARD_REGISTER_PAGE__ = function (route, fn) {__AWARD_LOADED_PAGE__.push({ route: route, fn: fn })};` }} />
+                    {jsPath.length ? jsPath.map((item, index) => {
+                        return <script src={item.src} key={index} id={`__AWARD_PAGE__${item.route}`}></script>
+                    }) : null}
+                </body>
             </html>
         )
     }

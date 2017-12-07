@@ -258,8 +258,9 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
                     }
 
                     //开发环境需要处理这些内容
-                    let _content = `var _AWARD_STYLE = [] \n var _CSSModules = require('react-css-modules') \n`    
-                    
+                    let _content = `var _AWARD_STYLE = [] \n var _CSSModules = require('react-css-modules') \n`,    
+                        _content_ = _content
+
                     let line = 0                    
                     content = `${content}\r\n`
                     for (let i = 0; i < content.length; i++) {
@@ -288,7 +289,8 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
                                 const _matchMore = ComponentName.match(/[^()]*[^()]/g)
                 
                                 res = `
-                                var ComponentStyle = {}; 
+                                var ComponentStyle = {};
+                                _AWARD_STYLE = _AWARD_STYLE.filter(style => style != '')                                 
                                 if (_AWARD_STYLE.length) { 
                                     for (var i = 0; i < _AWARD_STYLE.length; i++) { 
                                         for (var key in _AWARD_STYLE[i]) { 
@@ -308,14 +310,28 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
                                     ${_default[0]}
                                 }`
                             }
-                                                        
+
                             _content += res + '\n'
+
+                            //开发环境需要将styleName替换
+                            const _className = res.match(/styleName['":]/g)
+
+                            if (_className != null) {                                
+                                _className.map(item => {
+                                    let _match = item.match(/styleName(['":])/)
+                                    res = res.replace(item, `stylename${_match[1]}`)
+                                })
+                            } 
+                            
+                            _content_ += res + '\n'
+                            
                             line = i
                         }
                     } 
                     
                     return {
-                        content: _content //在webpack中传文件
+                        content: _content, //传文件
+                        _content:_content_ //写文件
                     }                      
                 }
             }

@@ -114,8 +114,12 @@ export default class Main extends React.Component{
 ### getInitialProps
 
 在组件内部使用`getInitialProps`,同时在组件内部，可以通过`this.props`获取
-```js
-static async getInitialProps() {    
+```jsx
+//context 内容包括
+//页面刷新，在服务端可以获取到 req 和 res
+//客户端页面无刷新跳转，可以获取到 query
+//const {query} = context; query即 path中的:id之类的，同时还包括location.search
+static async getInitialProps(context) {      
     const { data: { list } } = await axios.get('http://localhost:4000/api/list')
     return {
         name: 'top',
@@ -157,6 +161,7 @@ export default class Index extends React.Component {
     }
 }
 ```
+
 ### images
 可以直接在项目通过`import`引用对应的图片文件,具体可以查看`example/style-images-fonts`
 ```js

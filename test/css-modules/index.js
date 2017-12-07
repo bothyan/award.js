@@ -18,9 +18,6 @@ class Index extends React.Component {
 }
 
 const cssm = CSSModules(Index, {
-    age: 'age_2',
-    wrap: 'wrap_3',
-    name:'name_2'
 }, {
     allowMultiple: true,
     handleNotFoundStyleName:'ignore'    

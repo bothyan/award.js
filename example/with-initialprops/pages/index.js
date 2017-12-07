@@ -6,9 +6,11 @@ import '../style/index.scss'
 
 export default class Index extends React.Component { 
 
-    static async getInitialProps() {
+    static async getInitialProps(context) {
+
+        console.log(context.query)
         
-        const { data: { list } } = await axios.get('http://localhost:3000/api/list')
+        const { data: { list } } = await axios.get('http://localhost:4000/api/list')
 
         return {
             name: 'top',
@@ -38,7 +40,7 @@ export default class Index extends React.Component {
             <h1 styleName="hello" onClick={this.change.bind(this)}>
                 hello {this.props.name}      
             </h1>
-                <Link to="/mine/12/home/140" tag="span">mine</Link>
+                <Link to="/mine/12/home/140?code=123" tag="span">mine</Link>
                 <ul>{this.props.list.map(item => { 
                     return <li key={item.id}>{item.name}</li>
                 })}</ul>    

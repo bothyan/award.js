@@ -103,7 +103,8 @@ const checkDistStaticSource = (content,distImages,options) => {
                     const _matchMore = ComponentName.match(/[^()]*[^()]/g)
 
                     res = `
-                var ComponentStyle = {};                
+                var ComponentStyle = {};
+                _AWARD_STYLE = _AWARD_STYLE.filter(style => style != '')                
                 if (_AWARD_STYLE.length) { 
                     for (var i = 0; i < _AWARD_STYLE.length; i++) { 
                         for (var key in _AWARD_STYLE[i]) { 
