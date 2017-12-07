@@ -10,8 +10,8 @@
     
 nodejs作为服务器，express作为路由入口，webpack将同一份react项目代码编译打包，实现了对服务端和客户端的展现
 
-- [快速体验](#快速体验)
-- [功能说明](#功能说明)
+- [Setup](#setup)
+- [How to use](#how-to-use)
   - [basic-shell](#basic-shell)
   - [award/router](#awardrouter)
   - [getInitialProps](#getinitialprops)
@@ -20,15 +20,13 @@ nodejs作为服务器，express作为路由入口，webpack将同一份react项�
   - [images](#images)
   - [react-css-modules](#react-css-modules)
   - [header-seo](#header-seo)
-- [基础架构](#基础架构)
-  
-  
+- [Award](#award)
 
-## 快速体验
+## Setup
 
 安装
 ```bash
-//node > 8
+# node version > 8
 npm install --save award
 ```
 
@@ -59,7 +57,7 @@ export default () => <div>Welcome to award.js!</div>
 另外在项目的`example`文件夹中，有相关功能的demo
 
 
-## 功能说明
+## how-to-use
 
 ### basic-shell
 
@@ -225,9 +223,8 @@ export default class Index extends React.Component {
 
 
 ---
----
 
-# Award系统简要
+# Award
 
 ## 总结的问题
 
@@ -266,10 +263,11 @@ export default class Index extends React.Component {
 
 ## 开发
 ```shell
+# node version > 8
 git clone https://github.com/Topthinking/award.js.git
-npm install
+npm install 
 npm run build //启动源码编译服务
-cd example/fast
+cd example/fast //打开demo项目
 ../../dist/bin/award //开启服务，当看到访问的地址，即可访问
 ```
 然后访问站点 `http://localhost:3000` 进行修改源码，编译，调试，开发
