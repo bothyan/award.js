@@ -83,10 +83,15 @@ const checkDistStaticSource = (content,distImages,options) => {
             }
             
             //将这一行的export.default代码匹配出来
+            //exports.default = (0, _Login2.default)(LoginBtn);
+            //exports.default = LoginBtn;
             const _default = res.match(/exports.default(.*);$/)
 
-            if (_default != null) { 
-                const ComponentName = _default[1].replace(/[\s=]/g, '')
+            if (_default != null) {
+                //拿到等于号后面的值
+                let ComponentName = _default[1].replace(/[\s=]/g, '')
+                const _matchMore = ComponentName.match(/[^()]*[^()]/g)
+
                 res = `
                 var ComponentStyle = {};                
                 if (_AWARD_STYLE.length) { 
@@ -95,11 +100,18 @@ const checkDistStaticSource = (content,distImages,options) => {
                             ComponentStyle[key] = _AWARD_STYLE[i][key];
                         }
                     }
-                    exports.default = _CSSModules(${ComponentName},ComponentStyle);
+                `;
+                //判断是否有嵌套，即高阶组件的使用
+                if (_matchMore.length) {
+                    ComponentName = _matchMore[_matchMore.length-1]
+                    res += _default[0].replace(`(${ComponentName})`,`(_CSSModules(${ComponentName},ComponentStyle))`)                        
+                } else {                        
+                    res += `exports.default = _CSSModules(${ComponentName},ComponentStyle);`
+                }                
+                res += `
                 }else{
                     ${_default[0]}
-                }
-                `             
+                }`             
             }
 
             // //将这一行的use strict代码匹配出来

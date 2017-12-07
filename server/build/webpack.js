@@ -280,7 +280,7 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
             loader: 'babel-loader',
             options: {
                 presets: ["react", "es2015", "stage-0"],
-                plugins: ["transform-runtime",
+                plugins: ["react-require","transform-runtime",
                     [
                         require.resolve('babel-plugin-module-resolver'),
                         {
