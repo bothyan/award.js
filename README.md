@@ -11,14 +11,15 @@
 nodejs作为服务器，express作为路由入口，webpack将同一份react项目代码编译打包，实现了对服务端和客户端的展现
 
 - [快速体验](#快速体验)
-  - [自定义路由](#自定义路由)
-  - [异步加载初始化数据](#异步加载初始化数据)
-  - [mock数据](#mock数据)
-  - [样式资源](#样式)
-  - [图片资源](#图片资源)
+- [功能说明](#功能说明)
+  - [basic-shell](#basic-shell)
+  - [award/router](#award/router)
+  - [getInitialProps](#getInitialProps)
+  - [mock](#mock)
+  - [style](#style)
+  - [images](#images)
   - [react-css-modules](#react-css-modules)
   - [header-seo](#header-seo)
-- [基础命令](#基础命令)
 - [基础架构](#基础架构)
   
   
@@ -57,7 +58,10 @@ export default () => <div>Welcome to award.js!</div>
 
 另外在项目的`example`文件夹中，有相关功能的demo
 
-## 基础命令
+
+## 功能说明
+
+### basic-shell
 
 ```shell
 #执行开发环境命令
@@ -71,13 +75,18 @@ award build
 award start
 ```
 
-## 自定义路由
+### award/router
 
-如果需要扩展路由，那么在项目的根目录下定义名称为`main.js`的文件，内容如下
+`import { Router,Route,Link } from 'award/router'`
+
+默认路由是根据`pages`文件夹下的路径来自动划分的
+
+如果需要自定义路由形式，那么需要在项目的根目录下创建名称为`main.js`的文件，内容如下
 
 path  访问的地址
 
 render 绝对地址，暂时是这样，后续优化
+
 ```jsx
 import React from 'react'
 import { Router,Route } from 'award/router'
@@ -95,7 +104,14 @@ export default class Main extends React.Component{
 }
 ```
 
-## 异步加载初始化数据
+这样就可以实现路由的自定义配置
+
+跳转 `Link`
+
+具体使用方法可以参考`example/with-router`
+
+
+### getInitialProps
 
 在组件内部使用`getInitialProps`,同时在组件内部，可以通过`this.props`获取
 ```js
@@ -108,7 +124,7 @@ static async getInitialProps() {
 }
 ```
 
-## mock数据
+### mock
 
 在项目根目录新建`mock`文件夹，在其文件夹中新建本地需要模拟数据的js文件
 ```js
@@ -122,7 +138,7 @@ module.exports = (server) => {
 }
 ```
 
-## 样式
+### style
 
 可以直接在项目通过`import`引用对应的`scss`文件,具体可以查看`example/with-style-sass`
 ```js
@@ -141,7 +157,7 @@ export default class Index extends React.Component {
     }
 }
 ```
-## 图片资源
+### images
 可以直接在项目通过`import`引用对应的图片文件,具体可以查看`example/style-images-fonts`
 ```js
 import React from 'react'
@@ -166,7 +182,7 @@ export default class Index extends React.Component {
 }
 ```
 
-## react-css-modules
+### react-css-modules
 内置 `react-css-modules` 插件实现 css modules
 
 该功能主要是项目发布的时候，即`award build`的时候，会进行处理
@@ -189,7 +205,7 @@ export default class Index extends React.Component {
 }
 ```
 
-## header-seo
+### header-seo
 主要是设置每个页面的`title` `meta` 等标签用来进行seo优化
 
 该功能具体的实现，可以在例子`example/head-seo`中看到
