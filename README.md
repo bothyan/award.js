@@ -94,8 +94,8 @@ export default class Main extends React.Component{
         return (
             <Router>
                 <h1>hello award.js</h1>    
-                <Route path="/" render="/pages/index.js"/>
-                <Route path="/about/:id" render="/pages/about.js"/>                 
+                <Route path="/" page="/pages/index.js" name="index"/>
+                <Route path="/about/:id" page="/pages/about.js" name="about"/>                 
             </Router>
         )
     }
@@ -108,13 +108,21 @@ export default class Main extends React.Component{
 
 形式如下,分别为
 
-js文件加载前`before`
+刷新页面生命周期
 
-js文件加载中`loading`
+在`main.js`的`default`组件内部定义`static async before` 方法，用来控制刷新时的处理
 
-js文件加载后`after`
+比如一些页面的重定向，还有一些用户信息的处理，这一块待扩展
 
-js文件执行完成`finish`
+无刷新加载页面的生命周期
+
+    js文件加载前`before`
+
+    js文件加载中`loading`
+
+    js文件加载后`after`
+
+    js文件执行完成`finish`
 ```js
 <Router
     before={this.before.bind(this)}
@@ -138,7 +146,7 @@ Link设置的跳转 `Link`
 <Redirect to="/about/12/home/15" push/>
 ```
 
-具体使用方法可以参考`example/with-router`
+具体使用方法可以参考`example/with-router`中的demo演示
 
 
 ### getInitialProps

@@ -7,8 +7,8 @@ export default class Main extends React.Component{
     render() { 
         return (
             <Router>   
-                <Route path="/" render="/pages/index.js" /> 
-                <Route path="/mine/:id/home/:uid" render="/pages/home/mine/index.js"/>
+                <Route path="/" page="/pages/index.js" /> 
+                <Route path="/mine/:id/home/:uid" page="/pages/home/mine/index.js"/>
             </Router>
         )
     }

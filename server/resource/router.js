@@ -2,8 +2,8 @@ import glob from 'glob-promise'
 import { resolve, join } from 'path'
 import WebpackDevMiddleware from 'webpack-dev-middleware'
 import render from './render'
-import webpack from './build/webpack'
-import clean from './build/clean'
+import webpack from '../build/webpack'
+import clean from '../build/clean'
 import { replaceStaticSource } from './compiler'
 
 export default class Router {
@@ -114,16 +114,12 @@ export default class Router {
             _routers.map(item => {
                 let _tmp = item.match(singleRouter)
                 _tmp = JSON.parse(_tmp[1].replace(/&quot;/g, '"'))
-
-                _tmp.page = _tmp.render
-                delete _tmp.render
-
                 routers.push(_tmp)
             })
         }
         
         global.AWARD_ROUTE = false
-        routers.push({ page: '/main.js', path: null })
+        routers.push({ page: '/main.js', path: null, name: true })
         await clean(this.options)
         return routers
     }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { createHeaderElements } from '../lib/utils'
+import { createHeaderElements } from '../../lib/utils'
 
 class Main extends React.Component {
 

@@ -77,6 +77,9 @@ export default class Index extends React.Component {
 
                 <span onClick={this.onClick.bind(this)}>点击跳转</span>    
                 {_Redirect}
+
+                <p>跳转到未注册地址页</p>
+            <Link to="/jeje/12">跳转到未注册地址页</Link>    
             </div>    
         )
     }

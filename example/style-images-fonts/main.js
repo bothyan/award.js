@@ -9,9 +9,9 @@ export default class Main extends React.Component{
     render() { 
         return (
             <Router>
-                <Route path="/" render="/pages/index.js"/>
-                <Route path="/about" render="/pages/about.js" />
-                <Route path="/css" render="/pages/css.js" />                
+                <Route path="/" page="/pages/index.js"/>
+                <Route path="/about" page="/pages/about.js" />
+                <Route path="/css" page="/pages/css.js" />                
             </Router>
         )
     }

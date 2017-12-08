@@ -1,7 +1,7 @@
 import WebpackDevMiddleware from 'webpack-dev-middleware'
 import WebpackHotMiddleware from 'webpack-hot-middleware'
-import webpack from './build/webpack'
-import clean from './build/clean'
+import webpack from '../build/webpack'
+import clean from '../build/clean'
 import { replaceStaticSource } from './compiler'
 
 export default class HotReloader {

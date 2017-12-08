@@ -1,8 +1,8 @@
 import WebpackDevMiddleware from 'webpack-dev-middleware'
-import Router from '../router'
+import Router from '../resource/router'
 import webpack, { buildWebpack } from './webpack'
 import clean, { cleanBundles,cleanFile } from './clean'
-import { replaceStaticSource } from '../compiler'
+import { replaceStaticSource } from '../resource/compiler'
 
 global.AWARD_InServer = true
 

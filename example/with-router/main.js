@@ -1,12 +1,24 @@
 import React from 'react'
 import Loading from './components/loading'
-import { Router,Route } from 'award/router'
+import { Router, Route, ResolveRouter } from 'award/router'
 
 //路由改变的生命周期
 export default class Main extends React.Component{ 
 
-    //路由对应的js文件加载前
-    before({ url, query }) { 
+    //刷新页面加载前
+    static async before({ req, res, routes }) {
+        const { hostname, headers, url } = req
+        const { name = false } = ResolveRouter(routes,url)
+        if (!name) { 
+            res.redirect(`http://m.ximalaya.com`)
+        }
+    }
+
+    //无刷新页面加载前 路由对应的js文件加载前
+    before({ url, query, name }) {
+        if (!name) { 
+            window.location.href =  `http://m.ximalaya.com`
+        }
         this.obj = document.createElement('div')
         this.obj.innerHTML = '<h1>页面加载中...</h1>'
         document.body.appendChild(this.obj)
@@ -31,8 +43,8 @@ export default class Main extends React.Component{
                 after={this.after.bind(this)}
                 finish={this.finish.bind(this)}
             >  
-                <Route path="/" render="/pages/index.js"/>
-                <Route path="/about/:id/home/:uid" render="/pages/about.js"/>                  
+                <Route path="/" page="/pages/index.js" name="index"/>
+                <Route path="/about/:id/home/:uid" page="/pages/about.js" name="about"/>                  
             </Router>
         )
     }
