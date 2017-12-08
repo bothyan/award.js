@@ -83,7 +83,9 @@ award start
 
 path  访问的地址
 
-render 绝对地址，暂时是这样，后续优化
+page 绝对地址，暂时是这样，后续优化
+
+name 该路由的释义
 
 ```jsx
 import React from 'react'
