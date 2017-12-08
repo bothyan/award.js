@@ -104,7 +104,39 @@ export default class Main extends React.Component{
 
 这样就可以实现路由的自定义配置
 
-跳转 `Link`
+如果配置了自定义路由，那么就可以使用路由的几个钩子函数，这些钩子是挂载在`Router`组件上
+
+形式如下,分别为
+
+js文件加载前`before`
+
+js文件加载中`loading`
+
+js文件加载后`after`
+
+js文件执行完成`finish`
+```js
+<Router
+    before={this.before.bind(this)}
+    loading={Loading}
+    after={this.after.bind(this)}
+    finish={this.finish.bind(this)}
+>  
+    <Route path="/" render="/pages/index.js"/>
+    <Route path="/about/:id/home/:uid" render="/pages/about.js"/>                  
+</Router>
+```
+
+可以通过这一系列钩子来处理js文件加载的步骤，`before`和`after`返回false可以中断下面的生命周期的执行
+
+Link设置的跳转 `Link`
+
+点击触发跳转 `Redirect`
+
+目前三个参数 `to` `push` `replace` 触发动作和`Link`一样，触发方式在`render`的时候自动触发跳转
+```js
+<Redirect to="/about/12/home/15" push/>
+```
 
 具体使用方法可以参考`example/with-router`
 

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import extend from 'extend'
-import { Link, Router, Route, ResolveRouter } from 'award/router'
 import App from '../lib/app'
 import Loader from '../lib/loader'
 import { createHeaderElements } from '../lib/utils'
@@ -49,7 +48,7 @@ export default async () => {
     render(props)
 
     // 路由切换页面加载
-    routeLoader.subscribe(async ({ Component, route, query }) => {
+    routeLoader.subscribe(async ({ Component, route, query, callback = null }) => {
 
         if(typeof query === 'undefined'){
             return false
@@ -76,9 +75,14 @@ export default async () => {
         createHeaderElements(initialProps,createElement)
         delete initialProps.header
         
-        props.data = { ...initialProps, assetPrefix, route, routes }  
+        props.data = { ...initialProps, assetPrefix, route, routes, query }  
 
         render(props)
+
+        //触发加载完成后回调
+        if (callback != null) { 
+            callback()
+        }
     })
 }
 

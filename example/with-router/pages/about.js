@@ -2,7 +2,23 @@
 import React from 'react'
 import { Link } from 'award/router'
 
+function getData() { 
+    return new Promise((resolve, reject) => { 
+        setTimeout(() => { 
+            resolve()
+        },3000)
+    })
+}
+
 export default class Mine extends React.Component { 
+
+
+    static async getInitialProps() {
+        await getData()
+        return {
+            name: 'top'
+        }
+    }
 
     constructor() { 
         super()
