@@ -1,6 +1,6 @@
 {
   "name": "award",
-  "version": "0.3.9",
+  "version": "0.5.0",
   "description": "server side rendered && webpack && react && nodejs",
   "main": "./dist/server/index.js",
   "bin": {
