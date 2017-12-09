@@ -4,10 +4,10 @@ import { existsSync } from 'fs'
 import { resolve, join } from 'path'
 import HotReloader from './hot-reloader'
 import Router from './router'
-import { serveStatic,renderHtml } from './render'
+import { serveStatic,renderHtml,renderError } from './render'
 
 /**
- * 统一处理Award需要的静态资源
+ * 统一处理Award需要的静态资
  */
 export default class Resource {
     constructor({ dir, dev, server, dist, page, assetPrefix }) {
@@ -150,5 +150,16 @@ export default class Resource {
             assetPrefix: this.assetPrefix,
             exist_maincss: this.exist_maincss
         })
+    }
+
+    // 渲染错误页面
+    async renderError({ req, res, error}) { 
+        if (this.dev) { 
+            await renderError({
+                req,
+                res,
+                error
+            })
+        }
     }
 }

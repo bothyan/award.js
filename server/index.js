@@ -24,32 +24,19 @@ export default class Server {
         this._Resource = {}
     }
 
-    // 注册路由
-    async registerRouter() {
-        const { routes, exist_mainjs } = this._Resource.getParams()
-        // 注册各个页面路由
-        routes.map(async (item, index) => {
-
-            // 注册该页面的静态资源的路由          
-            this._Resource.registerPageSource(item.page)
-
-            // 注册该页面动态地址
-            item.path && this.server.get(item.path, async (req, res) => {
-
-                let _Main = null
-                //这里处理 路由钩子函数
-                if (exist_mainjs.length) {
-                    delete require.cache[require.resolve(exist_mainjs[0])]
-                    _Main = require(exist_mainjs[0]).default
-                    _Main.before && _Main.before({ req, res, routes })
-                }
-
-                this._Resource.render({ item, req, res, _Main })
-            })
-        })
+    //开启服务
+    async start(port, hostname) {
+        try {
+            await this.prepare()
+            await this.registerRouter()
+            await this.registerOtherRouter()
+        } catch (err) {
+            console.log(err)
+        }
+        await this.server.listen(port, hostname)
     }
 
-    //服务预处理
+    // 服务预处理
     async prepare() {
         const options = {
             dir: this.dir,
@@ -64,10 +51,43 @@ export default class Server {
         await this._Resource.start()
     }
 
-    //开启服务
-    async start(port, hostname) {
-        await this.prepare()
-        await this.registerRouter()
-        await this.server.listen(port, hostname)
+    // 注册项目路由
+    async registerRouter() {
+        const { routes, exist_mainjs } = this._Resource.getParams()
+        // 注册各个页面路由
+        routes.map(async (item, index) => {
+
+            // 注册该页面的静态资源的路由          
+            this._Resource.registerPageSource(item.page)
+
+            // 注册该页面动态地址
+            item.path && this.server.get(item.path, async (req, res) => {
+
+                try {
+                    let _Main = null
+                    // 这里处理 路由钩子函数
+                    if (exist_mainjs.length) {
+                        delete require.cache[require.resolve(exist_mainjs[0])]
+                        _Main = require(exist_mainjs[0]).default
+                        _Main.before && _Main.before({ req, res, routes })
+                    }
+
+                    await this._Resource.render({ item, req, res, _Main })
+
+                } catch (err) {
+                    // 捕获错误
+                    await this._Resource.renderError({ req, res, error: err })
+                }
+            })
+        })
+    }
+
+    // 注册其他路由
+    async registerOtherRouter() { 
+
+        // 404 页面
+        this.server.get('*', function(req, res){
+            res.send('404')
+        })
     }
 }

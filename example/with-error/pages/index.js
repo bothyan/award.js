@@ -20,7 +20,7 @@ export default class Index extends React.Component {
         return (
             <div>
                 <h1 className="hello" onClick={this.change.bind(this)} style={{ color: this.state.new ? 'red' : 'black' }}>
-                    Hello award.js           
+                    Hello award.js  {this.props.a}         
                 </h1>
                 <Link to="/about" tag="span">查看详情</Link>
             </div>    

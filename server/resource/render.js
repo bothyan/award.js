@@ -6,7 +6,7 @@ import { resolve, join } from 'path'
 import glob from 'glob-promise'
 import App from '../../lib/app'
 import Document from './document'
-
+import ErrorDebug from './error'
 
 export default function render(Component, props) {
   return renderToStaticMarkup(createElement(Component, props))
@@ -85,6 +85,12 @@ export async function renderHtml({ req, res, page, routes, Component, Main, dev,
     html,
     dev
   })
+
+  res.send('<!DOCTYPE html>' + _html)
+}
+
+export async function renderError({ req, res, error }) { 
+  const _html = render(ErrorDebug, {error})
 
   res.send('<!DOCTYPE html>' + _html)
 }
