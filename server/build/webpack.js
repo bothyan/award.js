@@ -104,6 +104,7 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
     if (!entry) {
 
         const _main = await glob('main.js', { cwd: dir })
+        const _error = await glob('error.js', { cwd: dir })
         
         entry = {}
 
@@ -113,6 +114,10 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
 
         if (_main.length) {
             entry['bundles/main.js'] = join(dir, `main.js`)
+        }
+
+        if (_error.length) { 
+            entry['bundles/error.js'] = join(dir, `error.js`)            
         }
 
         routes.map(item => {
@@ -126,8 +131,6 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
             ])
         }  
     }
-
-    
 
     let extractCss = new ExtractTextPlugin('static/style/[name].css')
 

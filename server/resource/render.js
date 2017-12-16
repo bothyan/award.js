@@ -27,12 +27,12 @@ export function serveStatic(req, res, path) {
   })
 }
 
-export async function renderHtml({ req, res, page, routes, Component, Main, dev, dir, dist, assetPrefix, exist_maincss }) {
+export async function renderHtml({ req, res, error, page, routes, Component, Main, dev, dir, dist, assetPrefix, exist_maincss }) {
 
   const query = { ...req.params, ...req.query }
   const initialProps = !Component.getInitialProps ? {} : await Component.getInitialProps({ req, res, query })
 
-  let html, props = { ...initialProps, route: page, query, routes }
+  let html, props = { ...initialProps, route: page, query, routes, error }
 
   if (Main) {
     //对象深拷贝
@@ -59,7 +59,7 @@ export async function renderHtml({ req, res, page, routes, Component, Main, dev,
   //当前页面需要的js文件
   jsPath.push({
     route: page,
-    src: join(assetPrefix, page)
+    src: join(assetPrefix, error.err ? '/static/error.js' : page)
   }, {
       route: '',
       src: join(assetPrefix, '/main.js')

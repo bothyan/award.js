@@ -17,7 +17,7 @@ const dev = process.env.NODE_ENV === 'development'
 export default async () => {
 
     let Main, Component, initialProps = {}
-    const { assetPrefix, route, routes } = serverData
+    const { assetPrefix, route, routes, error } = serverData
     
     routeLoader = new Loader(assetPrefix)
 
@@ -72,10 +72,17 @@ export default async () => {
         }) 
 
         //创建新的award-head
-        createHeaderElements(initialProps,createElement)
+        createHeaderElements(initialProps,createHeadElement)
         delete initialProps.header
         
-        props.data = { ...initialProps, assetPrefix, route, routes, query }  
+        const error = {
+            code: route === null ? 404 : '',
+            err: true,
+            mes: '',
+            stack:''
+        }
+
+        props.data = { ...initialProps, assetPrefix, route, routes, query, error }  
 
         render(props)
 
@@ -94,7 +101,7 @@ function render(props = {}) {
     }
 }
 
-function createElement(element,obj) { 
+function createHeadElement(element,obj) { 
     var createObj = document.createElement(element)
     
     let children = obj.children

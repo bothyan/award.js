@@ -23,14 +23,18 @@ export default class Resource {
         this.routes = []
 
         this.exist_mainjs = false
-        this.exist_maincss = false        
+        this.exist_maincss = false 
+        
+        this.exist_errorjs = false
+        this.exist_errorcss = false
     }
 
     // 拿参数
     getParams() { 
         return {
             routes: this.routes,
-            exist_mainjs: this.exist_mainjs
+            exist_mainjs: this.exist_mainjs,
+            exist_errorjs: this.exist_errorjs
         }
     }
 
@@ -63,11 +67,16 @@ export default class Resource {
         this.exist_mainjs = await glob(join(this.dir, `./${this.dist}/dist/main.js`))
         this.exist_maincss = await glob(join(this.dir, this.dist, 'static/style/bundles/main.js.css'))
 
+        this.exist_errorjs = await glob(join(this.dir, `./${this.dist}/dist/error.js`))        
+        this.exist_errorcss = await glob(join(this.dir, this.dist, 'static/style/bundles/error.js.css'))
+        
         //客户端入口的js文件
         this.server.get(`${this.assetPrefix}/main.js`, async (req, res) => {
             const path = join(this.dir, this.dist, 'main.js')
             return await serveStatic(req, res, path)
         })
+
+        // 配置的main.js组件
 
         if (this.exist_mainjs.length) {
             //客户端组件入口的js文件，即main.js
@@ -84,6 +93,22 @@ export default class Resource {
             })
         }
 
+        // 错误页面
+
+        if (this.exist_errorjs.length) { 
+            //客户端错误页面的js入口
+            this.server.get(`${this.assetPrefix}/static/error.js`, async (req, res) => {
+                const path = join(this.dir, this.dist, `bundles/error.js`)
+                return await serveStatic(req, res, path)
+            })
+        }
+
+        if (this.exist_errorcss.length) {
+            //客户端错误页面入口的css文件
+            this.server.get(`${this.assetPrefix}/static/style/error.css`, async (req, res) => {
+                return await serveStatic(req, res, this.exist_errorcss[0])
+            })
+        }
 
         if (!this.dev) {
             //获取图片、字体等资源
@@ -125,10 +150,10 @@ export default class Resource {
     }
 
     // 渲染静态资源
-    async render({ req, res, item, _Main }) {
+    async render({ req, res, page, _Main, error }) {
         let _Component = null
 
-        const ComponentPath = join(this.dir, `./${this.dist}/dist/`, item.page)
+        const ComponentPath = join(this.dir, `./${this.dist}/dist/`, page)
 
         //这里需要删除require的缓存
         delete require.cache[require.resolve(ComponentPath)]
@@ -140,7 +165,8 @@ export default class Resource {
         await renderHtml({
             req,
             res,
-            page: item.page,
+            error,
+            page: page,
             routes: this.routes,  
             Component,   
             Main,                     
@@ -153,13 +179,18 @@ export default class Resource {
     }
 
     // 渲染错误页面
-    async renderError({ req, res, error}) { 
-        if (this.dev) { 
-            await renderError({
-                req,
-                res,
-                error
-            })
+    async renderError({ req, res, error }) {
+        //渲染 默认的错误页面
+        if (!this.exist_errorjs.length) {
+            if (this.dev) {
+                await renderError({
+                    req,
+                    res,
+                    error
+                })
+            } else {
+                res.send('404...')
+            }
         }
     }
 }
