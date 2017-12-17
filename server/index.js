@@ -29,7 +29,7 @@ export default class Server {
         try {
             await this.prepare()
             await this.registerRouter()
-            //await this.registerOtherRouter()
+            await this.registerOtherRouter()
         } catch (err) {
             console.log(err)
         }
@@ -143,7 +143,7 @@ export default class Server {
 
         // 404 页面
         this.server.get('*', async (req, res) => {
-            console.log('*****')
+          
             const { routes, exist_errorjs, exist_mainjs } = this._Resource.getParams()
 
             let _Main = null
