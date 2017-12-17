@@ -8,9 +8,10 @@ export default class Main extends React.Component{
     //刷新页面加载前
     static async before({ req, res, routes }) {
         const { hostname, headers, url } = req
-        const { name = false } = ResolveRouter(routes,url)
+        const { name = false } = ResolveRouter(routes, url)
         if (!name) { 
             res.redirect(`http://m.ximalaya.com`)
+            return false
         }
     }
 
@@ -19,9 +20,9 @@ export default class Main extends React.Component{
         if (!name) { 
             window.location.href =  `http://m.ximalaya.com`
         }
-        this.obj = document.createElement('div')
-        this.obj.innerHTML = '<h1>页面加载中...</h1>'
-        document.body.appendChild(this.obj)
+        //this.obj = document.createElement('div')
+        //this.obj.innerHTML = '<h1>页面加载中...</h1>'
+        //document.body.appendChild(this.obj)
         return true
     }
 
@@ -32,13 +33,12 @@ export default class Main extends React.Component{
 
     //js文件中的组件内容执行完毕
     finish() { 
-        this.obj.remove()
+        //this.obj.remove()
     }
 
     render() {
         return (
             <Router
-                before={this.before.bind(this)}
                 loading={Loading}
                 after={this.after.bind(this)}
                 finish={this.finish.bind(this)}

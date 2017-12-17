@@ -1,5 +1,5 @@
-const IS_BUNDLED_PAGE = /^bundles[/\\](pages.*\.js|main|error\.js)$/
-const MATCH_ROUTE_NAME = /^bundles[/\\](pages[/\\](.*)\.js|main|error\.js)$/
+const IS_BUNDLED_PAGE = /^bundles[/\\](pages.*\.js|main\.js|error\.js)$/
+const MATCH_ROUTE_NAME = /^bundles[/\\](pages[/\\](.*)\.js|main\.js|error\.js)$/
 
 export default class PagesPlugin {
     apply(compiler) {
@@ -19,6 +19,8 @@ export default class PagesPlugin {
                 }
 
                 routeName = `/${routeName.replace(/(^|\/)index$/, '')}`
+
+                routeName = routeName == '/error.js' ? '/_award_error' : routeName
 
                 const content = page.source()
                 const newContent = `window.__AWARD_REGISTER_PAGE__('${routeName}', function(){var comp = ${content};return comp.default})`     

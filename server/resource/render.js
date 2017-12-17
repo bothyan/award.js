@@ -6,7 +6,7 @@ import { resolve, join } from 'path'
 import glob from 'glob-promise'
 import App from '../../lib/app'
 import Document from './document'
-import ErrorDebug from './error'
+import ErrorDebug from '../../lib/error'
 
 export default function render(Component, props) {
   return renderToStaticMarkup(createElement(Component, props))
@@ -30,19 +30,27 @@ export function serveStatic(req, res, path) {
 export async function renderHtml({ req, res, error, page, routes, Component, Main, dev, dir, dist, assetPrefix, exist_maincss }) {
 
   const query = { ...req.params, ...req.query }
+  const to = req.url
   const initialProps = !Component.getInitialProps ? {} : await Component.getInitialProps({ req, res, query })
 
-  let html, props = { ...initialProps, route: page, query, routes, error }
+  let html, _Component, props = { ...initialProps, route: page, query, routes, error, to }
+
 
   if (Main) {
     //对象深拷贝
     const MainProps = !Main.getInitialProps ? {} : await Main.getInitialProps({ req, res })
     props = extend(true, MainProps, { ...props, Component, Main })
+    _Component = createElement(App, props)
 
-    html = renderToStaticMarkup(React.createElement(App, props), props)
   } else {
-    html = render(Component, props)
+    _Component = createElement(Component, props)
   }
+  
+  if (error.err) {
+    renderToString(createElement(Component, props))
+  }
+    
+  html = renderToStaticMarkup(_Component)
 
   //css、js资源地址配置
   let cssPath = []
@@ -56,13 +64,20 @@ export async function renderHtml({ req, res, error, page, routes, Component, Mai
     })
   }
 
+  if (!error.err) { 
+    jsPath.push({
+      route: page,
+      src: join(assetPrefix, page)
+    })
+  }
+
   //当前页面需要的js文件
   jsPath.push({
-    route: page,
-    src: join(assetPrefix, error.err ? '/static/error.js' : page)
-  }, {
-      route: '',
-      src: join(assetPrefix, '/main.js')
+    route: '/_award_error',
+    src: join(assetPrefix, '/static/error.js')
+  },{
+    route: '',
+    src: join(assetPrefix, '/main.js')
   })
 
   //判断是否有css，一个是当前页面 一个是公共的
@@ -78,19 +93,19 @@ export async function renderHtml({ req, res, error, page, routes, Component, Mai
 
   props.assetPrefix = assetPrefix
 
-  const _html = render(Document, {
+  _Component = createElement(Document,{
     jsPath,
     cssPath,
     props,
     html,
     dev
   })
-
-  res.send('<!DOCTYPE html>' + _html)
+   
+  return '<!DOCTYPE html>' + renderToStaticMarkup(_Component)   
 }
 
 export async function renderError({ req, res, error }) { 
   const _html = render(ErrorDebug, {error})
 
-  res.send('<!DOCTYPE html>' + _html)
+  res.status(error.statusCode).send('<!DOCTYPE html>' + _html)
 }

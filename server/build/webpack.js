@@ -116,8 +116,10 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
             entry['bundles/main.js'] = join(dir, `main.js`)
         }
 
-        if (_error.length) { 
-            entry['bundles/error.js'] = join(dir, `error.js`)            
+        if (_error.length) {
+            entry['bundles/error.js'] = join(dir, `error.js`)
+        } else { 
+            entry['bundles/error.js'] = join(__dirname, '..', '..', 'lib/error.js')
         }
 
         routes.map(item => {
@@ -239,7 +241,7 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
                 name: 'dist/[path][name].[ext]',
                 transform({ content, sourceMap, interpolatedName }) {
                     if (!(/\.js$/.test(interpolatedName))) {
-                        return { content, sourceMap }
+                        return { content, sourceMap:false }
                     }
 
                     /**

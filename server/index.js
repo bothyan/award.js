@@ -29,7 +29,7 @@ export default class Server {
         try {
             await this.prepare()
             await this.registerRouter()
-            await this.registerOtherRouter()
+            //await this.registerOtherRouter()
         } catch (err) {
             console.log(err)
         }
@@ -61,16 +61,91 @@ export default class Server {
             this._Resource.registerPageSource(item.page)
 
             // 注册该页面动态地址
-            item.path && this.server.get(item.path, async (req, res) => {
+            item.path && this.server.get(item.path, async (req, res, next) => {
                 await this.handleRequestAndResponse(req, res, item.page)
             })
         })
     }
 
     // 处理请求和响应
-    async handleRequestAndResponse(req, res, page, { err = false, code = '', msg = '', stack='' } = {}) {
-        const { routes, exist_mainjs, exist_errorjs} = this._Resource.getParams()
+    async handleRequestAndResponse(req, res, page, error = {}) {
+
+        const { exist_errorjs } = this._Resource.getParams()        
+
+        const { err = false, statusCode = 200, message = '', stack = '' } = error
+
+        error = { err, statusCode, message, stack }
+
         try {
+            await this.render({ req, res, page, error })
+        } catch (_error) {
+            // 刷新的页面语法错误 捕获错误
+            if (exist_errorjs.length) {
+                //存在错误页面
+                try {
+                    error = {
+                        err: true,
+                        statusCode: 500,
+                        message: _error.message,
+                        stack: _error.stack
+                    }
+
+                    page = '/error.js'
+                
+                    await this.render({ req, res, page, error })
+
+                } catch (_err) {
+                    //处理 自定义的错误 出现语法错误
+                    await this._Resource.renderError({
+                        req, res, error: {
+                            err: true,
+                            statusCode: 500,
+                            message: _err.message,
+                            stack: _err.stack
+                        }
+                    })
+                }
+            } else { 
+                //不存在错误页面
+                await this._Resource.renderError({
+                    req, res, error: {
+                        err: true,
+                        statusCode: 500,
+                        message: _error.message,
+                        stack: _error.stack
+                    }
+                })
+            }    
+        }
+    }
+
+    async render({ req, res, page, error }) {
+        const { routes, exist_mainjs, exist_errorjs } = this._Resource.getParams()
+
+        let _Main = null
+        // 这里处理 路由钩子函数
+        if (exist_mainjs.length) {
+            delete require.cache[require.resolve(exist_mainjs[0])]
+            _Main = require(exist_mainjs[0]).default
+            _Main.before && _Main.before({ req, res, routes })
+        }
+        const html = await this._Resource.render({ req, res, page, _Main, error })
+
+        res.status(error.statusCode).send(html)
+    }
+
+    // 注册其他路由
+    async registerOtherRouter() {
+
+        this.server.get(/\.map$/, (req, res) => {
+            return false
+        })
+
+        // 404 页面
+        this.server.get('*', async (req, res) => {
+            console.log('*****')
+            const { routes, exist_errorjs, exist_mainjs } = this._Resource.getParams()
+
             let _Main = null
             // 这里处理 路由钩子函数
             if (exist_mainjs.length) {
@@ -79,48 +154,20 @@ export default class Server {
                 _Main.before && _Main.before({ req, res, routes })
             }
 
-            await this._Resource.render({ page, req, res, _Main, error:{
-                err,
-                code,
-                msg,
-                stack
-            }})
-
-        } catch (err) {
-            // 捕获错误
             if (exist_errorjs.length) {
                 await this.handleRequestAndResponse(req, res, '/error.js', {
                     err: true,
-                    code: 500,
-                    msg: err.message,
-                    stack:err.stack
-                })
-            } else {
-                await this._Resource.renderError({
-                    req, res, error: err
-                })
-            }
-        }
-    }
-
-    // 注册其他路由
-    async registerOtherRouter() {
-
-        // 404 页面
-        this.server.get('*', async (req, res) => {
-            const { exist_errorjs } = this._Resource.getParams()
-            if (exist_errorjs.length) {
-                await this.handleRequestAndResponse(req, res, '/error.js', {
-                    err: true,
-                    code: 404,
-                    msg: '找不到页面',
+                    statusCode: 404,
+                    message: '找不到页面',
                     stack: ''
                 })
             } else {
                 await this._Resource.renderError({
                     req, res, error: {
-                        code: '404',
-                        message: '页面找不到'
+                        err: true,
+                        statusCode: 404,
+                        message: '页面找不到',
+                        stack: ''
                     }
                 })
             }

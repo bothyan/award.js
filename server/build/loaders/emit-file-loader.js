@@ -14,8 +14,8 @@ module.exports = function (content, sourceMap) {
 
   const emit = (code, map, writeCode) => {
     writeCode = typeof writeCode != 'undefined' ? writeCode : code
-    this.emitFile(interpolatedName, writeCode , map)
-    this.callback(null, code, map)
+    this.emitFile(interpolatedName, writeCode , false)
+    this.callback(null, code, false)
   }
 
   if (query.transform) {

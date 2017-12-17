@@ -1,0 +1,9 @@
+{
+  "name": "react-error",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts":{
+    "dev":"babel index.js --out-dir ./dist && node ./dist/"
+  }
+}

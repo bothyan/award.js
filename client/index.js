@@ -1,9 +1,11 @@
-import React, { Component } from 'react'
+import React, { Component, createElement } from 'react'
 import ReactDOM from 'react-dom'
 import extend from 'extend'
 import App from '../lib/app'
 import Loader from '../lib/loader'
 import { createHeaderElements } from '../lib/utils'
+import { changeHistory } from '../lib/router/utils'
+import ErrorDebug from '../lib/error'
 
 //获取服务器数据
 const dataObj = document.getElementById('data')
@@ -12,13 +14,16 @@ dataObj.remove()
 
 export let routeLoader
 
+const appContainer = document.getElementById('main')
 const dev = process.env.NODE_ENV === 'development'
+
+let Main = null
 
 export default async () => {
 
-    let Main, Component, initialProps = {}
-    const { assetPrefix, route, routes, error } = serverData
-    
+    let Component
+    const { assetPrefix, route, routes, error, to, query } = serverData
+
     routeLoader = new Loader(assetPrefix)
 
     window.__AWARD_LOADED_PAGE__.forEach(({ route, fn }) => {
@@ -32,9 +37,13 @@ export default async () => {
 
     Main = await routeLoader.loadPage('/main.js')
 
-    // 首次加载页面 收集数据
-    Component = await routeLoader.loadPage(route)
-    
+    if (error.err) {
+        Component = await routeLoader.loadPage(null)
+    } else {
+        // 首次加载页面 收集数据
+        Component = await routeLoader.loadPage(route)
+    }
+
     const data = { ...serverData }
     const props = { data, routeLoader }
 
@@ -45,65 +54,99 @@ export default async () => {
         props.Main = Component
     }
 
-    render(props)
+    console.log(serverData)
+
+    error.err ? renderError({ error, to, query }) : renderHtml(props)
 
     // 路由切换页面加载
-    routeLoader.subscribe(async ({ Component, route, query, callback = null }) => {
+    routeLoader.subscribe(async ({ Component, route = null, query = {}, callback = null, to, error = {} }) => {
 
-        if(typeof query === 'undefined'){
+        if (typeof query === 'undefined') {
             return false
         }
 
-        initialProps = !Component.getInitialProps ? {} : await Component.getInitialProps({query})
- 
-        if (!!Main) {
-            //对象深拷贝
-            const MainProps = !Main.getInitialProps ? {} : await Main.getInitialProps()
-            initialProps = extend(true, MainProps, initialProps)  
-            
-            props.Component = Component                     
-        } else {
-            props.Main = Component
+        const props = await loadInitialProps({ Component, route, query, to, error })
+        try {
+            if (error.err) {
+                //❌跳转到未知页面
+                await renderError({ error, to, query })
+            } else {
+                renderHtml(props)
+            }
+
+        } catch (err) {
+            //❌跳转到语法错误页面
+            const error = {
+                err: true,
+                statusCode: 500,
+                stack: err.stack,
+                message: err.message
+            }
+            await renderError({ error, to, query })
         }
-
-        //删除所有award-head
-        Array.from(document.getElementsByClassName('award-head')).map(item => { 
-            item.remove()
-        }) 
-
-        //创建新的award-head
-        createHeaderElements(initialProps,createHeadElement)
-        delete initialProps.header
-        
-        const error = {
-            code: route === null ? 404 : '',
-            err: true,
-            mes: '',
-            stack:''
-        }
-
-        props.data = { ...initialProps, assetPrefix, route, routes, query, error }  
-
-        render(props)
 
         //触发加载完成后回调
-        if (callback != null) { 
+        if (callback != null) {
             callback()
         }
     })
 }
 
-function render(props = {}) {
-    ReactDOM.render(<App {...props} />, document.getElementById('main'))
+export async function renderError({ error, to, query }) {
 
-    if(dev){
+    const Component = await routeLoader.loadPage(null)
+
+    const props = await loadInitialProps({ Component, route: '/_award_error', query, to, error })
+
+    try {
+        renderHtml(props)
+    } catch (err) {
+        //❌错误页面出现语法错误
+        ReactDOM.render(createElement(ErrorDebug, { error: err }), appContainer)
+    }
+}
+
+async function loadInitialProps({ Component, route, query, to, error }) {
+    let initialProps = !Component.getInitialProps ? {} : await Component.getInitialProps({ query })
+    const props = { routeLoader }
+    const { assetPrefix, routes } = serverData
+
+    if (!!Main) {
+        //对象深拷贝
+        const MainProps = !Main.getInitialProps ? {} : await Main.getInitialProps()
+        initialProps = extend(true, MainProps, initialProps)
+
+        props.Main = Main
+        props.Component = Component
+    } else {
+        props.Main = Component
+    }
+
+    //删除所有award-head
+    Array.from(document.getElementsByClassName('award-head')).map(item => {
+        item.remove()
+    })
+
+    //创建新的award-head
+    createHeaderElements(initialProps, createHeadElement)
+    delete initialProps.header
+
+    props.data = { ...initialProps, assetPrefix, route, routes, query, error, to }
+
+    return props
+}
+
+function renderHtml(props = {}) {
+    ReactDOM.render(createElement(App, props), appContainer)
+
+    if (dev) {
         document.body.hidden = false
     }
 }
 
-function createHeadElement(element,obj) { 
+function createHeadElement(element, obj) {
     var createObj = document.createElement(element)
-    
+
     let children = obj.children
     if (!!children == false) {
         if (element == 'title') {
@@ -111,17 +154,17 @@ function createHeadElement(element,obj) {
         } else {
             children = null
         }
-    } else { 
+    } else {
         delete obj.children
     }
 
     obj.class = 'award-head'
-        
-    for (let key in obj) { 
-        createObj.setAttribute(key,obj[key])
+
+    for (let key in obj) {
+        createObj.setAttribute(key, obj[key])
     }
 
-    if (!!children) { 
+    if (!!children) {
         createObj.innerText = children
     }
 

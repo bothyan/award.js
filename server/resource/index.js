@@ -92,16 +92,13 @@ export default class Resource {
                 return await serveStatic(req, res, this.exist_maincss[0])
             })
         }
-
-        // 错误页面
-
-        if (this.exist_errorjs.length) { 
-            //客户端错误页面的js入口
-            this.server.get(`${this.assetPrefix}/static/error.js`, async (req, res) => {
-                const path = join(this.dir, this.dist, `bundles/error.js`)
-                return await serveStatic(req, res, path)
-            })
-        }
+        
+        //客户端错误页面的js入口
+        this.server.get(`${this.assetPrefix}/static/error.js`, async (req, res) => {
+            const path = join(this.dir, this.dist, `bundles/error.js`)
+            return await serveStatic(req, res, path)
+        })
+        
 
         if (this.exist_errorcss.length) {
             //客户端错误页面入口的css文件
@@ -162,7 +159,7 @@ export default class Resource {
         const Component = _Component.default || _Component
         const Main = !!_Main && (_Main.default || _Main)
 
-        await renderHtml({
+        return await renderHtml({
             req,
             res,
             error,
@@ -181,16 +178,14 @@ export default class Resource {
     // 渲染错误页面
     async renderError({ req, res, error }) {
         //渲染 默认的错误页面
-        if (!this.exist_errorjs.length) {
-            if (this.dev) {
-                await renderError({
-                    req,
-                    res,
-                    error
-                })
-            } else {
-                res.send('404...')
-            }
+        if (this.dev) {
+            await renderError({
+                req,
+                res,
+                error            
+            })
+        } else {
+            res.status(error.statusCode).send('404...')
         }
     }
 }

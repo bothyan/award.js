@@ -15,12 +15,18 @@ export default class Index extends React.Component {
         })
     }
 
+    componentDidMount() { 
+        console.log('')
+    }
+
     render() { 
         return (
             <div>
                 <h1 className="hello" onClick={this.change.bind(this)} style={{ color: this.state.new ? 'red' : 'black' }}>
-                    award.js detail {this.props.a.b}       
+                    award.js detaiasdasd  
+                    《怕《lasd 拉上打开 开凯
                 </h1>
+                <span>123asdasd</span>
             </div>    
         )
     }
