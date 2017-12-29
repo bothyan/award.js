@@ -401,6 +401,7 @@ export default async function createCompiler({ dir, dev, dist, page, routes = {}
     }
 
     let webpackConfig = {
+        context:dir,
         entry,
         output: {
             path: resolve(dir, `./${dist}`),

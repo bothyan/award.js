@@ -5,6 +5,7 @@ import { existsSync, readFileSync } from 'fs'
 import { printAndExit } from '../lib/utils'
 import pkgUp from 'pkg-up'
 import Server from '../server'
+import getConfig from '../server/config'
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development'
 
@@ -46,12 +47,14 @@ if (!existsSync(dir)) {
   printAndExit(`> No such directory exists as the project root: ${dir}`)
 }
 
-if (!existsSync(join(dir, 'pages'))) {
-  if (existsSync(join(dir, '..', 'pages'))) {
-    printAndExit('> No `pages` directory found')
+const { page } = getConfig(dir)
+
+if (!existsSync(join(dir, page))) {
+  if (existsSync(join(dir, '..', page))) {
+    printAndExit(`> No ${page} directory found`)
   }
 
-  printAndExit('> Couldn\'t find a `pages` directory. Please create one under the project root')
+  printAndExit(`> Couldn\'t find a ${page} directory. Please create one under the project root`)
 }
 
 const srv = new Server({ dir, dev: true })

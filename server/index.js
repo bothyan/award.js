@@ -1,6 +1,7 @@
 import express from 'express'
 import { resolve } from 'path'
 import Resource from './resource'
+import getConfig from './config'
 
 require('babel-register')({
     presets: ['react', 'es2015']
@@ -17,9 +18,12 @@ export default class Server {
         this.dir = resolve(dir)
         this.dev = dev
         this.server = express()
-        this.dist = '.award'
-        this.page = 'pages'
-        this.assetPrefix = '/award'
+
+        const config = getConfig(this.dir)
+        
+        this.dist = config.dist
+        this.page = config.page
+        this.assetPrefix = config.assetPrefix
 
         this._Resource = {}
     }

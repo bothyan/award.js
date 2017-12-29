@@ -1,9 +1,14 @@
-const IS_BUNDLED_PAGE = /^bundles[/\\](pages.*\.js|main\.js|error\.js)$/
-const MATCH_ROUTE_NAME = /^bundles[/\\](pages[/\\](.*)\.js|main\.js|error\.js)$/
+import getConfig from '../../config'
 
 export default class PagesPlugin {
     apply(compiler) {
         compiler.plugin('after-compile', (compilation, callback) => {
+
+            const { page } = getConfig(compilation.options.context)
+
+            const IS_BUNDLED_PAGE = new RegExp(`^bundles[/\](${page}.*.js|main.js|error.js)$`)
+            const MATCH_ROUTE_NAME = new RegExp(`^bundles[/\](${page}[/\](.*).js|main.js|error.js)$`)
+
             const pages = Object
                 .keys(compilation.namedChunks)
                 .map(key => compilation.namedChunks[key])

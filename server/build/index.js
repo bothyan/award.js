@@ -3,19 +3,20 @@ import Router from '../resource/router'
 import webpack, { buildWebpack } from './webpack'
 import clean, { cleanBundles,cleanFile } from './clean'
 import { replaceStaticSource } from '../resource/compiler'
+import getConfig from '../config'
 
 global.AWARD_InServer = true
 
 export default async function build(dir, conf = null) {
 
-    const dist = '.award'
+    const config = getConfig(dir)
 
     const options = {
         dir: dir,
         dev: false,
-        dist,
-        page: 'pages',
-        assetPrefix: '/award'
+        dist:config.dist,
+        page: config.page,
+        assetPrefix: config.assetPrefix
     }
 
     // 获取路由
