@@ -27,6 +27,7 @@ export function serveStatic(req, res, path) {
   })
 }
 
+//渲染正确的页面
 export async function renderHtml({ req, res, error, page, routes, Component, Main, dev, dir, dist, assetPrefix, exist_maincss }) {
 
   const query = { ...req.params, ...req.query }
@@ -104,8 +105,42 @@ export async function renderHtml({ req, res, error, page, routes, Component, Mai
   return '<!DOCTYPE html>' + renderToStaticMarkup(_Component)   
 }
 
-export async function renderError({ req, res, error }) { 
-  const _html = render(ErrorDebug, {error})
+//渲染错误页面
+export async function renderError({ req, res, error, routes, dev, dir, dist, exist_mainjs, exist_maincss, assetPrefix }) { 
+  const html = render(ErrorDebug, { error })
 
-  res.status(error.statusCode).send('<!DOCTYPE html>' + _html)
+  const query = { ...req.params, ...req.query }
+  const to = req.url
+
+  const props = { route: '/_error_error', query, routes, to, _error:error }
+  
+  //css、js资源地址配置
+  let cssPath = []
+  let jsPath = [] //主要依赖的文件，也就是客户端入口
+
+  //客户端路由自定义配置页面
+  if (exist_mainjs.length) {
+    jsPath.push({
+      route: '/main.js',
+      src: join(assetPrefix, 'static/main.js')
+    })
+  }
+
+  //当前页面需要的js文件
+  jsPath.push({
+    route: '',
+    src: join(assetPrefix, '/main.js')
+  })
+
+  props.assetPrefix = assetPrefix
+
+  const _Component = createElement(Document,{
+    jsPath,
+    cssPath,
+    props,
+    html,
+    dev
+  })
+
+  res.status(error.statusCode).send('<!DOCTYPE html>' + renderToStaticMarkup(_Component))
 }

@@ -29,10 +29,23 @@ export default class Server {
         try {
             await this.prepare()
             await this.registerRouter()
-            await this.registerOtherRouter()
         } catch (err) {
             console.log(err)
         }
+        
+        this.server.get('*', async (req, res) => {
+            if (req.url.match(/\.(json|map)/) != null) {
+                return
+            } else {
+                await this.handleRequestAndResponse(req, res, null, {
+                    err: true,
+                    statusCode: 404,
+                    message: '找不到页面',
+                    stack: ''
+                })
+            }    
+        })
+
         await this.server.listen(port, hostname)
     }
 
@@ -77,6 +90,9 @@ export default class Server {
         error = { err, statusCode, message, stack }
 
         try {
+            if (err) { 
+                throw error
+            }
             await this.render({ req, res, page, error })
         } catch (_error) {
             // 刷新的页面语法错误 捕获错误
@@ -85,7 +101,7 @@ export default class Server {
                 try {
                     error = {
                         err: true,
-                        statusCode: 500,
+                        statusCode: _error.statusCode || 500,
                         message: _error.message,
                         stack: _error.stack
                     }
@@ -110,7 +126,7 @@ export default class Server {
                 await this._Resource.renderError({
                     req, res, error: {
                         err: true,
-                        statusCode: 500,
+                        statusCode: _error.statusCode || 500,
                         message: _error.message,
                         stack: _error.stack
                     }
@@ -132,45 +148,5 @@ export default class Server {
         const html = await this._Resource.render({ req, res, page, _Main, error })
 
         res.status(error.statusCode).send(html)
-    }
-
-    // 注册其他路由
-    async registerOtherRouter() {
-
-        this.server.get(/\.map$/, (req, res) => {
-            return false
-        })
-
-        // 404 页面
-        this.server.get('*', async (req, res) => {
-          
-            const { routes, exist_errorjs, exist_mainjs } = this._Resource.getParams()
-
-            let _Main = null
-            // 这里处理 路由钩子函数
-            if (exist_mainjs.length) {
-                delete require.cache[require.resolve(exist_mainjs[0])]
-                _Main = require(exist_mainjs[0]).default
-                _Main.before && _Main.before({ req, res, routes })
-            }
-
-            if (exist_errorjs.length) {
-                await this.handleRequestAndResponse(req, res, '/error.js', {
-                    err: true,
-                    statusCode: 404,
-                    message: '找不到页面',
-                    stack: ''
-                })
-            } else {
-                await this._Resource.renderError({
-                    req, res, error: {
-                        err: true,
-                        statusCode: 404,
-                        message: '页面找不到',
-                        stack: ''
-                    }
-                })
-            }
-        })
     }
 }

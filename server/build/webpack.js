@@ -11,6 +11,14 @@ export const buildWebpack = async ({ dir, dist, routes = {} }) => {
         
     const entry = {}
 
+    const _error = await glob('error.js', { cwd: dir })
+
+    if (_error.length) {
+        entry['bundles/error.js'] = join(dir, `error.js`)
+    } else { 
+        entry['bundles/error.js'] = join(__dirname, '..', '..', 'lib/error.js')
+    }
+
     routes.map(item => {
         entry[join('bundles', item.page)] = join(dir, dist , 'dist' , item.page)
     })
@@ -38,7 +46,8 @@ export const buildWebpack = async ({ dir, dist, routes = {} }) => {
                     exclude: /node_modules/,
                     loader: 'babel-loader',
                     options: {
-                        plugins: [
+                        presets: ["react", "es2015", "stage-0"],
+                        plugins: ["react-require","transform-runtime",
                             [
                                 require.resolve('babel-plugin-module-resolver'),
                                 {

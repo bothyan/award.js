@@ -11,7 +11,7 @@ export default class Index extends React.Component {
             <div>
                 <h1 styleName='name'>
                     hello world 
-                    <span>你好，世界123</span>
+                    <span>你好，世界</span>
                 </h1>
                 <IndexComponent /> 
                 <Link tag="span" styleName="click" to="/about">点击查看</Link>

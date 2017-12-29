@@ -36,7 +36,7 @@ export default class Mine extends React.Component {
     render() { 
         return (
             <h1 className="hello" onClick={this.change.bind(this)} style={{ color: this.state.new ? 'red' : 'black' }}>
-                id：{this.props.query.id.a.c} uid： {this.props.query.uid}
+                id：{this.props.query.id} uid： {this.props.query.uid}
                 <br />
                 <Link to="/" tag="a">回到首页</Link>
             </h1>

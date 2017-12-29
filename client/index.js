@@ -37,26 +37,34 @@ export default async () => {
 
     Main = await routeLoader.loadPage('/main.js')
 
-    if (error.err) {
-        Component = await routeLoader.loadPage(null)
-    } else {
-        // 首次加载页面 收集数据
-        Component = await routeLoader.loadPage(route)
-    }
+    const props = { data: { ...serverData }, routeLoader }
 
-    const data = { ...serverData }
-    const props = { data, routeLoader }
+    if (typeof error != 'undefined') {
+        if (error.err) {
+            Component = await routeLoader.loadPage(null)
+        } else {
+            // 首次加载页面 收集数据
+            Component = await routeLoader.loadPage(route)
+        }
 
-    if (!!Main) {
-        props.Main = Main
-        props.Component = Component
-    } else {
-        props.Main = Component
-    }
+        if (!!Main) {
+            props.Main = Main
+            props.Component = Component
+        } else {
+            props.Main = Component
+        }
 
-    console.log(serverData)
+        error.err ? renderError({ error, to, query }) : renderHtml(props)
 
-    error.err ? renderError({ error, to, query }) : renderHtml(props)
+    } else { 
+        if (!!Main) {
+            props.Main = Main
+            props.Component = ErrorDebug
+        } else {
+            props.Main = ErrorDebug
+        }
+        renderHtml(props)
+    }    
 
     // 路由切换页面加载
     routeLoader.subscribe(async ({ Component, route = null, query = {}, callback = null, to, error = {} }) => {

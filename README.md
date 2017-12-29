@@ -20,6 +20,7 @@ nodejs作为服务器，express作为路由入口，webpack将同一份react项�
   - [images](#images)
   - [react-css-modules](#react-css-modules)
   - [header-seo](#header-seo)
+  - [error-handle](#error-handle)
 - [Award](#award)
 
 ## Setup
@@ -264,18 +265,39 @@ export default class Index extends React.Component {
 其实在代码中实现的一个对象的深拷贝动作，即类似`JQuery`的`$.extend`方法
 
 
+### error-handle
+错误处理,可以使用系统自带的错误提示，或者在项目根目录下自定义文件`error.js`来自定义错误提示
+
+具体的演示在`example/with-error`中，可以详看
+
+总共会包括下面几种类型的错误
+
+1. 跳转页面出现语法错误 
+2. 刷新页面出现语法错误
+3. 自定义错误页面出现语法错误
+4. 找不到页面提示错误，遵从上面的错误页面渲染规则
+
+除了找不到页面的错误码是`404` 其余都是`500`
+
+所遵循的规则是，没有自定义错误页面将选择系统自带的错误
+
+如果自定义了错误，使用自定义页面渲染
+
+如果自定义错误页面发生错误，那么就采用系统自带的错误提示
+
 ---
 
 # Award
 
 ## 总结的问题
 
-    一份需要webpack打包的js文件，需要两份打包结果
-    其中一个打包结果直接到目录dist/server下，另一个打包结果到目录dist/client下
-    但注意的是，第二个打包结果中的所有js文件需要被一个方法包裹
-    请写下实现此打包方式的webpack配置
+一份需要webpack打包的js文件，需要两份打包结果
 
+其中一个打包结果直接到目录dist/server下，另一个打包结果到目录dist/client下 
 
+但注意的是，第二个打包结果中的所有js文件需要被一个方法包裹
+
+实现此打包方式的webpack配置
 
 
 ## 基础架构
@@ -290,7 +312,7 @@ export default class Index extends React.Component {
 - [x] css modules
 - [x] 客户端跳转静态资源加载优化，即客户端路由优化
 - [x] Head处理，即SEO优化处理
-- [ ] 错误页面
+- [x] 错误页面
 - [ ] 动态配置文件，主要配置cdn等一些资源路径，还有webpack的扩展，但是目前所要用到的都已经内置了
 - [ ] 离线包发布
 

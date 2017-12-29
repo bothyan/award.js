@@ -182,7 +182,14 @@ export default class Resource {
             await renderError({
                 req,
                 res,
-                error            
+                error,
+                routes: this.routes,
+                dev: this.dev,
+                dir: this.dir,
+                dist: this.dist,
+                assetPrefix: this.assetPrefix,
+                exist_mainjs: this.exist_mainjs,
+                exist_maincss: this.exist_maincss
             })
         } else {
             res.status(error.statusCode).send('404...')
