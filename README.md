@@ -353,4 +353,4 @@ cd example/fast //打开demo项目
 
 ## License
 
-[GPL](https://github.com/Topthinking/react-ssr/blob/master/License)
+[MIT](./License)
