@@ -19,7 +19,7 @@
     "url": "https://github.com/Topthinking/award.js.git"
   },
   "author": "Topthinking",
-  "license": "GPL",
+  "license": "MIT",
   "dependencies": {
     "ansi-html": "^0.0.7",
     "babel-core": "^6.26.0",
