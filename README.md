@@ -1,5 +1,15 @@
 # Award &middot; [![NPM version](https://img.shields.io/npm/v/award.svg)](https://www.npmjs.com/package/award) 
 
+## 特此声明
+
+由于`react-router`已经实现了嵌套路由 和 服务端渲染的功能
+
+接下来将致力于实现以`react-router V4`为核心的服务端渲染框架
+
+目标：更轻量，更便捷，更清晰
+
+目前此框架已满足大部分需求任务，将减少对其的深度维护
+
 ## 写在前面
 
 `仅需一个命令，即可搭建一个基于react的服务端渲染的网站`
